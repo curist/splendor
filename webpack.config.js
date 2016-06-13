@@ -17,7 +17,8 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'webpack yo!'
+      title: 'build by webpack @ ' + new Date(),
+      template: 'index.ejs'
     }),
   ]
 };
