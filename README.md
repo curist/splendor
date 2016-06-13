@@ -3,7 +3,6 @@
 Basic boilerplate for mithril.js app using webpack.
 
 
-
 ## Development
 
 ```sh
@@ -42,7 +41,11 @@ Views use utils.BindData to get informed data updates.
              \------> [Data Store] (Boabab) ------/
 
 
-# Webpack modules/plugins
+# Webpack
+
+Hot module replacement enabled out of the box.
+
+## modules/plugins
 
 * precss
 * autoprefixer
