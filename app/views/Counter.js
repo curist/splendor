@@ -12,17 +12,17 @@ var Counter = {
 
     this.inc = function() {
       B.do({
-        action: 'inc'
+        action: 'counter-inc'
       });
     }
     this.add2 = function() {
       B.do({
-        action: 'add2'
+        action: 'counter-add2'
       });
     }
     this.reset = function() {
       B.do({
-        action: 'reset-counter'
+        action: 'counter-reset'
       });
     }
   },
