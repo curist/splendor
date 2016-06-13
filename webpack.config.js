@@ -1,3 +1,4 @@
+var webpack = require('webpack');
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var precss = require('precss');
@@ -34,5 +35,6 @@ module.exports = {
       hash: true,
       template: 'index.ejs'
     }),
+    new webpack.NoErrorsPlugin(),
   ]
 };

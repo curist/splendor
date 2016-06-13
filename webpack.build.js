@@ -1,3 +1,4 @@
+var webpack = require('webpack');
 var path = require('path');
 
 var HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -37,6 +38,7 @@ module.exports = {
       hash: true,
       template: 'index.ejs'
     }),
-    new ExtractTextPlugin('style.css')
+    new ExtractTextPlugin('style.css'),
+    new webpack.NoErrorsPlugin(),
   ]
 };
