@@ -8,6 +8,7 @@ Basic boilerplate for mithril.js app using webpack.
 ```sh
 npm i
 npm start
+# open http://localhost:8080
 ```
 
 ## Build
@@ -15,6 +16,7 @@ npm start
 ```sh
 npm i
 npm run build
+# bundled app sits in ./build/
 ```
 
 # App Architecture
