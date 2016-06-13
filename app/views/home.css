@@ -1,3 +1,13 @@
-p {
-    background-color: blue;
+$padding: 5px;
+
+.Home {
+    p {
+        background-color: blue;
+        padding: $padding 0;
+
+        &.reverse {
+            background-color: black;
+            color: blue
+        }
+    }
 }

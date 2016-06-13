@@ -10,9 +10,10 @@ var Home = {
   controller: function() {
   },
   view: function(ctrl) {
-    return m('div', [
+    return m('div.Home', [
       m('h1', 'Home'),
       m(Counter),
+      m('p.reverse', 'hrhr')
     ]);
   }
 }
