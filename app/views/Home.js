@@ -2,6 +2,8 @@ var m = require('mithril');
 var B = require('app/broker');
 var utils = require('app/utils');
 
+require('./home.css');
+
 var Home = {
   controller: function() {
     var ctrl = this;

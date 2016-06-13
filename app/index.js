@@ -3,8 +3,8 @@ var B = require('app/broker');
 
 require('app/actions');
 
-var Home = require('app/views/Home');
+var Okay = require('app/views/Okay');
 
 window.onload = function() {
-  m.mount(document.getElementById('app'), Home);
+  m.mount(document.getElementById('app'), Okay);
 }
