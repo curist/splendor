@@ -1,6 +1,7 @@
 var m = require('mithril');
 var B = require('app/broker');
 
+require('app/style.css');
 require('app/actions');
 
 var Home = require('app/views/Home');

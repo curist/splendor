@@ -1,11 +1,12 @@
 {
   "scripts": {
     "start": "webpack-dev-server --progress --colors --hot --inline --config ./webpack.config.js",
-    "build": "webpack -p --config ./webpack.config.js"
+    "build": "webpack -p --config ./webpack.build.js"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
     "css-loader": "^0.23.1",
+    "extract-text-webpack-plugin": "^1.0.1",
     "html-webpack-plugin": "^2.21.0",
     "postcss-loader": "^0.9.1",
     "precss": "^1.4.0",
