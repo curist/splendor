@@ -13,7 +13,6 @@ var Home = {
     return m('div.Home', [
       m('h1', 'Home'),
       m(Counter),
-      m('p.reverse', 'hrhr')
     ]);
   }
 }
