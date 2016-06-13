@@ -1,6 +1,8 @@
 var B = require('app/broker');
 var db = require('app/db');
 
+B.removeAllListeners();
+
 B.on('do', function(action) {
   B.emit(action.action, action);
 });

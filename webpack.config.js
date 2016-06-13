@@ -31,6 +31,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       title: 'build by webpack @ ' + new Date(),
+      hash: true,
       template: 'index.ejs'
     }),
   ]

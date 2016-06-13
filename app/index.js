@@ -5,6 +5,14 @@ require('app/actions');
 
 var Home = require('app/views/Home');
 
-window.onload = function() {
+function mountApplication() {
   m.mount(document.getElementById('app'), Home);
 }
+
+window.onload = mountApplication;
+
+if(module.hot) {
+  module.hot.accept();
+  mountApplication();
+}
+
