@@ -2,7 +2,7 @@
 import EventEmitter from 'events';
 
 class Broker extends EventEmitter {
-  do(action) {
+  do (action) {
     this.emit('do', action);
   }
 }

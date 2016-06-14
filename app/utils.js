@@ -8,14 +8,14 @@ utils.BindData = function BindData(controller, bindings) {
   controller.data = {};
 
   // get initial props value
-  Object.keys(bindings).forEach(function(propName) {
+  Object.keys(bindings).forEach(propName => {
     const path = bindings[propName];
     const v = db.get(path);
     controller.data[propName] = v;
   });
 
   let watcher = controller._w = db.watch(bindings);
-  watcher.on('update', function(e) {
+  watcher.on('update', e => {
     const data = e.target.get();
     controller.data = data;
     m.redraw();
@@ -33,7 +33,7 @@ utils.syncLocalStorage = (function syncLocalStorage () {
   function syncToLocalStorage() {
     let prevState = null;
     clearInterval(window.syncLocalStorageInterval);
-    window.syncLocalStorageInterval = setInterval(function() {
+    window.syncLocalStorageInterval = setInterval(() => {
       const state = db.get('state');
       if(state != prevState) {
         localStorage.setItem(key, JSON.stringify(state));

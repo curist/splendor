@@ -3,7 +3,7 @@ import B from 'app/broker';
 import { BindData } from 'app/utils';
 
 const Counter = {
-  controller: function() {
+  controller () {
     let ctrl = this;
     BindData(ctrl, {
       count: ['count'],
@@ -25,7 +25,7 @@ const Counter = {
       });
     }
   },
-  view: function(ctrl) {
+  view (ctrl) {
     return m('div', [
       m('h1', 'Counter'),
       m('p', [

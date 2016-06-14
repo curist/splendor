@@ -6,9 +6,9 @@ import Counter from 'app/views/Counter';
 import './home.css';
 
 const Home = {
-  controller: function() {
+  controller () {
   },
-  view: function(ctrl) {
+  view (ctrl) {
     return m('div.Home', [
       m('h1', 'Home'),
       m(Greeter),

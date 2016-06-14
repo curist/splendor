@@ -3,7 +3,7 @@ import B from 'app/broker';
 import { BindData } from 'app/utils';
 
 const Greeter = {
-  controller: function() {
+  controller () {
     var ctrl = this;
     BindData(ctrl, {
       name: ['state', 'user']
@@ -23,7 +23,7 @@ const Greeter = {
       })
     }
   },
-  view: function(ctrl) {
+  view (ctrl) {
     return m('div', [
       m('p', [
         'Hello, ',
