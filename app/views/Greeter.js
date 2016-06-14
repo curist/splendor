@@ -5,6 +5,7 @@ import { BindData } from 'app/utils';
 const Greeter = {
   controller () {
     var ctrl = this;
+
     BindData(ctrl, {
       name: ['state', 'user']
     })

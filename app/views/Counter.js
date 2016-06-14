@@ -5,21 +5,22 @@ import { BindData } from 'app/utils';
 const Counter = {
   controller () {
     let ctrl = this;
+
     BindData(ctrl, {
       count: ['count'],
     });
 
-    this.inc = function() {
+    ctrl.inc = function() {
       B.do({
         action: 'counter-inc'
       });
     }
-    this.add2 = function() {
+    ctrl.add2 = function() {
       B.do({
         action: 'counter-add2'
       });
     }
-    this.reset = function() {
+    ctrl.reset = function() {
       B.do({
         action: 'counter-reset'
       });
