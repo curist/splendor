@@ -1,13 +1,11 @@
-var m = require('mithril');
-var B = require('app/broker');
-var utils = require('app/utils');
+import m from 'mithril';
 
-var Greeter = require('app/views/Greeter');
-var Counter = require('app/views/Counter');
+import Greeter from 'app/views/Greeter';
+import Counter from 'app/views/Counter';
 
-require('./home.css');
+import './home.css';
 
-var Home = {
+const Home = {
   controller: function() {
   },
   view: function(ctrl) {
@@ -19,4 +17,4 @@ var Home = {
   }
 }
 
-module.exports = Home;
+export default Home;

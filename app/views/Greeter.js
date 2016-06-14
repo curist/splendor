@@ -1,11 +1,11 @@
-var m = require('mithril');
-var B = require('app/broker');
-var utils = require('app/utils');
+import m from 'mithril';
+import B from 'app/broker';
+import { BindData } from 'app/utils';
 
-var Greeter = {
+const Greeter = {
   controller: function() {
     var ctrl = this;
-    utils.BindData(ctrl, {
+    BindData(ctrl, {
       name: ['state', 'user']
     })
 
@@ -38,4 +38,4 @@ var Greeter = {
   }
 }
 
-module.exports = Greeter;
+export default Greeter;

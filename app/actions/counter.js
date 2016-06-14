@@ -1,5 +1,5 @@
-var B = require('app/broker');
-var db = require('app/db');
+import B from 'app/broker';
+import db from 'app/db';
 
 B.on('counter-inc', function(action) {
   function inc(n) {
@@ -9,7 +9,7 @@ B.on('counter-inc', function(action) {
 })
 
 B.on('counter-add2', function(action) {
-  var n = db.get('count');
+  const n = db.get('count');
   db.set('count', n + 2);
 })
 

@@ -1,18 +1,20 @@
-var m = require('mithril');
-var B = require('app/broker');
-var db = require('app/db');
+import m from 'mithril';
+import B from 'app/broker';
+import db from 'app/db';
+
+import {syncLocalStorage} from 'app/utils';
+
+import Home from 'app/views/Home'
 
 function mountApplication() {
-  var Home = require('app/views/Home');
   m.mount(document.getElementById('app'), Home);
 }
 
 function init() {
-  var utils = require('app/utils');
   require('app/style.css');
   require('app/actions');
 
-  utils.syncLocalStorage();
+  syncLocalStorage();
   mountApplication();
 }
 

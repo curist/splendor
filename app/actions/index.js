@@ -1,4 +1,4 @@
-var B = require('app/broker');
+import B from 'app/broker';
 
 B.removeAllListeners();
 

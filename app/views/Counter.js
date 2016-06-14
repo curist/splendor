@@ -1,12 +1,11 @@
-var m = require('mithril');
-var B = require('app/broker');
-var utils = require('app/utils');
+import m from 'mithril';
+import B from 'app/broker';
+import { BindData } from 'app/utils';
 
-
-var Counter = {
+const Counter = {
   controller: function() {
-    var ctrl = this;
-    utils.BindData(ctrl, {
+    let ctrl = this;
+    BindData(ctrl, {
       count: ['count'],
     });
 
@@ -46,4 +45,4 @@ var Counter = {
   }
 }
 
-module.exports = Counter;
+export default Counter;
