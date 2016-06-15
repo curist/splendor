@@ -4,6 +4,8 @@ import db from 'app/db';
 
 import Home from 'app/views/Home'
 
+import 'normalize.css';
+
 function mountApplication() {
   m.mount(document.getElementById('app'), Home);
 }

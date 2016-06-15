@@ -1,4 +1,3 @@
-import firebase from 'firebase';
 import B from 'app/broker';
 
 const config = {
