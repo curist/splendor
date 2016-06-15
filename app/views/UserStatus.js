@@ -37,10 +37,10 @@ const UserStatus = {
           ]
         }
         return [
-          m('.user-name', user.name),
           m('img.user-avatar', {
             src: user.photoUrl
           }),
+          m('.user-name', user.name),
           m('button', {
             onclick: ctrl.signout
           }, 'sign out'),

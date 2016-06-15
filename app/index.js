@@ -2,12 +2,14 @@ import m from 'mithril';
 import B from 'app/broker';
 import db from 'app/db';
 
-import Home from 'app/views/Home'
+import { bindRoutes } from 'app/routes';
 
 import 'normalize.css';
 
 function mountApplication() {
-  m.mount(document.getElementById('app'), Home);
+  const el = document.getElementById('app');
+  bindRoutes(el);
+  m.route(m.route());
 }
 
 function init() {

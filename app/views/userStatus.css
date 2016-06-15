@@ -1,11 +1,15 @@
 .UserStatus {
+    display: flex;
+    align-items: center;
+
     button {
         font-size: 1em;
     }
 
-    .user-name {
+    .user-name, .status {
         font-size: 18px;
         color: #543;
+        margin-right: 1em;
     }
 
     .user-avatar {
@@ -13,5 +17,6 @@
         width: $size;
         height: $size;
         border-radius: $size;
+        margin-right: 1em;
     }
 }

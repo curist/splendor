@@ -14,6 +14,7 @@ B.on('signout', function() {
 B.on('firebase/signin', function(action) {
   var user = {
     name: action.user.displayName,
+    email: action.user.email,
     photoUrl: action.user.photoURL,
   }
   db.set('user', user);
