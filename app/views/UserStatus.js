@@ -3,6 +3,8 @@ import B from 'app/broker';
 
 import { BindData } from 'app/utils';
 
+import Button from 'app/widgets/Button';
+
 import './userStatus.css';
 
 const UserStatus = {
@@ -31,7 +33,12 @@ const UserStatus = {
         if(!user) {
           return [
             m('span.status', 'not login'),
-            m('button', {
+            m(Button, {
+              config: {
+                ripple: true,
+                raised: true,
+                accent: true,
+              },
               onclick: ctrl.signin
             }, 'sign in'),
           ]
@@ -41,8 +48,12 @@ const UserStatus = {
           m('img.user-avatar', {
             src: user.photoUrl
           }),
-
-          m('button', {
+          m(Button, {
+            config: {
+              ripple: true,
+              raised: true,
+              accent: true,
+            },
             onclick: ctrl.signout
           }, 'sign out'),
         ]
