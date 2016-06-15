@@ -2,8 +2,6 @@ import m from 'mithril';
 import B from 'app/broker';
 import db from 'app/db';
 
-import {syncLocalStorage} from 'app/utils';
-
 import Home from 'app/views/Home'
 
 function mountApplication() {
@@ -13,8 +11,8 @@ function mountApplication() {
 function init() {
   require('app/style.css');
   require('app/actions');
+  require('app/firebase');
 
-  syncLocalStorage();
   mountApplication();
 }
 
