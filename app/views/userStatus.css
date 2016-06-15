@@ -1,0 +1,17 @@
+.UserStatus {
+    button {
+        font-size: 1em;
+    }
+
+    .user-name {
+        font-size: 18px;
+        color: #543;
+    }
+
+    .user-avatar {
+        $size: 64px;
+        width: $size;
+        height: $size;
+        border-radius: $size;
+    }
+}

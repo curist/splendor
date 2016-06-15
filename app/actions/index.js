@@ -4,6 +4,7 @@ B.removeAllListeners();
 
 require('app/actions/counter');
 require('app/actions/greeter');
+require('app/actions/firebase');
 
 B.on('do', function(action) {
   B.emit(action.action, action);
