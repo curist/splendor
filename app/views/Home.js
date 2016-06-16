@@ -3,6 +3,7 @@ import B from 'app/broker';
 
 import UserStatus from 'app/views/UserStatus';
 import Counter from 'app/widgets/Counter';
+import Clickers from 'app/widgets/Clickers';
 
 import { BindData } from 'app/utils';
 
@@ -19,7 +20,8 @@ const Home = {
   view (ctrl) {
     const user = ctrl.data.user;
     return m('div.Home', [
-      m(Counter),
+      m('.Clickers', m(Clickers)),
+      m('.Content', m(Counter)),
     ]);
   }
 }

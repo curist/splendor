@@ -13,6 +13,7 @@ B.on('signout', function() {
 
 B.on('firebase/signin', function(action) {
   var user = {
+    uid: action.user.uid,
     name: action.user.displayName,
     email: action.user.email,
     photoUrl: action.user.photoURL,
