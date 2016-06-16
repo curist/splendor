@@ -1,4 +1,36 @@
 {
-  ".read": "auth !== null",
-  ".write": "auth !== null"
+  "games": {
+    "$game_id": {
+      ".write": "newData.hasChildren(['player_count', 'players']) && newData.child('players').child(auth.uid).exists()",
+      "players": {
+        "$uid": {
+          ".validate": "auth.uid != null && auth.uid == $uid",
+          "name": {
+            ".validate": "auth.displayName == newData.val()"
+          },
+          "$others": {
+            ".validate": false
+          }
+        }
+      },
+      "player_count": {
+        ".validate": "(data.val() === null && newData.val() === 1) || ((data.val() + 1) === newData.val())"
+      }
+    }
+  },
+  "users": {
+    "$uid": {
+      ".read": "auth != null",
+      ".write": "auth.uid == $uid",
+      // user infos
+      // maybe we can directly put them
+      // where we want them
+      "username": {
+        ".read": true
+      },
+      "avatarurl": {
+        ".read": true
+      }
+    }
+  }
 }
