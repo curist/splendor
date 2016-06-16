@@ -1,7 +1,14 @@
 {
+  "counter": {
+    ".write": true,
+    ".read": true,
+    ".validate": "(data.val() === null && newData.val() === 1) || (newData.val() === data.val() + 1)"
+  },
   "games": {
     "$game_id": {
-      ".write": "newData.hasChildren(['player_count', 'players']) && newData.child('players').child(auth.uid).exists()",
+      // how can we create new game?
+      ".write": "newData.hasChildren(['started', 'players']) || newData.hasChildren(['player_count', 'players'])",
+
       "players": {
         "$uid": {
           ".validate": "auth.uid != null && auth.uid == $uid",
@@ -15,6 +22,12 @@
       },
       "player_count": {
         ".validate": "(data.val() === null && newData.val() === 1) || ((data.val() + 1) === newData.val())"
+      },
+      "started": {
+        ".validate": "(data.val() === null && newData.val() === false) || (data.val() === false && newData.val() === true)"
+      },
+      "$others": {
+        ".validate": false
       }
     }
   },

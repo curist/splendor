@@ -1,4 +1,5 @@
 import B from 'app/broker';
+import db from 'app/db';
 
 const config = {
   apiKey: "AIzaSyBoT3dxnQHbp3F2tVVKlzNI5sFGLEOKAHQ",
@@ -15,7 +16,9 @@ class FirebaseApp {
     this.database = firebase.database();
     this.storage = firebase.storage();
     // Initiates Firebase auth and listen to auth state changes.
-    this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
+    this.auth.onAuthStateChanged(this.onAuthStateChanged);
+
+    this.database.ref('counter').on('value', this.onCountChanged);
   }
 
   onAuthStateChanged (user) {
@@ -31,6 +34,11 @@ class FirebaseApp {
     }
   }
 
+  onCountChanged (countSnapshot) {
+    const count = countSnapshot.val();
+    db.set('count', count);
+  }
+
   signIn () {
     const provider = new firebase.auth.GoogleAuthProvider();
     this.auth.signInWithPopup(provider);
@@ -39,6 +47,12 @@ class FirebaseApp {
   signOut () {
     this.auth.signOut();
   }
+
+  incCount() {
+    const count = db.get('count');
+    this.database.ref('counter').set(count + 1);
+  }
+
 }
 
 export default new FirebaseApp();

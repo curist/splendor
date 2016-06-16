@@ -12,17 +12,7 @@ const Counter = {
 
     ctrl.inc = function() {
       B.do({
-        action: 'counter-inc'
-      });
-    }
-    ctrl.add2 = function() {
-      B.do({
-        action: 'counter-add2'
-      });
-    }
-    ctrl.reset = function() {
-      B.do({
-        action: 'counter-reset'
+        action: 'firebase/inc-count'
       });
     }
   },
@@ -35,13 +25,7 @@ const Counter = {
       ]),
       m('button', {
         onclick: ctrl.inc.bind(ctrl),
-      }, 'inc'),
-      m('button', {
-        onclick: ctrl.add2.bind(ctrl),
-      }, 'add 2'),
-      m('button', {
-        onclick: ctrl.reset.bind(ctrl),
-      }, 'reset'),
+      }, '+ 1'),
     ]);
   }
 }
