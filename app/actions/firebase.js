@@ -3,15 +3,15 @@ import db from 'app/db';
 
 import firebase from 'app/firebase';
 
-B.on('signin', function() {
+B.on('signin', () => {
   firebase.signIn();
 })
 
-B.on('signout', function() {
+B.on('signout', () => {
   firebase.signOut();
 })
 
-B.on('firebase/signin', function(action) {
+B.on('firebase/signin', (action) => {
   var user = {
     uid: action.user.uid,
     name: action.user.displayName,
@@ -21,6 +21,6 @@ B.on('firebase/signin', function(action) {
   db.set('user', user);
 })
 
-B.on('firebase/signout', function(action) {
+B.on('firebase/signout', () => {
   db.unset('user');
 })

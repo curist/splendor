@@ -1,6 +1,4 @@
 import m from 'mithril';
-import B from 'app/broker';
-import db from 'app/db';
 
 import { bindRoutes } from 'app/routes';
 
