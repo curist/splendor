@@ -1,4 +1,4 @@
-# Hello Webpack
+# Hello Webapp
 
 Basic boilerplate for mithril.js app using webpack.
 
@@ -54,6 +54,8 @@ Hot module replacement enabled out of the box.
 * postcss
 * HtmlWebpackPlugin
 * ExtractTextPlugin: For production build style.css
+* es6 via babel.js
+* eslint
 
 # License
 
