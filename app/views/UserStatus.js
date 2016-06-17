@@ -11,18 +11,18 @@ const UserStatus = {
 
     BindData(ctrl , {
       user: ['user']
-    })
+    });
 
     ctrl.signin = () => {
       B.do({
         action: 'signin'
       });
-    }
+    };
     ctrl.signout = () => {
       B.do({
         action: 'signout'
       });
-    }
+    };
   },
   view (ctrl) {
     return m('div.UserStatus', [
@@ -34,7 +34,7 @@ const UserStatus = {
             m('button', {
               onclick: ctrl.signin
             }, 'sign in'),
-          ]
+          ];
         }
         return [
           m('img.user-avatar', {
@@ -44,10 +44,10 @@ const UserStatus = {
           m('button', {
             onclick: ctrl.signout
           }, 'sign out'),
-        ]
+        ];
       })()
     ]);
   }
-}
+};
 
 export default UserStatus;

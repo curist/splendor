@@ -20,6 +20,6 @@ utils.BindData = function BindData(controller, bindings) {
     controller.data = data;
     m.redraw();
   });
-}
+};
 
 module.exports = utils;

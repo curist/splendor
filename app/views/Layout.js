@@ -9,7 +9,7 @@ const Layout = {
 
     BindData(ctrl , {
       user: ['user']
-    })
+    });
   },
   view (ctrl, args, component) {
     const user = ctrl.data.user;
@@ -19,11 +19,11 @@ const Layout = {
         if(user) {
           return m(component);
         } else {
-          return m('span', '^ please login first')
+          return m('span', '^ please login first');
         }
       })()
     ]);
   }
-}
+};
 
 export default Layout;

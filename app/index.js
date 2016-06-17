@@ -23,5 +23,8 @@ window.onload = init;
 if(module.hot) {
   module.hot.accept();
   init();
+
+  // setup debug
+  localStorage.debug = 'app/*';
 }
 

@@ -1,11 +1,15 @@
 import B from 'app/broker';
 import db from 'app/db';
 
+import DEBUG from 'debug';
+
+const debug = DEBUG('app/firebase');
+
 const config = {
-  apiKey: "AIzaSyBoT3dxnQHbp3F2tVVKlzNI5sFGLEOKAHQ",
-  authDomain: "project-5049152049997853939.firebaseapp.com",
-  databaseURL: "https://project-5049152049997853939.firebaseio.com",
-  storageBucket: "project-5049152049997853939.appspot.com",
+  apiKey: 'AIzaSyBoT3dxnQHbp3F2tVVKlzNI5sFGLEOKAHQ',
+  authDomain: 'project-5049152049997853939.firebaseapp.com',
+  databaseURL: 'https://project-5049152049997853939.firebaseio.com',
+  storageBucket: 'project-5049152049997853939.appspot.com',
 };
 
 class FirebaseApp {
@@ -34,11 +38,11 @@ class FirebaseApp {
         uid: user.uid,
         username: user.displayName,
         photoUrl: user.photoURL || 'https://s3.amazonaws.com/wll-community-production/images/no-avatar.png',
-      })
+      });
     } else {
       B.do({
         action: 'firebase/signout'
-      })
+      });
     }
   }
 
@@ -48,7 +52,7 @@ class FirebaseApp {
   }
 
   onClickerChanged (clickerSnapshot) {
-    var clicker = clickerSnapshot.val()
+    var clicker = clickerSnapshot.val();
     db.push('clickers', clicker);
   }
 
@@ -57,7 +61,7 @@ class FirebaseApp {
     db.apply('clickers', (clickers) => {
       return clickers.filter(clicker => {
         return clicker.uid !== removedClicker.uid;
-      })
+      });
     });
   }
 
@@ -78,8 +82,8 @@ class FirebaseApp {
   leaveGame() {
     const user = this.auth.currentUser;
     this.database.ref('clickers/' + user.uid).remove().catch(function(err) {
-      console.log(err);
-    })
+      debug(err);
+    });
   }
 
 }

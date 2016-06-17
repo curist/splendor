@@ -5,11 +5,11 @@ import firebase from 'app/firebase';
 
 B.on('signin', () => {
   firebase.signIn();
-})
+});
 
 B.on('signout', () => {
   firebase.signOut();
-})
+});
 
 B.on('firebase/signin', (action) => {
   var user = {
@@ -17,10 +17,10 @@ B.on('firebase/signin', (action) => {
     name: action.user.displayName,
     email: action.user.email,
     photoUrl: action.user.photoURL,
-  }
+  };
   db.set('user', user);
-})
+});
 
 B.on('firebase/signout', () => {
   db.unset('user');
-})
+});

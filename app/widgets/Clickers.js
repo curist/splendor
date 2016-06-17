@@ -16,7 +16,7 @@ const Counter = {
 
     ctrl.leave = () => {
       firebase.leaveGame();
-    }
+    };
   },
   view (ctrl) {
     const user = ctrl.data.user || {};
@@ -25,25 +25,25 @@ const Counter = {
       (ctrl.data.clickers || []).map(clicker => {
         return m('.Clicker', [
           m('img.Photo', {
-            src: clicker.photoUrl
+            src: clicker.photoUrl,
           }),
           m('div', [
             m('div.Name', clicker.username),
             (function() {
               if(clicker.uid == user.uid) {
                 return m('div.Info', [
-                  m('div', "(It's you!)"),
+                  m('div', '(It\'s you!)'),
                   m('div.Leave', {
                     onclick: ctrl.leave,
                   }, 'leave'),
-                ])
+                ]);
               }
             })(),
           ]),
-        ])
+        ]);
       }),
     ]);
-  }
-}
+  },
+};
 
 export default Counter;

@@ -1,14 +1,17 @@
 import m from 'mithril';
 
 import Layout from 'app/views/Layout';
-import Home from 'app/views/Home'
+import Home from 'app/views/Home';
+
+import DEBUG from 'debug';
+const debug = DEBUG('app/routes');
 
 let routes = {
   '/': Home,
-}
+};
 
 export function bindRoutes(el) {
-  console.log('bind routes');
+  debug('bind routes');
   m.route.mode = 'hash';
   m.route(el, '/', wrapRoutes(routes));
 }

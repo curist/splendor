@@ -14,7 +14,7 @@ const Counter = {
       B.do({
         action: 'firebase/inc-count'
       });
-    }
+    };
   },
   view (ctrl) {
     return m('div', [
@@ -28,6 +28,6 @@ const Counter = {
       }, '+ 1'),
     ]);
   }
-}
+};
 
 export default Counter;

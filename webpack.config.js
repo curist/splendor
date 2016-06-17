@@ -20,6 +20,13 @@ module.exports = {
     }
   },
   module: {
+    preLoaders: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules|bower_components)/,
+        loader: 'eslint',
+      }
+    ],
     loaders: [
       {
         test: /\.css$/,
@@ -36,10 +43,16 @@ module.exports = {
       }
     ]
   },
+  eslint: {
+    configFile: './.eslintrc.js'
+  },
   postcss: function() {
     return [precss, autoprefixer];
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env.DEBUG': '"*"'
+    }),
     new HtmlWebpackPlugin({
       title: 'build by webpack @ ' + new Date(),
       hash: true,
