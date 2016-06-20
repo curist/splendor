@@ -1,6 +1,8 @@
 import m from 'mithril';
 import _ from 'underscore';
 
+import { colors } from 'app/data/game-setting';
+
 import './card.css';
 
 // args schema:
@@ -15,13 +17,6 @@ import './card.css';
 //     total_cost: 3 }
 const Card = {
   view (ctrl, args) {
-    const colors = [
-      'white',
-      'blue',
-      'green',
-      'red',
-      'black',
-    ];
     return m('.Card', [
       (function() {
         if(args.points > 0) {

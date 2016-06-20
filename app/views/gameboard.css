@@ -1,0 +1,78 @@
+$white: white;
+$blue: blue;
+$green: green;
+$red: red;
+$black: black;
+$gold: gold;
+.GameBoard {
+    .Cards {
+        display: flex;
+        flex-direction: column;
+        .Rank {
+            display: flex;
+            margin-bottom: 5px;
+
+            .Card {
+                margin-left: 5px;
+            }
+
+            .FakeCard {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 24px;
+                margin-left: 12px;
+            }
+        }
+
+    }
+
+    .Resources {
+        display: flex;
+        justify-content: space-between;
+        .Resource {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-left: 5px;
+            .Indicator {
+                $size: 36px;
+                display: flex;
+                width: $size;
+                height: $size;
+                justify-content: center;
+                align-items: center;
+            }
+
+            &.white .Indicator {
+                background-color: $white;
+            }
+            &.blue .Indicator {
+                background-color: $blue;
+                color: white;
+            }
+            &.green .Indicator {
+                background-color: $green;
+                color: black;
+            }
+            &.red .Indicator {
+                background-color: $red;
+                color: black;
+            }
+            &.black .Indicator {
+                background-color: $black;
+                color: #ccc;
+            }
+            &.gold {
+                margin-right: 8px;
+                margin-left: 32px;
+            }
+            &.gold .Indicator {
+                background-color: $gold;
+                $size: 28px;
+                width: $size;
+                height: $size;
+            }
+        }
+    }
+}

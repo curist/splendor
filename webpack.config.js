@@ -40,7 +40,11 @@ module.exports = {
           presets: ['es2015'],
           plugins: ['transform-runtime']
         }
-      }
+      },
+      {
+        test: /\.json$/,
+        loader: 'json'
+      },
     ]
   },
   eslint: {

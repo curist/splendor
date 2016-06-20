@@ -5,7 +5,7 @@ const db = new Baobab({
   clickers: [],
   state: {
     user: 'anonymous'
-  }
+  },
 });
 
 export default db;

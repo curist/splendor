@@ -5,14 +5,15 @@
 }
 
 body{
-  margin: 40px auto;
+  margin: 0;
+  padding: 0;
   max-width: 42em;
   line-height: 1.6;
   font-size: 18px;
   color: #444;
-  padding: 0 10px;
   background-color: lightblue;
 }
+
 
 h1,h2,h3{
   line-height:1.2;
@@ -26,3 +27,14 @@ h1,h2,h3{
   flex-direction: column;
 }
 
+@media(min-width:767px) {
+  body {
+    margin: 40px auto;
+    max-width: 42em;
+    line-height: 1.6;
+    font-size: 18px;
+    padding: 0 10px;
+    background-color: lightblue;
+  }
+
+}

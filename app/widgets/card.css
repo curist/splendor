@@ -5,8 +5,8 @@ $red: red;
 $black: black;
 .Card {
     position: relative;
-    width: 60px;
-    height: 90px;
+    width: 55px;
+    height: 75px;
     border: 1px solid black;
     border-radius: 3px;
     overflow: hidden;
@@ -34,7 +34,7 @@ $black: black;
             margin-bottom: -5px;
             .Indicator {
                 width: 12px;
-                height: 18px;
+                height: 16px;
                 border: 1px solid #ccc;
                 border-radius: 3px;
                 &.white {
@@ -55,7 +55,7 @@ $black: black;
             }
 
             .Count {
-                font-size: 0.8em;
+                font-size: 0.7em;
             }
         }
     }
