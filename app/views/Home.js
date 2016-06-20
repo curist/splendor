@@ -10,6 +10,7 @@ import allCards from 'app/data/cards';
 import Card from 'app/widgets/Card';
 import NewGameSetting from 'app/views/NewGameSetting';
 import GameBoard from 'app/views/GameBoard';
+import PlayerBoard from 'app/views/PlayerBoard';
 
 const Home = {
   controller () {
@@ -24,7 +25,10 @@ const Home = {
     const inGame = !!ctrl.data.game;
     return m('.Home', (function() {
       if(inGame) {
-        return m(GameBoard);
+        return [
+          m(GameBoard),
+          m(PlayerBoard),
+        ];
       } else {
         return m(NewGameSetting);
       }

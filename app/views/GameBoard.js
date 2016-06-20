@@ -52,9 +52,9 @@ const GameBoard = {
           m('.Card.FakeCard', ctrl.data.deck1.length),
         ]),
       ]),
-      m('.Resources', ctrl.resourceTypes.map(resource => {
-        return m('.Resource.' + resource, [
-          m('.Indicator', ctrl.data.resource[resource]),
+      m('.Resources', ctrl.resourceTypes.map(type => {
+        return m('.Resource.' + type, [
+          m('.Indicator', ctrl.data.resource[type]),
         ]);
       })),
     ]);
