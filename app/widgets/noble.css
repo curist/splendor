@@ -5,10 +5,9 @@ $red: red;
 $black: black;
 .Noble {
     position: relative;
-    width: 60px;
-    height: 60px;
-    border: 1px solid black;
-    border-radius: 3px;
+    width: 57px;
+    height: 57px;
+    border: 1px solid #eee;
     background-color: #763c33;
     overflow: hidden;
     .Points {
