@@ -1,9 +1,7 @@
 import B from 'app/broker';
-import db from 'app/db';
 
-import DEBUG from 'debug';
-
-const debug = DEBUG('app/firebase');
+// import DEBUG from 'debug';
+// const debug = DEBUG('app/firebase');
 
 const config = {
   apiKey: 'AIzaSyBoT3dxnQHbp3F2tVVKlzNI5sFGLEOKAHQ',
@@ -21,11 +19,6 @@ class FirebaseApp {
     this.storage = firebase.storage();
     // Initiates Firebase auth and listen to auth state changes.
     this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
-
-    this.database.ref('counter').on('value', this.onCountChanged.bind(this));
-    this.database.ref('clickers').on('child_added', this.onClickerChanged.bind(this));
-    this.database.ref('clickers').on('child_changed', this.onClickerRemoved.bind(this));
-    this.database.ref('clickers').on('child_removed', this.onClickerRemoved.bind(this));
   }
 
   onAuthStateChanged (user) {
@@ -34,35 +27,11 @@ class FirebaseApp {
         action: 'firebase/signin',
         user: user
       });
-      this.database.ref('clickers/' + user.uid).set({
-        uid: user.uid,
-        username: user.displayName,
-        photoUrl: user.photoURL || 'https://s3.amazonaws.com/wll-community-production/images/no-avatar.png',
-      });
     } else {
       B.do({
         action: 'firebase/signout'
       });
     }
-  }
-
-  onCountChanged (countSnapshot) {
-    const count = countSnapshot.val();
-    db.set('count', count);
-  }
-
-  onClickerChanged (clickerSnapshot) {
-    var clicker = clickerSnapshot.val();
-    db.push('clickers', clicker);
-  }
-
-  onClickerRemoved (snap) {
-    const removedClicker = snap.val();
-    db.apply('clickers', (clickers) => {
-      return clickers.filter(clicker => {
-        return clicker.uid !== removedClicker.uid;
-      });
-    });
   }
 
   signIn () {
@@ -73,19 +42,6 @@ class FirebaseApp {
   signOut () {
     this.auth.signOut();
   }
-
-  incCount() {
-    const count = db.get('count');
-    this.database.ref('counter').set(count + 1);
-  }
-
-  leaveGame() {
-    const user = this.auth.currentUser;
-    this.database.ref('clickers/' + user.uid).remove().catch(function(err) {
-      debug(err);
-    });
-  }
-
 }
 
 export default new FirebaseApp();
