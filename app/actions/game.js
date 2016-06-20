@@ -8,6 +8,7 @@ const debug = DEBUG('app/actions/game');
 import setting from 'app/data/game-setting';
 import {colors} from 'app/data/game-setting';
 import cards from 'app/data/cards';
+import nobles from 'app/data/nobles';
 const groupedCards = _(cards).groupBy(card => card.rank);
 
 B.on('game/init', (action) => {
@@ -37,5 +38,9 @@ B.on('game/init', (action) => {
     db.set(['game', 'resource', color], setting[players].resource);
   });
 
-  // TODO deal nobles
+  db.set(['game', 'nobles'], _(nobles).chain()
+    .shuffle().take(setting[players].nobles).value());
+
+
+  // TODO players status
 });

@@ -1,0 +1,64 @@
+$white: white;
+$blue: blue;
+$green: green;
+$red: red;
+$black: black;
+.Noble {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    border: 1px solid black;
+    border-radius: 3px;
+    background-color: #763c33;
+    overflow: hidden;
+    .Points {
+        $size: 20px;
+        display: flex;
+        position: absolute;
+        top: -1px;
+        right: -1px;
+        width: $size;
+        height: $size;
+        font-size: 0.8em;
+        border: 1px solid black;
+        border-bottom-left-radius: 5px;
+        background-color: #eee;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .Cost {
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        .Indicator {
+            width: 18px;
+            height: 18px;
+            font-size: 0.8em;
+            text-align: center;
+
+            &.white {
+                background-color: $white;
+            }
+            &.blue {
+                background-color: $blue;
+                color: #eee;
+            }
+            &.green {
+                background-color: $green;
+                color: #333;
+            }
+            &.red {
+                background-color: $red;
+            }
+            &.black {
+                background-color: $black;
+                color: #eee;
+            }
+        }
+    }
+}

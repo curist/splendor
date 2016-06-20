@@ -3,6 +3,7 @@ import B from 'app/broker';
 import _ from 'underscore';
 
 import Card from 'app/widgets/Card';
+import Noble from 'app/widgets/Noble';
 
 import {colors} from 'app/data/game-setting';
 
@@ -27,14 +28,16 @@ const GameBoard = {
       deck2: ['game', 'deck2'],
       deck3: ['game', 'deck3'],
       resource: ['game', 'resource'],
-      // TODO bind noble
+      nobles: ['game', 'nobles'],
     });
 
     ctrl.resourceTypes = colors.concat(['gold']);
   },
   view (ctrl) {
     return m('.GameBoard', [
-      m('.Nobles'),
+      m('.Nobles', ctrl.data.nobles.map(noble => {
+        return m(Noble, noble);
+      })),
       m('.Cards', [
         m('.Rank', [
           Cards(ctrl.data.cards3),

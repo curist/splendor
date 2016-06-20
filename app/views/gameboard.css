@@ -5,6 +5,14 @@ $red: red;
 $black: black;
 $gold: gold;
 .GameBoard {
+    .Nobles {
+        display: flex;
+        margin: 10px 0;
+        .Noble {
+            margin-left: 5px;
+        }
+    }
+
     .Cards {
         display: flex;
         flex-direction: column;
@@ -22,6 +30,7 @@ $gold: gold;
                 align-items: center;
                 font-size: 24px;
                 margin-left: 12px;
+                cursor: none;
             }
         }
 
