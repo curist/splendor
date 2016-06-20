@@ -1,19 +1,21 @@
 /* vim:set ft=sass: */
 $padding: 15px;
 .Home {
+  display: flex;
+  padding: $padding;
+  color: #333;
+
+  h1 {
+    text-shadow: 2px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .SideBar {
+    flex: 1;
+  }
+
+  .Content {
     display: flex;
-    padding: $padding;
-    color: #333;
-
-    h1 {
-        text-shadow: 2px 2px rgba(0, 0, 0, 0.3);
-    }
-
-    .Clickers {
-        flex: 1;
-    }
-
-    .Content {
-        flex: 2;
-    }
+    flex: 3;
+    flex-wrap: wrap;
+  }
 }

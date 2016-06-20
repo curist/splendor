@@ -1,16 +1,28 @@
+/* vim:set ft=sass: */
+
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body{
-    margin:40px auto;
-    max-width:42em;
-    line-height:1.6;
-    font-size:18px;
-    color:#444;
-    padding:0 10px;
-    background-color: lightblue;
+  margin: 40px auto;
+  max-width: 42em;
+  line-height: 1.6;
+  font-size: 18px;
+  color: #444;
+  padding: 0 10px;
+  background-color: lightblue;
 }
+
 h1,h2,h3{
-    line-height:1.2;
+  line-height:1.2;
 }
+
+.row {
+  flex-direction: row;
+}
+
+.col {
+  flex-direction: column;
+}
+

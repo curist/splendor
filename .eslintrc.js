@@ -31,6 +31,9 @@ module.exports = {
     "comma-dangle": [
       "error",
       "only-multiline"
+    ],
+    "no-unused-vars": [
+      "off"
     ]
   }
 };

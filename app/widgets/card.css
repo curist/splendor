@@ -1,0 +1,99 @@
+$size: 150px;
+$white: white;
+$blue: blue;
+$green: green;
+$red: red;
+$black: black;
+.Card {
+    position: relative;
+    width: $size;
+    height: $size;
+    border: 1px solid black;
+    border-radius: 3px;
+    overflow: hidden;
+    cursor: pointer;
+    background: lightsteelblue;
+
+    .Rank {
+        display: none;
+        font-size: 0.8em;
+        font-style: italic;
+        color: #999;
+    }
+
+    .Cost {
+        position: absolute;
+        bottom: 3px;
+        left: 3px;
+        .Indicators {
+            display: flex;
+            .Indicator {
+                width: 12px;
+                height: 18px;
+                border: 1px solid #ccc;
+                border-radius: 3px;
+                &.white {
+                    background-color: $white;
+                }
+                &.blue {
+                    background-color: $blue;
+                }
+                &.green {
+                    background-color: $green;
+                }
+                &.red {
+                    background-color: $red;
+                }
+                &.black {
+                    background-color: $black;
+                }
+            }
+        }
+    }
+
+    .Points {
+        $size: 1.5em;
+        display: flex;
+        position: absolute;
+        top: -1px;
+        right: -1px;
+        width: $size;
+        height: $size;
+        font-size: 1.2em;
+        border: 1px solid black;
+        border-bottom-left-radius: 5px;
+        justify-content: center;
+        background-color: #eee;
+    }
+
+    .Provide {
+        $size: 32px;
+        width: $size;
+        height: $size;
+        position: absolute;
+        right: 3px;
+        bottom: 3px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+
+        &.white {
+            background-color: $white;
+        }
+
+        &.blue {
+            background-color: $blue;
+        }
+        
+        &.green {
+            background-color: $green;
+        }
+
+        &.red {
+            background-color: $red;
+        }
+
+        &.black {
+            background-color: $black;
+        }
+    }
+}
