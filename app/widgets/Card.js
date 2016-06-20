@@ -32,9 +32,10 @@ const Card = {
       m('.Cost', colors.filter(color => {
         return (args[color] > 0);
       }).map(color => {
-        return m('.Indicators', _.range(args[color]).map(() => {
-          return m('.Indicator.' + color);
-        }));
+        return m('.Row', [
+          m('.Indicator.' + color),
+          m('.Count', args[color]),
+        ]);
       })),
       m('.Rank', 'r' + args.rank),
     ]);

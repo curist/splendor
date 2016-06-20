@@ -1,4 +1,3 @@
-$size: 150px;
 $white: white;
 $blue: blue;
 $green: green;
@@ -6,8 +5,8 @@ $red: red;
 $black: black;
 .Card {
     position: relative;
-    width: $size;
-    height: $size;
+    width: 60px;
+    height: 90px;
     border: 1px solid black;
     border-radius: 3px;
     overflow: hidden;
@@ -23,10 +22,16 @@ $black: black;
 
     .Cost {
         position: absolute;
-        bottom: 3px;
+        bottom: 6px;
         left: 3px;
-        .Indicators {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        .Row {
             display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-bottom: -5px;
             .Indicator {
                 width: 12px;
                 height: 18px;
@@ -48,32 +53,37 @@ $black: black;
                     background-color: $black;
                 }
             }
+
+            .Count {
+                font-size: 0.8em;
+            }
         }
     }
 
     .Points {
-        $size: 1.5em;
+        $size: 20px;
         display: flex;
         position: absolute;
         top: -1px;
         right: -1px;
         width: $size;
         height: $size;
-        font-size: 1.2em;
+        font-size: 0.8em;
         border: 1px solid black;
         border-bottom-left-radius: 5px;
-        justify-content: center;
         background-color: #eee;
+        justify-content: center;
+        align-items: center;
     }
 
     .Provide {
-        $size: 32px;
+        $size: 20px;
         width: $size;
         height: $size;
         position: absolute;
-        right: 3px;
-        bottom: 3px;
-        border-radius: 5px;
+        right: -1px;
+        bottom: -1px;
+        border-top-left-radius: 5px;
         border: 1px solid #ccc;
 
         &.white {
