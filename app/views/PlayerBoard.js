@@ -20,11 +20,6 @@ const PlayerBoard = {
           m('.Count', player.resources[type]),
         ]);
       })),
-      m('.Score', [
-        m('.Title', 'Score: '),
-        // TODO show player reserved cards
-        m('.Points', player.score),
-      ]),
     ]);
   },
 };

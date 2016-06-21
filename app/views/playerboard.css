@@ -49,22 +49,4 @@ $gold: gold;
             }
         }
     }
-
-    .Score {
-        position: absolute;
-        right: 5px;
-        top: 3px;
-        & > div {
-            display: inline-block;
-        }
-        .Title {
-
-        }
-
-        .Points {
-            margin-left: 3px;
-            font-weight: bold;
-            font-size: 1.1em;
-        }
-    }
 }
