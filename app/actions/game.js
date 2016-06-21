@@ -68,3 +68,7 @@ B.on('game/init', (action) => {
     };
   }));
 });
+
+B.on('game/exit', (action) => {
+  db.unset(['game']);
+});

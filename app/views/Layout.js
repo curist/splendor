@@ -1,6 +1,6 @@
 import m from 'mithril';
 
-import UserStatus from 'app/views/UserStatus';
+import InGameMenu from 'app/views/InGameMenu';
 import { BindData } from 'app/utils';
 
 const Layout = {
@@ -14,7 +14,7 @@ const Layout = {
   view (ctrl, args, component) {
     const user = ctrl.data.user;
     return m('div', [
-      m(UserStatus),
+      m(InGameMenu),
       (() => {
         if(user) {
           return m(component);
