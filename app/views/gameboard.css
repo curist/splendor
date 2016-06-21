@@ -44,6 +44,7 @@ $gold: gold;
                 display: flex;
                 width: $size;
                 height: $size;
+                border-radius: $size;
                 justify-content: center;
                 align-items: center;
             }

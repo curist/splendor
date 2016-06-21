@@ -2,4 +2,12 @@
 .Home {
   display: flex;
   flex-direction: column;
+
+  .GameBoard {
+    margin-bottom: 5px;
+  }
+
+  .PlayerBoard {
+    margin-left: 15px;
+  }
 }
