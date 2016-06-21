@@ -16,7 +16,7 @@ const NewGameSetting = {
     };
   },
   view (ctrl) {
-    return m('view', m('.col', [
+    return m('view', m('.row', [
       m('select', {
         value: ctrl.players(),
         onchange: m.withAttr('value', ctrl.players),

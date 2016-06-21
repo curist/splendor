@@ -17,7 +17,8 @@ const Home = {
     const ctrl = this;
 
     BindData(ctrl, {
-      game: ['game']
+      game: ['game'],
+      players: ['game', 'players'],
     });
 
   },
@@ -27,7 +28,7 @@ const Home = {
       if(inGame) {
         return [
           m(GameBoard),
-          m(PlayerBoard),
+          m(PlayerBoard, {player: ctrl.data.players[0]}),
         ];
       } else {
         return m(NewGameSetting);
