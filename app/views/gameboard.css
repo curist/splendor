@@ -13,28 +13,23 @@ $gold: gold;
         }
     }
 
-    .Cards {
-        display: flex;
-        flex-direction: column;
-        .Rank {
-            display: flex;
-            margin-bottom: 5px;
+    .Rank.row {
+        margin-bottom: 5px;
 
-            .Card {
-                margin-left: 5px;
-            }
-
-            .FakeCard {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 24px;
-                margin-left: 12px;
-                cursor: none;
-            }
+        .Card {
+            margin-left: 5px;
         }
 
+        .FakeCard {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            margin-left: 12px;
+            cursor: none;
+        }
     }
+
 
     .Resources {
         display: flex;

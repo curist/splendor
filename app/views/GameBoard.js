@@ -38,16 +38,16 @@ const GameBoard = {
       m('.Nobles', ctrl.data.nobles.map(noble => {
         return m(Noble, noble);
       })),
-      m('.Cards', [
-        m('.Rank', [
+      m('.col', [
+        m('.Rank.row', [
           Cards(ctrl.data.cards3),
           m('.Card.FakeCard', ctrl.data.deck3.length),
         ]),
-        m('.Rank', [
+        m('.Rank.row', [
           Cards(ctrl.data.cards2),
           m('.Card.FakeCard', ctrl.data.deck2.length),
         ]),
-        m('.Rank', [
+        m('.Rank.row', [
           Cards(ctrl.data.cards1),
           m('.Card.FakeCard', ctrl.data.deck1.length),
         ]),
