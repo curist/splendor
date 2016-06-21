@@ -46,7 +46,7 @@ B.on('game/init', (action) => {
   // TODO players status
   // TODO randomize or by setting
   db.set(['game', 'current-player'], 0);
-  db.set(['game', 'players'], _.range(players).map(() => {
+  db.set(['game', 'players'], _.range(players).map((i) => {
     return {
       bonus: {
         white: 0,
@@ -65,10 +65,19 @@ B.on('game/init', (action) => {
       },
       score: 0,
       reservedCards: [],
+      active: (i == 0),
     };
   }));
+
+  // TODO set showing-player to playing player
+  db.set(['game', 'showing-player'], 0);
 });
 
 B.on('game/exit', (action) => {
   db.unset(['game']);
+});
+
+B.on('game/show-player', (action) => {
+  const { player } = action;
+  db.set(['game', 'showing-player'], player);
 });

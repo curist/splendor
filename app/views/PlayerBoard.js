@@ -1,4 +1,6 @@
 import m from 'mithril';
+import DEBUG from 'debug';
+const debug = DEBUG('app/views/PlayerBoard');
 
 import {colors} from 'app/data/game-setting';
 

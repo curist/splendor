@@ -1,0 +1,35 @@
+.PlayerBar {
+    .Active {
+        &.hide {
+            visibility: hidden;
+        }
+    }
+
+    .PlayerBox {
+        $border-color: #333;
+        display: flex;
+        width: 64px;
+        cursor: pointer;
+        border: 1px solid $border-color;
+        border-radius: 8px;
+        overflow: hidden;
+
+        .PlayerName {
+            flex: 1;
+            border-right: 1px solid $border-color;
+            background-color: #333;
+            color: #aaa;
+            text-align: center;
+        }
+
+        &.showing .PlayerName {
+            font-weight: bold;
+            color: #fee;
+        }
+
+        .Score {
+            flex: 1;
+            text-align: center;
+        }
+    }
+}

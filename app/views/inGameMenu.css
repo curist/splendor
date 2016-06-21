@@ -11,7 +11,6 @@
     width: $size;
     height: $size;
     border-radius: $size;
-    margin-right: 1em;
   }
 
   .scroll {
@@ -32,7 +31,6 @@
     .user-name, .status {
       font-size: 16px;
       color: #543;
-      margin-right: 1em;
       flex: 1;
       text-align: center;
       white-space: nowrap;

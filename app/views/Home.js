@@ -10,6 +10,7 @@ import allCards from 'app/data/cards';
 import Card from 'app/widgets/Card';
 import NewGameSetting from 'app/views/NewGameSetting';
 import GameBoard from 'app/views/GameBoard';
+import PlayerBar from 'app/views/PlayerBar';
 import PlayerBoard from 'app/views/PlayerBoard';
 
 const Home = {
@@ -19,6 +20,7 @@ const Home = {
     BindData(ctrl, {
       game: ['game'],
       players: ['game', 'players'],
+      showingPlayer: ['game', 'showing-player'],
     });
 
   },
@@ -28,7 +30,8 @@ const Home = {
       if(inGame) {
         return [
           m(GameBoard),
-          m(PlayerBoard, {player: ctrl.data.players[0]}),
+          m(PlayerBar),
+          m(PlayerBoard, {player: ctrl.data.players[ctrl.data.showingPlayer]}),
         ];
       } else {
         return m(NewGameSetting);
