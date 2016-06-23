@@ -1,7 +1,6 @@
 import B from 'app/broker';
 
-// import DEBUG from 'debug';
-// const debug = DEBUG('app/firebase');
+const debug = require('debug')('app/firebase');
 
 const config = {
   apiKey: 'AIzaSyBoT3dxnQHbp3F2tVVKlzNI5sFGLEOKAHQ',

@@ -2,8 +2,7 @@ import B from 'app/broker';
 import db from 'app/db';
 import _ from 'underscore';
 
-import DEBUG from 'debug';
-const debug = DEBUG('app/actions/game');
+const debug = require('debug')('app/actions/game');
 
 import setting from 'app/data/game-setting';
 import {colors} from 'app/data/game-setting';

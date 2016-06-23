@@ -1,7 +1,11 @@
 import m from 'mithril';
 import _ from 'underscore';
 
+import B from 'app/broker';
+
 import { colors } from 'app/data/game-setting';
+
+const debug = require('debug')('app/widgets/Card');
 
 import './card.css';
 

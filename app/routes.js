@@ -3,8 +3,7 @@ import m from 'mithril';
 import Layout from 'app/views/Layout';
 import Home from 'app/views/Home';
 
-import DEBUG from 'debug';
-const debug = DEBUG('app/routes');
+const debug = require('debug')('app/routes');
 
 let routes = {
   '/': Home,

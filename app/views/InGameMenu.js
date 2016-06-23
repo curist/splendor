@@ -1,7 +1,6 @@
 import m from 'mithril';
 import B from 'app/broker';
-import DEBUG from 'debug';
-const debug = DEBUG('app/views/InGameMenu');
+const debug = require('debug')('app/views/InGameMenu');
 
 import { BindData } from 'app/utils';
 
