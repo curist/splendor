@@ -8,11 +8,13 @@ import setting from 'app/data/game-setting';
 import {colors} from 'app/data/game-setting';
 import cards from 'app/data/cards';
 import nobles from 'app/data/nobles';
-const groupedCards = _(cards).groupBy(card => card.rank);
+const groupedCards = _(cards.map((card, i) => {
+  card['key'] = i;
+  return card;
+})).groupBy(card => card.rank);
 
 B.on('game/init', (action) => {
   const { players } = action;
-  debug(players);
 
   const {
     1: rank1cards,
@@ -44,7 +46,11 @@ B.on('game/init', (action) => {
 
   // TODO players status
   // TODO randomize or by setting
-  db.set(['game', 'current-player'], Math.floor(Math.random() * players));
+  let startIndex = Math.floor(Math.random() * players);
+  db.set(['game', 'current-player'], startIndex);
+  // TODO set showing-player to playing player
+  db.set(['game', 'showing-player'], startIndex);
+
   db.set(['game', 'players'], _.range(players).map((i) => {
     return {
       bonus: {
@@ -67,8 +73,6 @@ B.on('game/init', (action) => {
     };
   }));
 
-  // TODO set showing-player to playing player
-  db.set(['game', 'showing-player'], 0);
 });
 
 B.on('game/exit', (action) => {

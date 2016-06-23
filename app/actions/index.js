@@ -4,6 +4,7 @@ B.removeAllListeners();
 
 require('app/actions/firebase');
 require('app/actions/game');
+require('app/actions/gameaction');
 
 B.on('do', function(action) {
   B.emit(action.action, action);

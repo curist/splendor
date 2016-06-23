@@ -20,23 +20,34 @@ import './card.css';
 //     provides: 'black',
 //     total_cost: 3 }
 const Card = {
-  view (ctrl, args) {
-    return m('.Card', [
+  controller () {
+    const ctrl = this;
+    ctrl.onClick = (card) => {
+      B.do({
+        action: 'gameaction/pick-card',
+        card: card,
+      });
+    };
+  },
+  view (ctrl, card) {
+    return m('.Card', {
+      onclick: ctrl.onClick.bind(ctrl, card)
+    }, [
       (function() {
-        if(args.points > 0) {
-          return m('.Points', args.points);
+        if(card.points > 0) {
+          return m('.Points', card.points);
         }
       })(),
-      m('.Provide.' + args.provides),
+      m('.Provide.' + card.provides),
       m('.Cost', colors.filter(color => {
-        return (args[color] > 0);
+        return (card[color] > 0);
       }).map(color => {
         return m('.Row', [
           m('.Indicator.' + color),
-          m('.Count', args[color]),
+          m('.Count', card[color]),
         ]);
       })),
-      m('.Rank', 'r' + args.rank),
+      m('.Rank', 'r' + card.rank),
     ]);
   }
 };

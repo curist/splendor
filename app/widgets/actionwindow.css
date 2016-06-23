@@ -1,0 +1,19 @@
+.ActionWindow {
+    position: absolute;
+    width: 180px;
+    min-height: 150px;
+    border: 1px solid black;
+    background-color: #eee;
+    left: 0;
+    right: 0;
+    margin: auto;
+    bottom: 15px;
+
+    &.hide {
+        display: none;
+    }
+
+    .Card {
+        cursor: none;
+    }
+}

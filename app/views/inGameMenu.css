@@ -1,6 +1,6 @@
 /* vim:set ft=sass: */
 .InGameMenu {
-  position: absolute;
+  position: fixed;
   display: flex;
   z-index: 9999;
   bottom: 0;
