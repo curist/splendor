@@ -6,6 +6,7 @@ import B from 'app/broker';
 
 import Card from 'app/widgets/Card';
 
+import { colors } from 'app/data/game-setting';
 import { BindData } from 'app/utils';
 
 import './actionwindow.css';
@@ -28,6 +29,12 @@ const ActionWindow = {
       B.do({
         action: 'gameaction/reserve-card',
         card: card,
+      });
+    };
+
+    ctrl.takeResources = () => {
+      B.do({
+        action: 'gameaction/take-resources',
       });
     };
 
@@ -54,7 +61,20 @@ const ActionWindow = {
     ]);
   },
   takeResourceView (ctrl) {
-
+    const resources = ctrl.data.action.resources;
+    return m('.ActionWindow.col', [
+      m('.Resources.row', colors.filter(color => {
+        return resources[color];
+      }).map(color => {
+        return m('.Resource.' + color, resources[color]);
+      })),
+      m('button', {
+        onclick: ctrl.takeResources.bind(ctrl),
+      }, 'take'),
+      m('button', {
+        onclick: ctrl.cancel.bind(ctrl),
+      }, 'cancel'),
+    ]);
   },
   view (ctrl) {
     const action = ctrl.data.action;

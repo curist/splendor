@@ -32,6 +32,13 @@ const GameBoard = {
     });
 
     ctrl.resourceTypes = colors.concat(['gold']);
+
+    ctrl.takeResource = (type) => {
+      B.do ({
+        action: 'gameaction/take-resource',
+        type: type,
+      });
+    };
   },
   view (ctrl) {
     return m('.GameBoard', [
@@ -53,7 +60,9 @@ const GameBoard = {
         ]),
       ]),
       m('.Resources', ctrl.resourceTypes.map(type => {
-        return m('.Resource.' + type, [
+        return m('.Resource.' + type, {
+          onclick: ctrl.takeResource.bind(ctrl, type),
+        }, [
           m('.Indicator', ctrl.data.resource[type]),
         ]);
       })),

@@ -39,6 +39,7 @@ $gold: gold;
             flex-direction: column;
             justify-content: center;
             margin-left: 5px;
+            cursor: pointer;
             .Indicator {
                 $size: 36px;
                 display: flex;

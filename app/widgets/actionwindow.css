@@ -1,3 +1,9 @@
+$white: white;
+$blue: blue;
+$green: green;
+$red: red;
+$black: black;
+
 .ActionWindow {
     position: absolute;
     width: 180px;
@@ -16,4 +22,40 @@
     .Card {
         cursor: none;
     }
+
+    .Resources {
+        padding: 5px;
+        .Resource {
+            $size: 32px;
+            width: $size;
+            height: $size;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #333;
+            border-radius: $size;
+            overflow: hidden;
+
+            &.white {
+                background-color: $white;
+            }
+            &.blue {
+                background-color: $blue;
+                color: white;
+            }
+            &.green {
+                background-color: $green;
+                color: black;
+            }
+            &.red {
+                background-color: $red;
+                color: black;
+            }
+            &.black {
+                background-color: $black;
+                color: #ccc;
+            }
+        }
+    }
+
 }
