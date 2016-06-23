@@ -18,7 +18,6 @@ const InGameMenu = {
     ctrl.expanded = m.prop(false);
 
     ctrl.toggleExpand = () => {
-      debug(ctrl.expanded());
       ctrl.expanded(!ctrl.expanded());
     };
 

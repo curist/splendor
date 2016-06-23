@@ -45,7 +45,7 @@ B.on('game/init', (action) => {
 
   // TODO players status
   // TODO randomize or by setting
-  db.set(['game', 'current-player'], 0);
+  db.set(['game', 'current-player'], Math.floor(Math.random() * players));
   db.set(['game', 'players'], _.range(players).map((i) => {
     return {
       bonus: {
@@ -65,7 +65,6 @@ B.on('game/init', (action) => {
       },
       score: 0,
       reservedCards: [],
-      active: (i == 0),
     };
   }));
 

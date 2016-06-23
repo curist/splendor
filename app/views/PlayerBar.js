@@ -14,6 +14,7 @@ const PlayerBar = {
     const ctrl = this;
 
     BindData(ctrl, {
+      currentPlayer: ['game', 'current-player'],
       players: ['game', 'players'],
       showing: ['game', 'showing-player'],
     });
@@ -27,7 +28,7 @@ const PlayerBar = {
   },
   view (ctrl) {
     return m('.PlayerBar.row', ctrl.data.players.map((player, i) => {
-      const isActive = player.active ? '' : '.hide';
+      const isActive = (i == ctrl.data.currentPlayer) ? '' : '.hide';
       const showing = (ctrl.data.showing == i) ? '.showing' : '';
       return [
         m('.Active' + isActive, m.trust('&#9733;')),
