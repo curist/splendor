@@ -141,6 +141,7 @@ function takeCardAndReplenish(db, card) {
   const nextCard = db.get(['game', 'deck' + rank, 0]);
   if(nextCard) {
     db.set(['game', 'cards' + rank, index], nextCard);
+    db.set(['game', 'cards' + rank, index, 'status'], 'board');
   }
   db.shift(['game', 'deck' + rank]);
 }

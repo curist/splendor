@@ -20,8 +20,13 @@ const groupedCards = _(cards.map((card, i) => {
   return card;
 })).groupBy(card => card.rank);
 
+function clone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
 function changeCardStatus(status) {
-  return (card) => {
+  return (ocard) => {
+    let card = clone(ocard);
     card.status = status;
     return card;
   };
