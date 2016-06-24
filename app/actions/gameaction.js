@@ -76,8 +76,7 @@ B.on('gameaction/take-resources', (action) => {
     db.apply(['game', 'resource', type], plus(-1 * count));
     db.apply(['game', 'players', playerIndex, 'resources', type], plus(count));
   });
-  cleanAction(db);
-  nextPlayer(db);
+  endTurn(db);
 });
 
 B.on('gameaction/hold-a-rank-card', (action) => {
@@ -110,8 +109,7 @@ B.on('gameaction/blind-hold', (action) => {
     player.reservedCards.push(card);
     return player;
   });
-  cleanAction(db);
-  nextPlayer(db);
+  endTurn(db);
 });
 
 function clone(obj) {
@@ -126,6 +124,13 @@ function plus(n) {
 
 function cleanAction(db) {
   db.unset(['game', 'action']);
+}
+
+function endTurn(db) {
+  // TODO do resource check
+  // TODO do nobles check
+  cleanAction(db);
+  nextPlayer(db);
 }
 
 // replenish card to it's original index
@@ -213,8 +218,7 @@ B.on('gameaction/acquire-card', (action) => {
   });
 
   takeCardAndReplenish(db, card);
-  cleanAction(db);
-  nextPlayer(db);
+  endTurn(db);
 });
 
 B.on('gameaction/reserve-card', (action) => {
@@ -237,8 +241,7 @@ B.on('gameaction/reserve-card', (action) => {
     return player;
   });
   takeCardAndReplenish(db, card);
-  cleanAction(db);
-  nextPlayer(db);
+  endTurn(db);
 });
 
 B.on('gameaction/take-noble', (action) => {
