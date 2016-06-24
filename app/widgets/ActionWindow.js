@@ -11,6 +11,8 @@ import { BindData } from 'app/utils';
 
 import './actionwindow.css';
 
+const debug = require('debug')('app/widgets/ActionWindow');
+
 const ActionWindow = {
   controller () {
     const ctrl = this;
@@ -50,10 +52,14 @@ const ActionWindow = {
       m('.col', [
         m('button', {
           onclick: ctrl.acquire.bind(ctrl, card),
-        }, 'acquire'),
-        m('button', {
-          onclick: ctrl.reserve.bind(ctrl, card),
-        }, 'reserve'),
+        }, 'buy'),
+        (function () {
+          if(card.status == 'board') {
+            return m('button', {
+              onclick: ctrl.reserve.bind(ctrl, card),
+            }, 'hold');
+          }
+        })(),
         m('button', {
           onclick: ctrl.cancel.bind(ctrl),
         }, 'cancel'),

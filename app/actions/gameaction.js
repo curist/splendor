@@ -171,6 +171,7 @@ B.on('gameaction/acquire-card', (action) => {
     debug('not enough resource for the card');
     return;
   }
+  card.status = 'bought';
   const [ pay, playerPayed ] = playerAcquireCard(player, card);
   db.set(['game', 'players', playerIndex], playerPayed);
   Object.keys(pay).forEach(type => {
@@ -183,9 +184,12 @@ B.on('gameaction/acquire-card', (action) => {
 });
 
 B.on('gameaction/reserve-card', (action) => {
-  const { card } = action;
+  const { card: ocard } = action;
   const playerIndex = db.get(['game', 'current-player']);
   const gold = db.get(['game', 'resource', 'gold']);
+
+  let card = clone(ocard);
+  card.status = 'hold';
 
   if(gold > 0) {
     db.set(['game', 'resource', 'gold'], gold - 1);

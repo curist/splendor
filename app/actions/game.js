@@ -8,10 +8,24 @@ import setting from 'app/data/game-setting';
 import {colors} from 'app/data/game-setting';
 import cards from 'app/data/cards';
 import nobles from 'app/data/nobles';
+
+// card statuses:
+//   - deck
+//   - board
+//   - hold
+//   - bought
 const groupedCards = _(cards.map((card, i) => {
-  card['key'] = i;
+  card.key = i;
+  card.status = 'deck';
   return card;
 })).groupBy(card => card.rank);
+
+function changeCardStatus(status) {
+  return (card) => {
+    card.status = status;
+    return card;
+  };
+}
 
 B.on('game/init', (action) => {
   const { players } = action;
@@ -26,9 +40,12 @@ B.on('game/init', (action) => {
   let rank2deck = _.shuffle(rank2cards);
   let rank3deck = _.shuffle(rank3cards);
 
-  db.set(['game', 'cards1'], _(rank1deck).take(4));
-  db.set(['game', 'cards2'], _(rank2deck).take(4));
-  db.set(['game', 'cards3'], _(rank3deck).take(4));
+  db.set(['game', 'cards1'],
+    _(rank1deck).take(4).map(changeCardStatus('board')));
+  db.set(['game', 'cards2'],
+    _(rank2deck).take(4).map(changeCardStatus('board')));
+  db.set(['game', 'cards3'],
+    _(rank3deck).take(4).map(changeCardStatus('board')));
 
   db.set(['game', 'deck1'], _(rank1deck).drop(4));
   db.set(['game', 'deck2'], _(rank2deck).drop(4));
@@ -44,12 +61,9 @@ B.on('game/init', (action) => {
     .shuffle().take(setting[players].nobles).value());
 
 
-  // TODO players status
   // TODO randomize or by setting
   let startIndex = Math.floor(Math.random() * players);
   db.set(['game', 'current-player'], startIndex);
-  // TODO set showing-player to playing player
-  db.set(['game', 'showing-player'], startIndex);
 
   db.set(['game', 'players'], _.range(players).map((i) => {
     return {
@@ -79,7 +93,3 @@ B.on('game/exit', (action) => {
   db.unset(['game']);
 });
 
-B.on('game/show-player', (action) => {
-  const { player } = action;
-  db.set(['game', 'showing-player'], player);
-});
