@@ -10,6 +10,7 @@
         border: 1px solid black;
         height: 95px;
         width: 70px;
+        background-color: #555;
 
         .Card {
             margin: 3px;
