@@ -68,6 +68,11 @@ $gold: gold;
                 &.gold {
                     background-color: $gold;
                 }
+
+                &.invalid {
+                    filter: grayscale(60%);
+                    opacity: 0.7;
+                }
             }
         }
 

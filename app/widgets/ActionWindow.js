@@ -17,8 +17,31 @@ const ActionWindow = {
   controller () {
     const ctrl = this;
     BindData(ctrl, {
-      action: ['game', 'action']
+      action: ['game', 'action'],
+      resources: ['game', 'resource'],
     });
+
+    const action = ctrl.data.action;
+
+    ctrl.takenResources = m.prop({});
+    if(action.action == 'take-resource') {
+      ctrl.takenResources(action.resources);
+    }
+
+    ctrl.takeResource = (color) => {
+      let res = ctrl.takenResources();
+      res[color] = (res[color] || 0) + 1;
+      ctrl.takenResources(res);
+    };
+
+    ctrl.giveBackResource = (color) => {
+      let res = ctrl.takenResources();
+      res[color] -= 1;
+      if(res[color] == 0) {
+        delete res[color];
+      }
+      ctrl.takenResources(res);
+    };
 
     ctrl.dropResources = m.prop({});
 
@@ -51,9 +74,10 @@ const ActionWindow = {
       });
     };
 
-    ctrl.takeResources = () => {
+    ctrl.takeResources = (res) => {
       B.do({
         action: 'gameaction/take-resources',
+        resources: res,
       });
     };
 
@@ -98,15 +122,47 @@ const ActionWindow = {
     ]);
   },
   takeResourceView (ctrl) {
-    const resources = ctrl.data.action.resources;
+    const resources = ctrl.data.resources;
+    const takenResources = ctrl.takenResources();
+    const totalTaken = Object.keys(takenResources).reduce((sum, color) => {
+      return sum + takenResources[color];
+    }, 0);
+    const took2sameColor = Object.keys(takenResources).reduce((yn, color) => {
+      return yn || (takenResources[color] >= 2);
+    }, false);
     return m('.ActionWindow.col', [
+      'Resources: ',
       m('.Resources.row', colors.filter(color => {
         return resources[color];
       }).map(color => {
-        return m('.Resource.' + color, resources[color]);
+        const count = resources[color] - (takenResources[color] || 0);
+        if(count <= 0) {
+          return;
+        }
+        let valid = true;
+        if(totalTaken >= 3) {
+          valid = false;
+        } else if(took2sameColor) {
+          valid = false;
+        } else if(totalTaken > 1 && takenResources[color] > 0) {
+          valid = false;
+        }
+        if(!valid) {
+          return m('.Resource.invalid.' + color, count);
+        }
+        return m('.Resource.' + color, {
+          onclick: ctrl.takeResource.bind(ctrl, color),
+        }, count);
+      })),
+      'Take',
+      m('.Resources.row', Object.keys(takenResources).map(color => {
+        const count = (takenResources[color] || 0);
+        return m('.Resource.' + color, {
+          onclick: ctrl.giveBackResource.bind(ctrl, color),
+        }, count);
       })),
       m('button', {
-        onclick: ctrl.takeResources.bind(ctrl),
+        onclick: ctrl.takeResources.bind(ctrl, takenResources),
       }, 'take'),
       m('button', {
         onclick: ctrl.cancel.bind(ctrl),

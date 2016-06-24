@@ -20,6 +20,7 @@ const Home = {
 
     BindData(ctrl, {
       game: ['game'],
+      action: ['game', 'action'],
       players: ['game', 'players'],
       currentPlayer: ['game', 'current-player'],
     });
@@ -38,7 +39,11 @@ const Home = {
               player: player,
             });
           })),
-          m(ActionWindow),
+          (function () {
+            if(ctrl.data.action) {
+              return m(ActionWindow);
+            }
+          })(),
           m(ReservedCards, currentPlayer),
         ];
       } else {

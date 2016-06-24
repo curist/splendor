@@ -27,42 +27,19 @@ B.on('gameaction/pick-card', (action) => {
 
 B.on('gameaction/take-resource', (action) => {
   const { type } = action;
-  const currentAction = db.get(['game', 'action']);
   if(type == 'gold') {
     return;
   }
-  if(!currentAction || currentAction.action !== 'take-resource') {
-    db.set(['game', 'action'], {
-      action: 'take-resource',
-      resources: {},
-    });
-  }
   const resources = db.get(['game', 'resource']);
-  const actionResources = db.get(['game', 'action', 'resources']);
-  // TODO validation
   if(resources[type] <= 0) {
     return;
   }
-  // handle taking 2 same type of resource
-  if(actionResources[type] > 0) {
-    if(resources[type] >= 4) {
-      db.set(['game', 'action', 'resources'], {
-        [type]: 2
-      });
-    }
-    return;
-  }
-  let types = Object.keys(actionResources);
-  for(let i = 0; i < types.length; i++) {
-    if(actionResources[types[i]] >= 2) {
-      return;
-    }
-  }
-  if(types.length >= 3) {
-    return;
-  }
-
-  db.set(['game', 'action', 'resources', type], 1);
+  db.set(['game', 'action'], {
+    action: 'take-resource',
+    resources: {
+      [type]: 1
+    },
+  });
 });
 
 B.on('gameaction/take-resources', (action) => {
@@ -70,7 +47,7 @@ B.on('gameaction/take-resources', (action) => {
   //   return (n || 0) + 1;
   // });
   const playerIndex = db.get(['game', 'current-player']);
-  const resources = db.get(['game', 'action', 'resources']);
+  const { resources } = action;
   Object.keys(resources).forEach(type => {
     let count = resources[type];
     db.apply(['game', 'resource', type], plus(-1 * count));
@@ -224,7 +201,6 @@ B.on('gameaction/acquire-card', (action) => {
     debug('not enough resource for the card');
     return;
   }
-  card.status = 'bought';
   const [ pay, playerPayed ] = playerAcquireCard(player, card);
   db.set(['game', 'players', playerIndex], playerPayed);
   Object.keys(pay).forEach(type => {
