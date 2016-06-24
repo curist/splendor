@@ -25,7 +25,7 @@ const ActionWindow = {
 
     ctrl.takenResources = m.prop({});
     if(action.action == 'take-resource') {
-      ctrl.takenResources(action.resources);
+      ctrl.takenResources(Object.assign({}, action.resources));
     }
 
     ctrl.takeResource = (color) => {

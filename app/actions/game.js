@@ -75,9 +75,9 @@ B.on('game/init', (action) => {
         black: 0,
       },
       resources: {
-        white: 5,
-        blue: 5,
-        green: 5,
+        white: 0,
+        blue: 0,
+        green: 0,
         red: 0,
         black: 0,
         gold: 0,
