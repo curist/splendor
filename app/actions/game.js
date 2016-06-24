@@ -40,6 +40,7 @@ function changeCardStatus(status) {
 B.on('game/init', (action) => {
   const { players, winGameScore } = action;
 
+  db.set(['game', 'turn'], 1);
   db.set(['game', 'win-game-score'], winGameScore);
 
   const {

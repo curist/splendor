@@ -25,7 +25,7 @@ const NewGameSetting = {
         m('select', {
           value: ctrl.players(),
           onchange: m.withAttr('value', ctrl.players),
-        },_.range(2,5).map(n => {
+        },_.range(1,5).map(n => {
           return m('option', {
             value: n
           }, n);

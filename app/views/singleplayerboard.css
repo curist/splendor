@@ -1,0 +1,71 @@
+$white: white;
+$blue: blue;
+$green: green;
+$red: red;
+$black: black;
+$gold: gold;
+.SinglePlayerBoard {
+    position: relative;
+    padding: 2px 15px;
+
+    .ScoreRow {
+        align-items: center;
+        .Score {
+            font-size: 20px;
+            padding-left: 5px;
+        }
+    }
+
+    .TurnRow {
+        .Turn {
+            padding-left: 5px;
+        }
+    }
+
+    .Resources {
+        display: flex;
+        .Resource {
+            width: 32px;
+            align-items: center;
+            border: 1px solid #555;
+            padding: 2px;
+            margin-right: 3px;
+            border-radius: 10px;
+            .Indicator {
+                $size: 24px;
+                display: flex;
+                width: $size;
+                height: $size;
+                border-radius: $size;
+                justify-content: center;
+                align-items: center;
+                &.white {
+                    background-color: $white;
+                }
+                &.blue {
+                    background-color: $blue;
+                    color: white;
+                }
+                &.green {
+                    background-color: $green;
+                    color: black;
+                }
+                &.red {
+                    background-color: $red;
+                    color: black;
+                }
+                &.black {
+                    background-color: $black;
+                    color: #ccc;
+                }
+                &.gold {
+                    background-color: $gold;
+                }
+            }
+
+            .Count {
+                margin-left: 3px;
+            }
+        }
+    }
+}

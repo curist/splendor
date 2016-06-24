@@ -11,6 +11,7 @@ import Card from 'app/widgets/Card';
 import NewGameSetting from 'app/views/NewGameSetting';
 import Summary from 'app/views/Summary';
 import GameBoard from 'app/views/GameBoard';
+import SinglePlayerBoard from 'app/views/SinglePlayerBoard';
 import PlayerBoard from 'app/views/PlayerBoard';
 import ActionWindow from 'app/widgets/ActionWindow';
 import ReservedCards from 'app/widgets/ReservedCards';
@@ -22,6 +23,7 @@ const Home = {
     BindData(ctrl, {
       game: ['game'],
       action: ['game', 'action'],
+      turn: ['game', 'turn'],
       players: ['game', 'players'],
       showSummary: ['game', 'show-summary'],
       currentPlayer: ['game', 'current-player'],
@@ -32,15 +34,25 @@ const Home = {
     const inGame = !!ctrl.data.game;
     return m('.Home', (function() {
       if(inGame) {
+        const isSinglePlayer = (ctrl.data.players.length == 1);
         const currentPlayer = ctrl.data.players[ctrl.data.currentPlayer];
         return [
           m(GameBoard),
-          m('.row', ctrl.data.players.map((player, i) => {
-            return m(PlayerBoard, {
-              isActive: (i == ctrl.data.currentPlayer),
-              player: player,
-            });
-          })),
+          (function () {
+            if(isSinglePlayer) {
+              return m(SinglePlayerBoard, {
+                turn: ctrl.data.turn,
+                player: ctrl.data.players[0],
+              });
+            } else {
+              return m('.row', ctrl.data.players.map((player, i) => {
+                return m(PlayerBoard, {
+                  isActive: (i == ctrl.data.currentPlayer),
+                  player: player,
+                });
+              }));
+            }
+          })(),
           (function () {
             if(ctrl.data.action) {
               return m(ActionWindow);

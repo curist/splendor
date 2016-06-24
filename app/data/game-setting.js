@@ -1,4 +1,8 @@
 const setting = {
+  1: {
+    resource: 4,
+    nobles: 3,
+  },
   2: {
     resource: 4,
     nobles: 3,
