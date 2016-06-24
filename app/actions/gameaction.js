@@ -216,6 +216,7 @@ function playerAcquireCard(oplayer, card) {
         pay[color] = cost;
       } else {
         short += (cost - player.resources[color]);
+        pay[color] = player.resources[color];
         player.resources[color] = 0;
       }
     }
