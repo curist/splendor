@@ -289,6 +289,7 @@ B.on('gameaction/drop-resources', (action) => {
   Object.keys(dropResources).forEach(color => {
     const count = dropResources[color];
     db.apply(['game', 'players', playerIndex, 'resources', color], plus(-1 * count));
+    db.apply(['game', 'resource', color], plus(count));
   });
   endTurn(db);
 });
