@@ -29,6 +29,16 @@ $gold: gold;
         margin: auto;
         bottom: 15px;
 
+        .PickNoble {
+            text-align: center;
+            background-color: #eee;
+            color: #eee;
+
+            &.picked {
+                color: black;
+            }
+        }
+
         .Card {
             cursor: none;
         }

@@ -119,7 +119,20 @@ function endTurn(db) {
       player
     });
   }
-  // TODO do nobles check
+  // nobles check
+  const affordableNobles = db.get(['game', 'nobles']).filter(noble => {
+    const passedResources = colors.filter(color => {
+      return player.bonus[color] >= noble[color];
+    });
+    // should all pass
+    return passedResources.length == 5;
+  });
+  if(affordableNobles.length > 0) {
+    return db.set(['game', 'action'], {
+      action: 'pick-a-noble',
+      nobles: affordableNobles,
+    });
+  }
   cleanAction(db);
   nextPlayer(db);
 }
@@ -251,4 +264,17 @@ B.on('gameaction/drop-resources', (action) => {
     db.apply(['game', 'players', playerIndex, 'resources', color], plus(-1 * count));
   });
   endTurn(db);
+});
+
+B.on('gameaction/pick-noble', (action) => {
+  const { noble } = action;
+  db.apply(['game', 'nobles'], (nobles) => {
+    return nobles.filter(nbl => {
+      return nbl.key !== noble.key;
+    });
+  });
+  const playerIndex = db.get(['game', 'current-player']);
+  db.apply(['game', 'players', playerIndex, 'score'], plus(noble.points));
+  cleanAction(db);
+  nextPlayer(db);
 });

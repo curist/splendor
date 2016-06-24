@@ -5,6 +5,7 @@ import m from 'mithril';
 import B from 'app/broker';
 
 import Card from 'app/widgets/Card';
+import Noble from 'app/widgets/Noble';
 
 import { colors } from 'app/data/game-setting';
 import { BindData } from 'app/utils';
@@ -60,6 +61,8 @@ const ActionWindow = {
       ctrl.dropResources(res);
     };
 
+    ctrl.pickedNoble = m.prop(0);
+
     ctrl.acquire = (card) => {
       B.do({
         action: 'gameaction/acquire-card',
@@ -92,6 +95,13 @@ const ActionWindow = {
       B.do({
         action: 'gameaction/drop-resources',
         resources: ctrl.dropResources(),
+      });
+    };
+
+    ctrl.pickNoble = (noble) => {
+      B.do({
+        action: 'gameaction/pick-noble',
+        noble: noble
       });
     };
 
@@ -209,6 +219,22 @@ const ActionWindow = {
       })(),
     ]);
   },
+  pickNobleView (ctrl, nobles) {
+    return m('.ActionWindow.col', [
+      m('.Nobles.row', nobles.map((noble, i) => {
+        const picked = (ctrl.pickedNoble() == i) ? '.picked' : '';
+        return m('.wrapper', {
+          onclick: ctrl.pickedNoble.bind(ctrl, i)
+        }, [
+          m('.PickNoble' + picked, '✓'),
+          m(Noble, noble),
+        ]);
+      })),
+      m('button', {
+        onclick: ctrl.pickNoble.bind(ctrl, nobles[ctrl.pickedNoble()])
+      }, 'confirm'),
+    ]);
+  },
   view (ctrl) {
     const action = ctrl.data.action;
     if(!action) {
@@ -230,6 +256,10 @@ const ActionWindow = {
     case 'too-much-resources':
       return m('.ActionWindowBackdrop', [
         ActionWindow.dropResourceView(ctrl, action.player)
+      ]);
+    case 'pick-a-noble':
+      return m('.ActionWindowBackdrop', [
+        ActionWindow.pickNobleView(ctrl, action.nobles)
       ]);
     default:
       return m('.ActionWindowBackdrop.hide');

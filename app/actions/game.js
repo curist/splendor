@@ -7,7 +7,12 @@ const debug = require('debug')('app/actions/game');
 import setting from 'app/data/game-setting';
 import {colors} from 'app/data/game-setting';
 import cards from 'app/data/cards';
-import nobles from 'app/data/nobles';
+import nobleData from 'app/data/nobles';
+
+const nobles = nobleData.map((noble, i) => {
+  noble.key = i;
+  return noble;
+});
 
 // card statuses:
 //   - deck
