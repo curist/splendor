@@ -155,6 +155,10 @@ function takeCardAndReplenish(db, card) {
   if(nextCard) {
     db.set(['game', 'cards' + rank, index], nextCard);
     db.set(['game', 'cards' + rank, index, 'status'], 'board');
+  } else {
+    db.set(['game', 'cards' + rank, index], {
+      status: 'empty'
+    });
   }
   db.shift(['game', 'deck' + rank]);
 }
