@@ -127,7 +127,21 @@ function cleanAction(db) {
 }
 
 function endTurn(db) {
-  // TODO do resource check
+  const playerIndex = db.get(['game', 'current-player']);
+  const player = db.get(['game', 'players', playerIndex]);
+  const resourcesCount = Object.keys(player.resources).map(color => {
+    return player.resources[color];
+  }).reduce((sum, count) => {
+    return sum + count;
+  });
+
+  // resource check
+  if (resourcesCount > 10) {
+    return db.set(['game', 'action'], {
+      action: 'too-much-resources',
+      player
+    });
+  }
   // TODO do nobles check
   cleanAction(db);
   nextPlayer(db);
@@ -250,4 +264,14 @@ B.on('gameaction/take-noble', (action) => {
 
 B.on('gameaction/cancel', () => {
   cleanAction(db);
+});
+
+B.on('gameaction/drop-resources', (action) => {
+  const playerIndex = db.get(['game', 'current-player']);
+  const { resources: dropResources } = action;
+  Object.keys(dropResources).forEach(color => {
+    const count = dropResources[color];
+    db.apply(['game', 'players', playerIndex, 'resources', color], plus(-1 * count));
+  });
+  endTurn(db);
 });

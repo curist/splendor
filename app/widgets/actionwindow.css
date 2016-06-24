@@ -3,60 +3,73 @@ $blue: blue;
 $green: green;
 $red: red;
 $black: black;
+$gold: gold;
 
-.ActionWindow {
+.ActionWindowBackdrop {
     position: absolute;
-    width: 180px;
-    min-height: 150px;
-    border: 1px solid black;
-    background-color: #eee;
-    left: 0;
+    top: 0;
+    bottom: 0;
     right: 0;
-    margin: auto;
-    bottom: 15px;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.6);
     z-index: 999;
 
     &.hide {
         display: none;
     }
 
-    .Card {
-        cursor: none;
-    }
+    .ActionWindow {
+        position: absolute;
+        width: 180px;
+        min-height: 150px;
+        border: 1px solid black;
+        background-color: #eee;
+        left: 0;
+        right: 0;
+        margin: auto;
+        bottom: 15px;
 
-    .Resources {
-        padding: 5px;
-        .Resource {
-            $size: 32px;
-            width: $size;
-            height: $size;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 1px solid #333;
-            border-radius: $size;
-            overflow: hidden;
+        .Card {
+            cursor: none;
+        }
 
-            &.white {
-                background-color: $white;
-            }
-            &.blue {
-                background-color: $blue;
-                color: white;
-            }
-            &.green {
-                background-color: $green;
-                color: black;
-            }
-            &.red {
-                background-color: $red;
-                color: black;
-            }
-            &.black {
-                background-color: $black;
-                color: #ccc;
+        .Resources {
+            padding: 5px;
+            .Resource {
+                $size: 32px;
+                width: $size;
+                height: $size;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border: 1px solid #333;
+                border-radius: $size;
+                overflow: hidden;
+
+                &.white {
+                    background-color: $white;
+                }
+                &.blue {
+                    background-color: $blue;
+                    color: white;
+                }
+                &.green {
+                    background-color: $green;
+                    color: black;
+                }
+                &.red {
+                    background-color: $red;
+                    color: black;
+                }
+                &.black {
+                    background-color: $black;
+                    color: #ccc;
+                }
+                &.gold {
+                    background-color: $gold;
+                }
             }
         }
-    }
 
+    }
 }

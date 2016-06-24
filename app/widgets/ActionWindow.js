@@ -20,6 +20,23 @@ const ActionWindow = {
       action: ['game', 'action']
     });
 
+    ctrl.dropResources = m.prop({});
+
+    ctrl.dropResource = (color) => {
+      let res = ctrl.dropResources();
+      res[color] = (res[color] || 0) + 1;
+      ctrl.dropResources(res);
+    };
+
+    ctrl.takeBackResource = (color) => {
+      let res = ctrl.dropResources();
+      res[color] -= 1;
+      if(res[color] == 0) {
+        delete res[color];
+      }
+      ctrl.dropResources(res);
+    };
+
     ctrl.acquire = (card) => {
       B.do({
         action: 'gameaction/acquire-card',
@@ -44,6 +61,13 @@ const ActionWindow = {
       B.do({
         action: 'gameaction/blind-hold',
         rank: rank,
+      });
+    };
+
+    ctrl.doDropResources = () => {
+      B.do({
+        action: 'gameaction/drop-resources',
+        resources: ctrl.dropResources(),
       });
     };
 
@@ -100,20 +124,59 @@ const ActionWindow = {
       }, 'cancel'),
     ]);
   },
+  dropResourceView (ctrl, player) {
+    const dropResources = ctrl.dropResources();
+    const resourcesCount = Object.keys(player.resources).reduce((sum, color) => {
+      return sum + (player.resources[color] - (dropResources[color] || 0));
+    }, 0);
+    return m('.ActionWindow', [
+      'Your Resource: ' + resourcesCount,
+      m('.Resources.hold.row', Object.keys(player.resources).filter(color => {
+        return (player.resources[color] - (dropResources[color] || 0)) > 0;
+      }).map(color => {
+        return m('.Resource.' + color, {
+          onclick: ctrl.dropResource.bind(ctrl, color),
+        }, player.resources[color] - (dropResources[color] || 0));
+      })),
+      'Resource to discard',
+      m('.Resources.drop.row', Object.keys(dropResources).map(color => {
+        return m('.Resource.' + color, {
+          onclick: ctrl.takeBackResource.bind(ctrl, color),
+        }, dropResources[color]);
+      })),
+      (function() {
+        if(resourcesCount <= 10) {
+          return m('button', {
+            onclick: ctrl.doDropResources.bind(ctrl),
+          }, 'discard');
+        }
+      })(),
+    ]);
+  },
   view (ctrl) {
     const action = ctrl.data.action;
     if(!action) {
-      return m('.ActionWindow.hide');
+      return m('.ActionWindowBackdrop.hide');
     }
     switch(action.action) {
     case 'pick-card':
-      return ActionWindow.pickCardView(ctrl, action.card);
+      return m('.ActionWindowBackdrop', [
+        ActionWindow.pickCardView(ctrl, action.card),
+      ]);
     case 'take-resource':
-      return ActionWindow.takeResourceView(ctrl);
+      return m('.ActionWindowBackdrop', [
+        ActionWindow.takeResourceView(ctrl)
+      ]);
     case 'blind-hold':
-      return ActionWindow.blindHoldView(ctrl, action.rank);
+      return m('.ActionWindowBackdrop', [
+        ActionWindow.blindHoldView(ctrl, action.rank)
+      ]);
+    case 'too-much-resources':
+      return m('.ActionWindowBackdrop', [
+        ActionWindow.dropResourceView(ctrl, action.player)
+      ]);
     default:
-      return m('.ActionWindow.hide');
+      return m('.ActionWindowBackdrop.hide');
     }
   },
 };
