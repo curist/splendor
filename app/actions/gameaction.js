@@ -170,8 +170,9 @@ function buyReservedCard(db, card) {
 
 function someoneWon(db) {
   const players = db.get(['game', 'players']);
+  const winGameScore = db.get(['game', 'win-game-score']);
   const winningPlayer = players.find(player => {
-    return player.score >= 15;
+    return player.score >= winGameScore;
   });
   return !!winningPlayer;
 }

@@ -38,7 +38,9 @@ function changeCardStatus(status) {
 }
 
 B.on('game/init', (action) => {
-  const { players } = action;
+  const { players, winGameScore } = action;
+
+  db.set(['game', 'win-game-score'], winGameScore);
 
   const {
     1: rank1cards,
