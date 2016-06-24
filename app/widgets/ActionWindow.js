@@ -154,7 +154,8 @@ const ActionWindow = {
           valid = false;
         } else if(took2sameColor) {
           valid = false;
-        } else if(totalTaken > 1 && takenResources[color] > 0) {
+        } else if(takenResources[color] > 0 &&
+          (totalTaken > 1 || resources[color] < 4)) {
           valid = false;
         }
         if(!valid) {

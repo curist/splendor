@@ -8,6 +8,7 @@ $gold: gold;
     .Nobles {
         display: flex;
         margin: 10px 0;
+        min-height: 60px;
         .Noble {
             margin-left: 5px;
         }

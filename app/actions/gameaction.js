@@ -159,6 +159,15 @@ function takeCardAndReplenish(db, card) {
   db.shift(['game', 'deck' + rank]);
 }
 
+function buyReservedCard(db, card) {
+  const playerIndex = db.get(['game', 'current-player']);
+  db.apply(['game', 'players', playerIndex, 'reservedCards'], (reservedCards) => {
+    return reservedCards.filter(reservedCard => {
+      return reservedCard.key !== card.key;
+    });
+  });
+}
+
 function nextPlayer(db) {
   const playerIndex = db.get(['game', 'current-player']);
   const players = db.get(['game', 'players']);
@@ -221,7 +230,11 @@ B.on('gameaction/acquire-card', (action) => {
     db.apply(['game', 'resource', type], plus(pay[type]));
   });
 
-  takeCardAndReplenish(db, card);
+  if(card.status == 'hold') {
+    buyReservedCard(db, card);
+  } else {
+    takeCardAndReplenish(db, card);
+  }
   endTurn(db);
 });
 
