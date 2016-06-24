@@ -15,11 +15,15 @@ $gold: gold;
     }
 
     .Score {
-        font-weight: bold;
         font-size: 20px;
         padding: 0 5px;
         width: 30px;
         text-align: center;
+
+        &.win {
+            font-weight: bold;
+            color: black;
+        }
     }
 
     .Resources {

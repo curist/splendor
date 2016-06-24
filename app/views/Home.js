@@ -9,6 +9,7 @@ import './home.css';
 import allCards from 'app/data/cards';
 import Card from 'app/widgets/Card';
 import NewGameSetting from 'app/views/NewGameSetting';
+import Summary from 'app/views/Summary';
 import GameBoard from 'app/views/GameBoard';
 import PlayerBoard from 'app/views/PlayerBoard';
 import ActionWindow from 'app/widgets/ActionWindow';
@@ -22,6 +23,7 @@ const Home = {
       game: ['game'],
       action: ['game', 'action'],
       players: ['game', 'players'],
+      showSummary: ['game', 'show-summary'],
       currentPlayer: ['game', 'current-player'],
     });
 
@@ -42,6 +44,11 @@ const Home = {
           (function () {
             if(ctrl.data.action) {
               return m(ActionWindow);
+            }
+          })(),
+          (function () {
+            if(ctrl.data.showSummary) {
+              return m(Summary);
             }
           })(),
           m(ReservedCards, currentPlayer),

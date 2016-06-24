@@ -15,9 +15,11 @@ const PlayerBoard = {
   view (ctrl, args) {
     const { isActive, player } = args;
     const active = isActive ? '.active' : '';
+    // TODO get game winning score
+    const win = (player.score >= 15) ? '.win' : '';
     // TODO show user avatar
     return m('.PlayerBoard.col' + active, [
-      m('.Score', player.score),
+      m('.Score' + win, player.score),
       m('.Resources', ctrl.resourceTypes.map(type => {
         return m('.Resource', [
           m('.Indicator.' + type, player.bonus[type] || ''),

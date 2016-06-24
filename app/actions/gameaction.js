@@ -168,13 +168,25 @@ function buyReservedCard(db, card) {
   });
 }
 
+function someoneWon(db) {
+  const players = db.get(['game', 'players']);
+  const winningPlayer = players.find(player => {
+    return player.score >= 15;
+  });
+  return !!winningPlayer;
+}
+
 function nextPlayer(db) {
   const playerIndex = db.get(['game', 'current-player']);
   const players = db.get(['game', 'players']);
   const nextPlayer = (playerIndex + 1) % players.length;
 
+  // TODO check starting player index
+  if(nextPlayer == 0 && someoneWon(db)) {
+    db.set(['game', 'show-summary'], true);
+    return;
+  }
   db.set(['game', 'current-player'], nextPlayer);
-  db.set(['game', 'showing-player'], nextPlayer);
 }
 
 function hasEnoughResourceForCard(player, card) {

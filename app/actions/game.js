@@ -72,8 +72,7 @@ B.on('game/init', (action) => {
 
 
   // TODO randomize or by setting
-  let startIndex = Math.floor(Math.random() * players);
-  db.set(['game', 'current-player'], startIndex);
+  db.set(['game', 'current-player'], 0);
 
   db.set(['game', 'players'], _.range(players).map((i) => {
     return {
