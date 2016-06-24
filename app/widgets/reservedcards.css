@@ -1,6 +1,6 @@
 .ReservedCards {
-    position: absolute;
-    bottom: 90px;
+    position: fixed;
+    bottom: 50px;
     right: 10px;
     overflow: hidden;
 

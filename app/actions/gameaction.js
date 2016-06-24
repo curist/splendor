@@ -187,9 +187,12 @@ function nextPlayer(db) {
   const nextPlayer = (playerIndex + 1) % players.length;
 
   // TODO check starting player index
-  if(nextPlayer == 0 && someoneWon(db)) {
-    db.set(['game', 'show-summary'], true);
-    return;
+  if(nextPlayer == 0) {
+    db.apply(['game', 'turn'], plus(1));
+    if(someoneWon(db)) {
+      db.set(['game', 'show-summary'], true);
+      return;
+    }
   }
   db.set(['game', 'current-player'], nextPlayer);
 }
