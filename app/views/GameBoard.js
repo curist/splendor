@@ -9,6 +9,8 @@ import {colors} from 'app/data/game-setting';
 
 import { BindData } from 'app/utils';
 
+const debug = require('debug')('app/views/GameBoard');
+
 import './gameboard.css';
 
 function Cards(cards) {
@@ -34,9 +36,21 @@ const GameBoard = {
     ctrl.resourceTypes = colors.concat(['gold']);
 
     ctrl.takeResource = (type) => {
-      B.do ({
+      B.do({
         action: 'gameaction/take-resource',
         type: type,
+      });
+    };
+
+    ctrl.holdRankCard = (rank) => {
+      const deck = ctrl.data['deck' + rank];
+      if(!deck || deck.length <= 0) {
+        debug(`no cards @ deck ${rank}`);
+        return;
+      }
+      B.do({
+        action: 'gameaction/hold-a-rank-card',
+        rank: rank
       });
     };
   },
@@ -48,15 +62,21 @@ const GameBoard = {
       m('.col', [
         m('.Rank.row', [
           Cards(ctrl.data.cards3),
-          m('.Card.FakeCard', ctrl.data.deck3.length),
+          m('.Card.FakeCard', {
+            onclick: ctrl.holdRankCard.bind(ctrl, 3),
+          }, ctrl.data.deck3.length),
         ]),
         m('.Rank.row', [
           Cards(ctrl.data.cards2),
-          m('.Card.FakeCard', ctrl.data.deck2.length),
+          m('.Card.FakeCard', {
+            onclick: ctrl.holdRankCard.bind(ctrl, 2),
+          }, ctrl.data.deck2.length),
         ]),
         m('.Rank.row', [
           Cards(ctrl.data.cards1),
-          m('.Card.FakeCard', ctrl.data.deck1.length),
+          m('.Card.FakeCard', {
+            onclick: ctrl.holdRankCard.bind(ctrl, 1),
+          }, ctrl.data.deck1.length),
         ]),
       ]),
       m('.Resources', ctrl.resourceTypes.map(type => {

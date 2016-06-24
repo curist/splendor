@@ -80,6 +80,40 @@ B.on('gameaction/take-resources', (action) => {
   nextPlayer(db);
 });
 
+B.on('gameaction/hold-a-rank-card', (action) => {
+  db.set(['game', 'action'], {
+    action: 'blind-hold',
+    rank: action.rank,
+  });
+});
+
+B.on('gameaction/blind-hold', (action) => {
+  const { rank } = action;
+  const playerIndex = db.get(['game', 'current-player']);
+  const player = db.get(['game', 'players', playerIndex]);
+  const nextCard = db.get(['game', 'deck' + rank, 0]);
+  const gold = db.get(['game', 'resource', 'gold']);
+
+  db.shift(['game', 'deck' + rank]);
+
+  let card = clone(nextCard);
+  card.status = 'hold';
+
+  if(gold > 0) {
+    db.set(['game', 'resource', 'gold'], gold - 1);
+  }
+  db.apply(['game', 'players', playerIndex], (oplayer) => {
+    const player = clone(oplayer);
+    if(gold > 0) {
+      player.resources.gold += 1;
+    }
+    player.reservedCards.push(card);
+    return player;
+  });
+  cleanAction(db);
+  nextPlayer(db);
+});
+
 function clone(obj) {
   return JSON.parse(JSON.stringify(obj));
 }

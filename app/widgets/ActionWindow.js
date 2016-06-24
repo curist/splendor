@@ -40,6 +40,13 @@ const ActionWindow = {
       });
     };
 
+    ctrl.blindHold = (rank) => {
+      B.do({
+        action: 'gameaction/blind-hold',
+        rank: rank,
+      });
+    };
+
     ctrl.cancel = () => {
       B.do({
         action: 'gameaction/cancel',
@@ -82,15 +89,32 @@ const ActionWindow = {
       }, 'cancel'),
     ]);
   },
+  blindHoldView (ctrl, rank) {
+    return m('.ActionWindow.col', [
+      m('p', `Hold a rank ${rank} card`),
+      m('button', {
+        onclick: ctrl.blindHold.bind(ctrl, rank),
+      }, 'hold'),
+      m('button', {
+        onclick: ctrl.cancel.bind(ctrl),
+      }, 'cancel'),
+    ]);
+  },
   view (ctrl) {
     const action = ctrl.data.action;
     if(!action) {
       return m('.ActionWindow.hide');
     }
-    if(action.action == 'pick-card') {
+    switch(action.action) {
+    case 'pick-card':
       return ActionWindow.pickCardView(ctrl, action.card);
+    case 'take-resource':
+      return ActionWindow.takeResourceView(ctrl);
+    case 'blind-hold':
+      return ActionWindow.blindHoldView(ctrl, action.rank);
+    default:
+      return m('.ActionWindow.hide');
     }
-    return ActionWindow.takeResourceView(ctrl);
   },
 };
 
