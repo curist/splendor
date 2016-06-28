@@ -47,6 +47,7 @@ const NewGameSetting = {
       m('.row', [
         'players: ',
         m('select', {
+          key: 'players',
           value: ctrl.players(),
           onchange: m.withAttr('value', ctrl.changePlayerCount.bind(ctrl)),
         },_.range(1,5).map(n => {
@@ -56,7 +57,9 @@ const NewGameSetting = {
         })),
       ]),
       _.range(1, parseInt(ctrl.players()) + 1).map(n => {
-        return m('.row', [
+        return m('.row', {
+          key: `actor${n}.row`
+        }, [
           m('.PlayerSetting', `player ${n}:`),
           m('select', {
             value: ctrl.playerActors()[n-1],
@@ -68,7 +71,9 @@ const NewGameSetting = {
           })),
         ]);
       }),
-      m('.row', [
+      m('.row', {
+        key: 'win-game-row'
+      }, [
         'win game score: ',
         m('select', {
           value: ctrl.score(),
