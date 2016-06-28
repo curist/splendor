@@ -14,7 +14,13 @@ const debug = require('debug')('app/views/GameBoard');
 import './gameboard.css';
 
 function Cards(cards) {
-  return cards.map(card => {
+  return cards.map((card, i) => {
+    if(card.status == 'empty') {
+      return m(Card, {
+        key: `empty-${i}`,
+        status: 'empty'
+      });
+    }
     return m(Card, card);
   });
 }
@@ -63,18 +69,21 @@ const GameBoard = {
         m('.Rank.row', [
           Cards(ctrl.data.cards3),
           m('.Card.FakeCard', {
+            key: 'fakecard3',
             onclick: ctrl.holdRankCard.bind(ctrl, 3),
           }, ctrl.data.deck3.length),
         ]),
         m('.Rank.row', [
           Cards(ctrl.data.cards2),
           m('.Card.FakeCard', {
+            key: 'fakecard2',
             onclick: ctrl.holdRankCard.bind(ctrl, 2),
           }, ctrl.data.deck2.length),
         ]),
         m('.Rank.row', [
           Cards(ctrl.data.cards1),
           m('.Card.FakeCard', {
+            key: 'fakecard1',
             onclick: ctrl.holdRankCard.bind(ctrl, 1),
           }, ctrl.data.deck1.length),
         ]),

@@ -31,9 +31,12 @@ const Card = {
   },
   view (ctrl, card) {
     if(card.status == 'empty') {
-      return m('.Card');
+      return m('.Card', {
+        key: `card${card.key}`,
+      });
     }
     return m('.Card', {
+      key: `card${card.key}`,
       onclick: ctrl.onClick.bind(ctrl, card)
     }, [
       (function() {
