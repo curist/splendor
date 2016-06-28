@@ -10,11 +10,11 @@ const InGameMenu = {
   controller () {
     const ctrl = this;
 
-    BindData(ctrl , {
-      user: ['user']
-    });
-
     ctrl.expanded = m.prop(false);
+
+    BindData(ctrl , {
+      game: ['game']
+    });
 
     ctrl.toggleExpand = () => {
       ctrl.expanded(!ctrl.expanded());
@@ -40,34 +40,14 @@ const InGameMenu = {
     };
   },
   view (ctrl) {
-    const expanded = ctrl.expanded() ? '.expanded' : '';
     return m('div.InGameMenu', [
-      (function() {
-        const user = ctrl.data.user;
-        if(!user) {
-          return [
-            m('span.status', 'not login'),
-            m('button', {
-              onclick: ctrl.signin
-            }, 'sign in'),
-          ];
+      (function () {
+        if(ctrl.data.game) {
+          return m('button', {
+            onclick: ctrl.exitGame.bind(ctrl),
+          }, 'exit game');
         }
-        return [
-          m('img.user-avatar', {
-            src: user.photoUrl,
-            onclick: ctrl.toggleExpand.bind(ctrl),
-          }),
-          m('.scroll' + expanded, [
-            m('.user-name', user.name),
-            m('button', {
-              onclick: ctrl.exitGame.bind(ctrl),
-            }, 'exit game'),
-            m('button', {
-              onclick: ctrl.signout.bind(ctrl),
-            }, 'sign out'),
-          ]),
-        ];
-      })()
+      })(),
     ]);
   }
 };

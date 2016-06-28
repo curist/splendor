@@ -10,11 +10,28 @@ import allCards from 'app/data/cards';
 import Card from 'app/widgets/Card';
 import NewGameSetting from 'app/views/NewGameSetting';
 import Summary from 'app/views/Summary';
+import TourmentSummary from 'app/views/TourmentSummary';
 import GameBoard from 'app/views/GameBoard';
 import SinglePlayerBoard from 'app/views/SinglePlayerBoard';
 import PlayerBoard from 'app/views/PlayerBoard';
 import ActionWindow from 'app/widgets/ActionWindow';
 import ReservedCards from 'app/widgets/ReservedCards';
+
+const TourmentRounds = {
+  controller () {
+    const ctrl = this;
+
+    BindData(ctrl, {
+      currentRound: ['tourment', 'currentRound'],
+      rounds: ['tourment', 'rounds'],
+    });
+  },
+  view (ctrl) {
+    const currentRound = ctrl.data.currentRound;
+    const rounds = ctrl.data.rounds;
+    return m('.TourmentRound', `${currentRound} / ${rounds}`);
+  },
+};
 
 const Home = {
   controller () {
@@ -54,14 +71,23 @@ const Home = {
             }
           })(),
           (function () {
+            if(ctrl.data.game.mode == 'tourment') {
+              return m(TourmentRounds);
+            }
+          })(),
+          (function () {
             if(ctrl.data.action) {
               return m(ActionWindow);
             }
           })(),
           (function () {
-            if(ctrl.data.showSummary) {
-              return m(Summary);
+            if(!ctrl.data.showSummary) {
+              return;
             }
+            if(ctrl.data.game.mode == 'tourment') {
+              return m(TourmentSummary);
+            }
+            return m(Summary);
           })(),
           m(ReservedCards, currentPlayer),
         ];

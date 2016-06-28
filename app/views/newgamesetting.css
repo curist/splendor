@@ -1,0 +1,10 @@
+.NewGameSetting {
+    .PlayerSetting {
+
+    }
+
+    .rounds {
+        width: 50px;
+        text-align: center;
+    }
+}

@@ -8,4 +8,5 @@ const db = new Baobab({
   },
 });
 
+window.db = db;
 export default db;

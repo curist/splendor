@@ -7,13 +7,14 @@ import {colors} from 'app/data/game-setting';
 
 import { BindData } from 'app/utils';
 
-import './summary.css';
+import './tourmentsummary.css';
 
 const Summary = {
   controller () {
     const ctrl = this;
     BindData(ctrl, {
       players: ['game', 'players'],
+      wins: ['tourment', 'wins'],
     });
 
     ctrl.exitGame = () => {
@@ -24,8 +25,9 @@ const Summary = {
   },
   view (ctrl) {
     const players = ctrl.data.players;
+    const wins = ctrl.data.wins;
     return m('.SummaryBackdrop', m('.Summary.col', [
-      m('h1', 'G_G'),
+      m('h1', 'Tourment G_G'),
       players.map((player, i) => {
         return m('.Player', [
           m('.row', [
@@ -33,8 +35,8 @@ const Summary = {
             m('span', player.actor),
           ]),
           m('.Score', [
-            m('strong', player.score),
-            ' pts'
+            m('strong', wins[i]),
+            ' wins'
           ]),
         ]);
       }),
