@@ -16,9 +16,19 @@
         .row {
             align-items: center;
 
-            .Score {
-                padding: 0 15px;
+            strong {
+                margin-right: 5px;
             }
+        }
+
+    }
+
+    .Player {
+        display: flex;
+
+        .Score {
+            flex: 1;
+            text-align: right;
         }
     }
 }

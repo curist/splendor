@@ -36,10 +36,15 @@ const Summary = {
     return m('.SummaryBackdrop', m('.Summary.col', [
       m('h1', 'G_G'),
       players.map((player, i) => {
-        return m('.row', [
-          m('h3', i + 1 + '.'),
-          m('h4.Score', player.score),
-          ' points',
+        return m('.Player', [
+          m('.row', [
+            m('strong', i + 1 + '.'),
+            m('span', player.actor),
+          ]),
+          m('.Score', [
+            m('strong', player.score),
+            ' pts'
+          ]),
         ]);
       }),
       m('button', {
