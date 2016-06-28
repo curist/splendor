@@ -114,6 +114,7 @@ function endTurn(db) {
 
   // resource check
   if (resourcesCount > 10) {
+    B.do({ action: 'gameevent/drop-resource' });
     return db.set(['game', 'action'], {
       action: 'too-much-resources',
       player
@@ -128,6 +129,10 @@ function endTurn(db) {
     return passedResources.length == 5;
   });
   if(affordableNobles.length > 0) {
+    B.do({
+      action: 'gameevent/pick-noble',
+      nobles: affordableNobles,
+    });
     return db.set(['game', 'action'], {
       action: 'pick-a-noble',
       nobles: affordableNobles,
@@ -186,7 +191,6 @@ function nextPlayer(db) {
   const players = db.get(['game', 'players']);
   const nextPlayer = (playerIndex + 1) % players.length;
 
-  // TODO check starting player index
   if(nextPlayer == 0) {
     db.apply(['game', 'turn'], plus(1));
     if(someoneWon(db)) {
@@ -195,6 +199,7 @@ function nextPlayer(db) {
     }
   }
   db.set(['game', 'current-player'], nextPlayer);
+  B.do({ action: 'gameevent/turn' });
 }
 
 function hasEnoughResourceForCard(player, card) {
@@ -280,10 +285,6 @@ B.on('gameaction/reserve-card', (action) => {
   });
   takeCardAndReplenish(db, card);
   endTurn(db);
-});
-
-B.on('gameaction/take-noble', (action) => {
-  // XXX there may or may not be several nobles to pick from
 });
 
 B.on('gameaction/cancel', () => {

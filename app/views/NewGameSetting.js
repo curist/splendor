@@ -2,42 +2,44 @@ import m from 'mithril';
 import B from 'app/broker';
 import _ from 'underscore';
 
+import AIs from 'app/AI';
+
 const debug = require('debug')('app/views/NewGameSetting');
-
-// TODO import AIs here
-
 
 const NewGameSetting = {
   controller () {
     const ctrl = this;
 
     ctrl.players = m.prop(2);
-    ctrl.score = m.prop(15);
-
-    ctrl.playerSetting = m.prop([
-      'human',
-      'human',
+    ctrl.playerActors = m.prop([
       'human',
       'human',
     ]);
 
-    ctrl.availablePlayers = [
-      'human',
-      'ai:easy',
-    ];
+    ctrl.score = m.prop(15);
+
+    ctrl.actors = ['human'].concat(Object.keys(AIs).map(name => {
+      return `ai:${name}`;
+    }));
 
     ctrl.initGame = () => {
       B.do({
         action: 'game/init',
-        players: ctrl.players(),
+        players: ctrl.playerActors(),
         winGameScore: ctrl.score(),
       });
     };
 
+    ctrl.changePlayerCount = (n) => {
+      let actors = ctrl.playerActors().concat(['human', 'human', 'human']);
+      ctrl.playerActors(actors.slice(0, n));
+      ctrl.players(n);
+    };
+
     ctrl.changePlayerSetting = (n, entity) => {
-      let playerSetting = ctrl.playerSetting();
-      playerSetting[n] = entity;
-      ctrl.playerSetting(playerSetting);
+      let playerActors = ctrl.playerActors();
+      playerActors[n] = entity;
+      ctrl.playerActors(playerActors);
     };
   },
   view (ctrl) {
@@ -46,7 +48,7 @@ const NewGameSetting = {
         'players: ',
         m('select', {
           value: ctrl.players(),
-          onchange: m.withAttr('value', ctrl.players),
+          onchange: m.withAttr('value', ctrl.changePlayerCount.bind(ctrl)),
         },_.range(1,5).map(n => {
           return m('option', {
             value: n
@@ -57,9 +59,9 @@ const NewGameSetting = {
         return m('.row', [
           m('.PlayerSetting', `player ${n}:`),
           m('select', {
-            value: ctrl.playerSetting()[n-1],
+            value: ctrl.playerActors()[n-1],
             onchange: m.withAttr('value', ctrl.changePlayerSetting.bind(ctrl, n-1)),
-          }, ctrl.availablePlayers.map(player => {
+          }, ctrl.actors.map(player => {
             return m('option', {
               value: player
             }, player);

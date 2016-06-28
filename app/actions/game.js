@@ -4,6 +4,8 @@ import _ from 'underscore';
 
 const debug = require('debug')('app/actions/game');
 
+import {initActors} from 'app/AI/actors';
+
 import setting from 'app/data/game-setting';
 import {colors} from 'app/data/game-setting';
 import cards from 'app/data/cards';
@@ -40,6 +42,10 @@ function changeCardStatus(status) {
 B.on('game/init', (action) => {
   const { players, winGameScore } = action;
 
+  const playerCount = players.length;
+
+  initActors(players);
+
   db.set(['game', 'turn'], 1);
   db.set(['game', 'win-game-score'], winGameScore);
 
@@ -67,18 +73,19 @@ B.on('game/init', (action) => {
   db.set(['game', 'resource', 'gold'], 5);
 
   colors.forEach(color => {
-    db.set(['game', 'resource', color], setting[players].resource);
+    db.set(['game', 'resource', color], setting[playerCount].resource);
   });
 
   db.set(['game', 'nobles'], _(nobles).chain()
-    .shuffle().take(setting[players].nobles).value());
+    .shuffle().take(setting[playerCount].nobles).value());
 
 
   // TODO randomize or by setting
   db.set(['game', 'current-player'], 0);
 
-  db.set(['game', 'players'], _.range(players).map((i) => {
+  db.set(['game', 'players'], players.map(actor => {
     return {
+      actor: actor,
       bonus: {
         white: 0,
         blue: 0,
@@ -99,6 +106,7 @@ B.on('game/init', (action) => {
     };
   }));
 
+  B.do({ action: 'gameevent/turn' });
 });
 
 B.on('game/exit', (action) => {
