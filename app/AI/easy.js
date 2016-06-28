@@ -1,6 +1,6 @@
 import _ from 'underscore';
 
-const debug = require('debug')('app/AI/easy');
+const debug = require('debug')('app/AI/idiot');
 
 const colors = [
   'white', 'blue', 'green', 'red', 'black'
@@ -61,9 +61,34 @@ function cardCost(player, card) {
       shortOf += short;
     }
   });
-  return shortOf + cost;
+  return shortOf * 2 + cost;
 }
 
+function calcAllBonus(cards) {
+  const allBonus = cards.reduce((bonus, card) => {
+    colors.forEach(color => {
+      bonus[color] += card[color] * (4 - card.rank);
+    });
+    return bonus;
+  }, {
+    white: 0,
+    blue: 0,
+    green: 0,
+    red: 0,
+    black: 0,
+  });
+
+  return allBonus;
+}
+
+function cardValue(player, cards, card) {
+  const allBonus = calcAllBonus(cards);
+
+  const cost = cardCost(player, card) + 1;
+  const bonusWeight = Math.log(allBonus[card.provides] + 10);
+  const value = bonusWeight * (card.points + 2) / cost;
+  return value;
+}
 function cp(player, card) {
   const w1 = 1.5 * (15 - player.score) / 15;
   const w2 = player.score / 15;
@@ -74,10 +99,8 @@ function cp(player, card) {
 
 function getBestCard(player, cards) {
   const sortedCards = cards.sort((cardA, cardB) => {
-    return cp(player, cardB) -
-      cp(player, cardA);
+    return cp(player, cardB) - cp(player, cardA);
   });
-  debug(sortedCards);
   return sortedCards[0];
 }
 
@@ -155,9 +178,9 @@ export default class Easy {
     //      a. having points better
     //   3. hold a card otherwise
     const player = state.players[playerIndex];
-    const resCount = countResources(player.resources);
 
-    const affordableCards = getAffordableCards(player, state.cards);
+    const allCards = state.cards.concat(player.reservedCards);
+    const affordableCards = getAffordableCards(player, allCards);
 
     // 2. try to buy a card
     const card = getBestCard(player, affordableCards);
@@ -168,25 +191,30 @@ export default class Easy {
       };
     }
 
+    const allBonus = calcAllBonus(allCards);
+    const resCount = countResources(player.resources);
+    const goalCard = getBestCard(player, allCards) || {};
     // 1. take resources
     if(resCount <= 7) {
       const availableColors = colors.filter(color => {
         return state.resources[color] > 0;
       });
-      const pickColors = _.shuffle(availableColors).slice(0, 3);
+      const pickColors = availableColors.sort((colorA, colorB) => {
+        const value_b = (goalCard[colorB] + 1) * (allBonus[colorB]/10 + 1);
+        const value_a = (goalCard[colorA] + 1) * (allBonus[colorA]/10 + 1);
+        return value_b - value_a;
+      }).slice(0, 3);
       return {
         action: 'resource',
         resources: zipResources(pickColors),
       };
     }
 
-    if(affordableCards.length == 0) {
-      // 3. hold a card
-      return {
-        action: 'hold',
-        card: _.shuffle(state.cards)[0],
-      };
-    }
+    // 3. hold a card
+    return {
+      action: 'hold',
+      card: _.shuffle(state.cards)[0],
+    };
   }
 
   dropResources (state, playerIndex, resources) {
