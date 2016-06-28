@@ -43,26 +43,20 @@ B.on('gameevent/turn', action => {
   // turnAction can be [buy, hold, resource]
   debug(turnAction);
   if(turnAction.action == 'buy') {
-    setTimeout(() => {
-      B.do({
-        action: 'gameaction/acquire-card',
-        card: turnAction.card,
-      });
-    }, 50);
+    B.do({
+      action: 'gameaction/acquire-card',
+      card: turnAction.card,
+    });
   } else if(turnAction.action == 'hold') {
-    setTimeout(() => {
-      B.do({
-        action: 'gameaction/reserve-card',
-        card: turnAction.card,
-      });
-    }, 50);
+    B.do({
+      action: 'gameaction/reserve-card',
+      card: turnAction.card,
+    });
   } else if(turnAction.action == 'resource') {
-    setTimeout(() => {
-      B.do({
-        action: 'gameaction/take-resources',
-        resources: turnAction.resources,
-      });
-    }, 50);
+    B.do({
+      action: 'gameaction/take-resources',
+      resources: turnAction.resources,
+    });
   } else {
     debug(`unknown turn action: ${turnAction.action}`);
   }
@@ -78,12 +72,10 @@ B.on('gameevent/drop-resource', action => {
   const gameState = composeGameState(db);
 
   const resources = actor.dropResources(gameState, playerIndex, player.resources);
-  setTimeout(() => {
-    B.do({
-      action: 'gameaction/drop-resources',
-      resources: resources,
-    });
-  }, 500);
+  B.do({
+    action: 'gameaction/drop-resources',
+    resources: resources,
+  });
 });
 
 B.on('gameevent/pick-noble', action => {
@@ -97,11 +89,9 @@ B.on('gameevent/pick-noble', action => {
   const gameState = composeGameState(db);
 
   const noble = actor.pickNoble(gameState, playerIndex, nobles);
-  setTimeout(() => {
-    B.do({
-      action: 'gameaction/pick-noble',
-      noble: noble,
-    });
-  }, 800);
+  B.do({
+    action: 'gameaction/pick-noble',
+    noble: noble,
+  });
 
 });

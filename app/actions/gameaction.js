@@ -223,7 +223,7 @@ function nextPlayer(db) {
     if(winningPlayerKey >= 0) {
       db.apply(['tourment', 'wins', winningPlayerKey], plus(1));
       if(currentRound < totalRounds) {
-        nextGame(db);
+        requestAnimationFrame(nextGame.bind(null, db));
       } else {
         db.set(['game', 'show-summary'], true);
       }

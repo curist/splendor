@@ -134,11 +134,13 @@ export default class Dumb {
 
     const allCards = state.cards.concat(player.reservedCards);
     const affordableCards = getAffordableCards(player, allCards);
-    if(affordableCards.length == 0) {
-      // 3. hold a card
+
+    // 2. try to buy a card
+    const card = getBestCard(affordableCards);
+    if(card) {
       return {
-        action: 'hold',
-        card: _.shuffle(state.cards)[0],
+        action: 'buy',
+        card: card,
       };
     }
 
@@ -155,12 +157,13 @@ export default class Dumb {
       };
     }
 
-    // 2. try to buy a card
-    const card = getBestCard(affordableCards);
-    return {
-      action: 'buy',
-      card: card,
-    };
+    if(affordableCards.length == 0) {
+      // 3. hold a card
+      return {
+        action: 'hold',
+        card: _.shuffle(state.cards)[0],
+      };
+    }
   }
 
   dropResources (state, playerIndex, resources) {
