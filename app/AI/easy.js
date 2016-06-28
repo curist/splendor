@@ -156,6 +156,18 @@ export default class Easy {
     //   3. hold a card otherwise
     const player = state.players[playerIndex];
     const resCount = countResources(player.resources);
+
+    const affordableCards = getAffordableCards(player, state.cards);
+
+    // 2. try to buy a card
+    const card = getBestCard(player, affordableCards);
+    if(card) {
+      return {
+        action: 'buy',
+        card: card,
+      };
+    }
+
     // 1. take resources
     if(resCount <= 7) {
       const availableColors = colors.filter(color => {
@@ -168,7 +180,6 @@ export default class Easy {
       };
     }
 
-    const affordableCards = getAffordableCards(player, state.cards);
     if(affordableCards.length == 0) {
       // 3. hold a card
       return {
@@ -176,12 +187,6 @@ export default class Easy {
         card: _.shuffle(state.cards)[0],
       };
     }
-    // 2. try to buy a card
-    const card = getBestCard(player, affordableCards);
-    return {
-      action: 'buy',
-      card: card,
-    };
   }
 
   dropResources (state, playerIndex, resources) {
