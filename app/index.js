@@ -13,7 +13,6 @@ function mountApplication() {
 function init() {
   require('app/style.css');
   require('app/actions');
-  require('app/firebase');
 
   mountApplication();
 }

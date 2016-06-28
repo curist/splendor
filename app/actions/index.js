@@ -2,7 +2,6 @@ import B from 'app/broker';
 
 B.removeAllListeners();
 
-require('app/actions/firebase');
 require('app/actions/game');
 require('app/actions/gameaction');
 
