@@ -177,13 +177,35 @@ function buyReservedCard(db, card) {
   });
 }
 
-function someoneWon(db) {
+function bonusCount(bonus) {
+  return colors.reduce((total, color) => {
+    return total + bonus[color];
+  }, 0);
+}
+
+function getWinningPlayer(db) {
   const players = db.get(['game', 'players']);
   const winGameScore = db.get(['game', 'win-game-score']);
-  const winningPlayer = players.find(player => {
+  const winningPlayer = players.filter(player => {
     return player.score >= winGameScore;
+  }).sort((player1, player2) => {
+    if(player1.score !== player2.score) {
+      return player2.score - player1.score;
+    }
+    return bonusCount(player2) - bonusCount(player1);
+  })[0];
+  return (winningPlayer || {key: -1}).key;
+}
+
+function nextGame(db) {
+  const tourment = db.get('tourment');
+  B.do({
+    action: 'game/init',
+    mode: 'tourment',
+    players: tourment.players,
+    winGameScore: tourment.winGameScore,
+    rounds: tourment.rounds,
   });
-  return !!winningPlayer;
 }
 
 function nextPlayer(db) {
@@ -193,8 +215,18 @@ function nextPlayer(db) {
 
   if(nextPlayer == 0) {
     db.apply(['game', 'turn'], plus(1));
-    if(someoneWon(db)) {
-      db.set(['game', 'show-summary'], true);
+
+    let currentRound = db.get(['tourment', 'currentRound']);
+    let totalRounds = db.get(['tourment', 'rounds']);
+
+    const winningPlayerKey = getWinningPlayer(db);
+    if(winningPlayerKey >= 0) {
+      db.apply(['tourment', 'wins', winningPlayerKey], plus(1));
+      if(currentRound < totalRounds) {
+        nextGame(db);
+      } else {
+        db.set(['game', 'show-summary'], true);
+      }
       return;
     }
   }

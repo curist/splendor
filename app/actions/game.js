@@ -40,11 +40,27 @@ function changeCardStatus(status) {
 }
 
 B.on('game/init', (action) => {
-  const { players, winGameScore } = action;
+  const { players, winGameScore, mode, rounds } = action;
 
   const playerCount = players.length;
 
   initActors(players);
+
+  db.set(['game', 'mode'], mode);
+
+  if(mode == 'tourment' && !db.get(['tourment', 'currentRound'])) {
+    db.set('tourment', {
+      players,
+      winGameScore,
+      rounds,
+      currentRound: 0,
+      wins: players.map(player => {
+        return 0;
+      }),
+    });
+  }
+  const currentRound = db.get(['tourment', 'currentRound']);
+  db.set(['tourment', 'currentRound'], currentRound + 1);
 
   db.set(['game', 'turn'], 1);
   db.set(['game', 'win-game-score'], winGameScore);
@@ -83,8 +99,9 @@ B.on('game/init', (action) => {
   // TODO randomize or by setting
   db.set(['game', 'current-player'], 0);
 
-  db.set(['game', 'players'], players.map(actor => {
+  db.set(['game', 'players'], players.map((actor, i) => {
     return {
+      key: i,
       actor: actor,
       bonus: {
         white: 0,
@@ -111,5 +128,6 @@ B.on('game/init', (action) => {
 
 B.on('game/exit', (action) => {
   db.unset(['game']);
+  db.unset(['tourment']);
 });
 

@@ -4,6 +4,8 @@ import _ from 'underscore';
 
 import AIs from 'app/AI';
 
+import './newgamesetting.css';
+
 const debug = require('debug')('app/views/NewGameSetting');
 
 const NewGameSetting = {
@@ -18,15 +20,19 @@ const NewGameSetting = {
 
     ctrl.score = m.prop(15);
 
+    ctrl.tourmentRounds = m.prop(5);
+
     ctrl.actors = ['human'].concat(Object.keys(AIs).map(name => {
       return `ai:${name}`;
     }));
 
-    ctrl.initGame = () => {
+    ctrl.initGame = (mode) => {
       B.do({
         action: 'game/init',
         players: ctrl.playerActors(),
         winGameScore: ctrl.score(),
+        mode: mode,
+        rounds: ctrl.tourmentRounds() || 3,
       });
     };
 
@@ -71,9 +77,7 @@ const NewGameSetting = {
           })),
         ]);
       }),
-      m('.row', {
-        key: 'win-game-row'
-      }, [
+      m('.row', [
         'win game score: ',
         m('select', {
           value: ctrl.score(),
@@ -84,9 +88,22 @@ const NewGameSetting = {
           }, n);
         })),
       ]),
-      m('button', {
-        onclick: ctrl.initGame.bind(ctrl),
-      }, 'Start Game'),
+      m('.row', [
+        m('span', 'tourment rounds: '),
+        m('input.rounds[type=text]', {
+          value: ctrl.tourmentRounds(),
+          onchange: m.withAttr('value', ctrl.tourmentRounds),
+          onkeyup: m.withAttr('value', ctrl.tourmentRounds),
+        }),
+      ]),
+      m('.row', [
+        m('button', {
+          onclick: ctrl.initGame.bind(ctrl, 'normal'),
+        }, 'Start Game'),
+        m('button', {
+          onclick: ctrl.initGame.bind(ctrl, 'tourment'),
+        }, 'Start Tourment'),
+      ]),
     ]));
   },
 };
