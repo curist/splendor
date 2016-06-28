@@ -48,21 +48,21 @@ B.on('gameevent/turn', action => {
         action: 'gameaction/acquire-card',
         card: turnAction.card,
       });
-    }, 200);
+    }, 50);
   } else if(turnAction.action == 'hold') {
     setTimeout(() => {
       B.do({
         action: 'gameaction/reserve-card',
         card: turnAction.card,
       });
-    }, 200);
+    }, 50);
   } else if(turnAction.action == 'resource') {
     setTimeout(() => {
       B.do({
         action: 'gameaction/take-resources',
         resources: turnAction.resources,
       });
-    }, 200);
+    }, 50);
   } else {
     debug(`unknown turn action: ${turnAction.action}`);
   }

@@ -23,16 +23,7 @@ const Summary = {
     };
   },
   view (ctrl) {
-    const players = _(ctrl.data.players).sortBy((playerA, playerB) => {
-      const playerAbought = colors.reduce((sum, color) => {
-        return sum + playerA.bonus[color];
-      }, 0);
-      const playerBbought = colors.reduce((sum, color) => {
-        return sum + playerA.bonus[color];
-      }, 0);
-      return (playerA.score - playerB.score) ||
-        (playerAbought - playerBbought);
-    });
+    const players = ctrl.data.players;
     return m('.SummaryBackdrop', m('.Summary.col', [
       m('h1', 'G_G'),
       players.map((player, i) => {

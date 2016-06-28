@@ -1,5 +1,7 @@
-import Idiot from './idiot';
+import Dumb from './dumb';
+import Easy from './easy';
 
 module.exports = {
-  idiot: Idiot,
+  dumb: Dumb,
+  easy: Easy,
 };

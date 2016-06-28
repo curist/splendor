@@ -1,6 +1,6 @@
 import _ from 'underscore';
 
-const debug = require('debug')('app/AI/idiot');
+const debug = require('debug')('app/AI/easy');
 
 const colors = [
   'white', 'blue', 'green', 'red', 'black'
@@ -49,15 +49,39 @@ function getAffordableCards(player, cards) {
   return cards.filter(hasEnoughResourceForCard.bind(null, player));
 }
 
-function getBestCard(cards) {
+function cardCost(player, card) {
+  let shortOf = 0;
+  let cost = 0;
+  colors.forEach(color => {
+    var short = card[color]
+      - player.resources[color]
+      - player.bonus[color];
+    cost += Math.max(0, card[color] - player.bonus[color]);
+    if(short > 0) {
+      shortOf += short;
+    }
+  });
+  return shortOf + cost;
+}
+
+function cp(player, card) {
+  const w1 = 1.5 * (15 - player.score) / 15;
+  const w2 = player.score / 15;
+  const weight = w1 * (1 / (1 + cardCost(player, card))) +
+    w2 * card.points;
+  return weight;
+}
+
+function getBestCard(player, cards) {
   const sortedCards = cards.sort((cardA, cardB) => {
-    return cardB.points - cardA.points;
+    return cp(player, cardB) -
+      cp(player, cardA);
   });
   debug(sortedCards);
   return sortedCards[0];
 }
 
-export default class Idiot {
+export default class Easy {
   // state = {
   //   winGameScore: 15,
   //   cards: [{
@@ -153,7 +177,7 @@ export default class Idiot {
       };
     }
     // 2. try to buy a card
-    const card = getBestCard(affordableCards);
+    const card = getBestCard(player, affordableCards);
     return {
       action: 'buy',
       card: card,
