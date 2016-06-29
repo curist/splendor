@@ -5,7 +5,8 @@
     overflow: hidden;
 
     .CardContainer {
-        overflow: auto;
+        overflow-y: hidden;
+        overflow-x: auto;
         white-space: nowrap;
         border: 1px solid black;
         height: 95px;
