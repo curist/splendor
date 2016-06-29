@@ -1,6 +1,6 @@
 import _ from 'underscore';
 
-const debug = require('debug')('app/AI/idiot');
+const debug = require('debug')('app/AI/dumb');
 
 const colors = [
   'white', 'blue', 'green', 'red', 'black'
@@ -53,7 +53,6 @@ function getBestCard(cards) {
   const sortedCards = cards.sort((cardA, cardB) => {
     return cardB.points - cardA.points;
   });
-  debug(sortedCards);
   return sortedCards[0];
 }
 

@@ -1,6 +1,6 @@
 import _ from 'underscore';
 
-const debug = require('debug')('app/AI/idiot');
+const debug = require('debug')('app/AI/easy');
 
 const colors = [
   'white', 'blue', 'green', 'red', 'black'
