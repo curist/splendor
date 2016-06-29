@@ -223,6 +223,8 @@ function nextPlayer(db) {
 
     const winningPlayerKey = getWinningPlayer(db);
     if(winningPlayerKey >= 0) {
+      const turn = db.get(['game', 'turn']);
+      db.push(['tourment', 'turns'], turn);
       db.apply(['tourment', 'wins', winningPlayerKey], plus(1));
       if(currentRound < totalRounds) {
         nextGame(db);

@@ -15,6 +15,7 @@ const Summary = {
     BindData(ctrl, {
       players: ['game', 'players'],
       wins: ['tourment', 'wins'],
+      turns: ['tourment', 'turns'],
     });
 
     ctrl.exitGame = () => {
@@ -22,10 +23,21 @@ const Summary = {
         action: 'game/exit',
       });
     };
+
+    ctrl.sum = (arr) => {
+      return arr.reduce((total, n) => {
+        return total + n;
+      }, 0);
+    };
+
+    ctrl.average = (arr) => {
+      return (ctrl.sum(arr) / arr.length).toFixed(1);
+    };
   },
   view (ctrl) {
     const players = ctrl.data.players;
     const wins = ctrl.data.wins;
+    const avgTurns = ctrl.average(ctrl.data.turns);
     return m('.SummaryBackdrop', m('.Summary.col', [
       m('h1', 'Tourment G_G'),
       players.map((player, i) => {
@@ -40,6 +52,7 @@ const Summary = {
           ]),
         ]);
       }),
+      m('p', `avg turns: ${avgTurns}`),
       m('button', {
         onclick: ctrl.exitGame.bind(ctrl),
       }, 'ok')
