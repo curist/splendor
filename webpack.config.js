@@ -45,6 +45,10 @@ module.exports = {
         test: /\.json$/,
         loader: 'json'
       },
+      {
+        test: /\.(jpg|jpeg|png)$/,
+        loader: 'file'
+      },
     ]
   },
   eslint: {
