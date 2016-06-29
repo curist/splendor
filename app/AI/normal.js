@@ -61,7 +61,7 @@ function cardCost(player, card) {
       shortOf += short;
     }
   });
-  return shortOf * 2 + cost;
+  return shortOf * 2.5 + cost;
 }
 
 function calcColorsTotal(cards) {
@@ -155,9 +155,12 @@ function cardValue(player, state, cards, card) {
     return value - cost;
   }
 
-  // const valueForAllPlayers = state.players.reduce((valueSum, player) => {
-  //   return valueSum + valueForPlayer(player, card);
-  // }, 0);
+  const valueForAllOtherPlayers = state.players.reduce((valueSum, ppl) => {
+    if(ppl.key == player.key) {
+      return valueSum;
+    }
+    return valueSum + valueForPlayer(ppl, card);
+  }, 0);
 
   return valueForPlayer(player, card);
 }
@@ -175,10 +178,8 @@ function getBestCard(player, state, cards) {
   return getBestCards(player, state, cards)[0];
 }
 
-function colorValue(player, cards, color) {
-  // const value_a = (goalCard[colorA] + 1) * (allBonus[colorA]/10 + 1);
-  // const colorSum = calcColorsTotal(cards);
-  // return colorSum[color]; // - (player[color]);
+function colorValue(player, cards, state, color) {
+  const { resources } = state;
   let diffTotal = 0;
   for(let i = 0; i < cards.length; i++) {
     let card = cards[i];
@@ -187,7 +188,8 @@ function colorValue(player, cards, color) {
       diffTotal += diff * (cards.length - i);
     }
   }
-  return diffTotal;
+  const scarcity = 10 - resources[color];
+  return diffTotal + scarcity;
 }
 
 export default class Normal {
@@ -211,14 +213,14 @@ export default class Normal {
 
     const allBonus = calcColorsTotal(allCards);
     const resCount = countResources(player.resources);
-    const topCards = getBestCards(player, state, allCards).slice(0,2);
+    const topCards = getBestCards(player, state, allCards).slice(0,3);
     if(resCount <= 7) {
       const availableColors = colors.filter(color => {
         return state.resources[color] > 0;
       });
       const pickColors = availableColors.sort((colorA, colorB) => {
-        const value_b = colorValue(player, topCards, colorB);
-        const value_a = colorValue(player, topCards, colorA);
+        const value_b = colorValue(player, topCards, state, colorB);
+        const value_a = colorValue(player, topCards, state, colorA);
         return value_b - value_a;
       }).slice(0, 3);
       return {
