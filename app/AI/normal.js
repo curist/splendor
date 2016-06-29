@@ -197,26 +197,28 @@ export default class Normal {
     const allCards = state.cards.concat(player.reservedCards);
     const affordableCards = getAffordableCards(player, allCards);
 
-    // 2. try to buy a card
-    const card = getBestCard(player, state, affordableCards);
-    if(card) {
+    // try to buy the best card
+    const card = getBestCard(player, state, allCards);
+    const bestCard = getBestCard(player, state, state.cards);
+    if(hasEnoughResourceForCard(player, bestCard)) {
       return {
         action: 'buy',
-        card: card,
+        card: bestCard,
       };
     }
 
+    // if we can't buy the best card, take resources
+
     const allBonus = calcColorsTotal(allCards);
     const resCount = countResources(player.resources);
-    const bestCards = getBestCards(player, state, allCards).slice(0,2);
-    // 1. take resources
+    const topCards = getBestCards(player, state, allCards).slice(0,2);
     if(resCount <= 7) {
       const availableColors = colors.filter(color => {
         return state.resources[color] > 0;
       });
       const pickColors = availableColors.sort((colorA, colorB) => {
-        const value_b = colorValue(player, bestCards, colorB);
-        const value_a = colorValue(player, bestCards, colorA);
+        const value_b = colorValue(player, topCards, colorB);
+        const value_a = colorValue(player, topCards, colorA);
         return value_b - value_a;
       }).slice(0, 3);
       return {
@@ -225,12 +227,19 @@ export default class Normal {
       };
     }
 
-    const holdCard = getBestCard(player, state, state.cards) ||
-      _.shuffle(state.cards)[0];
-    // 3. hold a card
+    // we already have plenty of resources, buy a affordable card
+    const affordableBestCard = getBestCard(player, state, affordableCards);
+    if(affordableBestCard) {
+      return {
+        action: 'buy',
+        card: affordableBestCard,
+      };
+    }
+
+    // hold the card
     return {
       action: 'hold',
-      card: holdCard,
+      card: bestCard,
     };
   }
 
