@@ -114,11 +114,12 @@ function endTurn(db) {
 
   // resource check
   if (resourcesCount > 10) {
-    B.do({ action: 'gameevent/drop-resource' });
-    return db.set(['game', 'action'], {
+    db.set(['game', 'action'], {
       action: 'too-much-resources',
       player
     });
+    B.do({ action: 'gameevent/drop-resource' });
+    return;
   }
   // nobles check
   const affordableNobles = db.get(['game', 'nobles']).filter(noble => {
@@ -129,14 +130,15 @@ function endTurn(db) {
     return passedResources.length == 5;
   });
   if(affordableNobles.length > 0) {
+    db.set(['game', 'action'], {
+      action: 'pick-a-noble',
+      nobles: affordableNobles,
+    });
     B.do({
       action: 'gameevent/pick-noble',
       nobles: affordableNobles,
     });
-    return db.set(['game', 'action'], {
-      action: 'pick-a-noble',
-      nobles: affordableNobles,
-    });
+    return;
   }
   cleanAction(db);
   nextPlayer(db);
@@ -223,7 +225,7 @@ function nextPlayer(db) {
     if(winningPlayerKey >= 0) {
       db.apply(['tourment', 'wins', winningPlayerKey], plus(1));
       if(currentRound < totalRounds) {
-        requestAnimationFrame(nextGame.bind(null, db));
+        nextGame(db);
       } else {
         db.set(['game', 'show-summary'], true);
       }

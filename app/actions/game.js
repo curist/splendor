@@ -123,7 +123,9 @@ B.on('game/init', (action) => {
     };
   }));
 
-  B.do({ action: 'gameevent/turn' });
+  requestAnimationFrame(() => {
+    B.do({ action: 'gameevent/turn' });
+  });
 });
 
 B.on('game/exit', (action) => {
