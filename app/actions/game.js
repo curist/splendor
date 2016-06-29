@@ -48,6 +48,7 @@ B.on('game/init', (action) => {
 
   db.set(['game', 'mode'], mode);
 
+  db.set(['tourment', 'turns'], []);
   if(mode == 'tourment' && !db.get(['tourment', 'currentRound'])) {
     db.set('tourment', {
       players,
