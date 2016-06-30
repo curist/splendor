@@ -1,5 +1,6 @@
 import m from 'mithril';
 
+import { syncLocalStorage } from 'app/utils';
 import { bindRoutes } from 'app/routes';
 
 import 'normalize.css';
@@ -14,6 +15,7 @@ function init() {
   require('app/style.css');
   require('app/actions');
 
+  syncLocalStorage();
   mountApplication();
 }
 
