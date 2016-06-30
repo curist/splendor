@@ -2,7 +2,7 @@ import m from 'mithril';
 import B from 'app/broker';
 import _ from 'underscore';
 
-import { BindData } from 'app/utils';
+import { BindData } from 'app/db';
 
 import './home.css';
 

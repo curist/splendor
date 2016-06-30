@@ -3,7 +3,7 @@ const debug = require('debug')('app/views/PlayerBoard');
 
 import B from 'app/broker';
 
-import { BindData } from 'app/utils';
+import { BindData } from 'app/db';
 import {colors} from 'app/data/game-setting';
 
 import './singleplayerboard.css';

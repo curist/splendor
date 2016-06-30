@@ -5,7 +5,7 @@ import B from 'app/broker';
 
 import {colors} from 'app/data/game-setting';
 
-import { BindData } from 'app/utils';
+import { BindData } from 'app/db';
 
 import './summary.css';
 

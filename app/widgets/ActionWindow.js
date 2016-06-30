@@ -8,7 +8,7 @@ import Card from 'app/widgets/Card';
 import Noble from 'app/widgets/Noble';
 
 import { colors } from 'app/data/game-setting';
-import { BindData } from 'app/utils';
+import { BindData } from 'app/db';
 
 import './actionwindow.css';
 

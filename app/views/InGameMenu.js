@@ -2,7 +2,7 @@ import m from 'mithril';
 import B from 'app/broker';
 const debug = require('debug')('app/views/InGameMenu');
 
-import { BindData } from 'app/utils';
+import { BindData } from 'app/db';
 
 import './inGameMenu.css';
 
