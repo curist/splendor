@@ -19,7 +19,7 @@ const ActionWindow = {
     const ctrl = this;
     BindData(ctrl, {
       action: ['game', 'action'],
-      resources: ['game', 'resource'],
+      resources: ['game', 'resources'],
     });
 
     const action = ctrl.data.action;

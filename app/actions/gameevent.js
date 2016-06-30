@@ -25,7 +25,7 @@ function composeGameState(db) {
     cards: cards,
     players: db.get(['game', 'players']),
     nobles: db.get(['game', 'nobles']),
-    resources: db.get(['game', 'resource']),
+    resources: db.get(['game', 'resources']),
     deckRemaingings: deckRemaingings,
   };
 }

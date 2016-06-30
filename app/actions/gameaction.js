@@ -30,7 +30,7 @@ B.on('gameaction/take-resource', (action) => {
   if(type == 'gold') {
     return;
   }
-  const resources = db.get(['game', 'resource']);
+  const resources = db.get(['game', 'resources']);
   if(resources[type] <= 0) {
     return;
   }
@@ -50,7 +50,7 @@ B.on('gameaction/take-resources', (action) => {
   const { resources } = action;
   Object.keys(resources).forEach(type => {
     let count = resources[type];
-    db.apply(['game', 'resource', type], plus(-1 * count));
+    db.apply(['game', 'resources', type], plus(-1 * count));
     db.apply(['game', 'players', playerIndex, 'resources', type], plus(count));
   });
   endTurn(db);
@@ -68,7 +68,7 @@ B.on('gameaction/blind-hold', (action) => {
   const playerIndex = db.get(['game', 'current-player']);
   const player = db.get(['game', 'players', playerIndex]);
   const nextCard = db.get(['game', 'deck' + rank, 0]);
-  const gold = db.get(['game', 'resource', 'gold']);
+  const gold = db.get(['game', 'resources', 'gold']);
 
   db.shift(['game', 'deck' + rank]);
 
@@ -76,7 +76,7 @@ B.on('gameaction/blind-hold', (action) => {
   card.status = 'hold';
 
   if(gold > 0) {
-    db.set(['game', 'resource', 'gold'], gold - 1);
+    db.set(['game', 'resources', 'gold'], gold - 1);
   }
   db.apply(['game', 'players', playerIndex], (oplayer) => {
     const player = clone(oplayer);
@@ -293,7 +293,7 @@ B.on('gameaction/acquire-card', (action) => {
   const [ pay, playerPayed ] = playerAcquireCard(player, card);
   db.set(['game', 'players', playerIndex], playerPayed);
   Object.keys(pay).forEach(type => {
-    db.apply(['game', 'resource', type], plus(pay[type]));
+    db.apply(['game', 'resources', type], plus(pay[type]));
   });
 
   if(card.status == 'hold') {
@@ -307,13 +307,13 @@ B.on('gameaction/acquire-card', (action) => {
 B.on('gameaction/reserve-card', (action) => {
   const { card: ocard } = action;
   const playerIndex = db.get(['game', 'current-player']);
-  const gold = db.get(['game', 'resource', 'gold']);
+  const gold = db.get(['game', 'resources', 'gold']);
 
   let card = clone(ocard);
   card.status = 'hold';
 
   if(gold > 0) {
-    db.set(['game', 'resource', 'gold'], gold - 1);
+    db.set(['game', 'resources', 'gold'], gold - 1);
   }
   db.apply(['game', 'players', playerIndex], (oplayer) => {
     const player = clone(oplayer);
@@ -337,7 +337,7 @@ B.on('gameaction/drop-resources', (action) => {
   Object.keys(dropResources).forEach(color => {
     const count = dropResources[color];
     db.apply(['game', 'players', playerIndex, 'resources', color], plus(-1 * count));
-    db.apply(['game', 'resource', color], plus(count));
+    db.apply(['game', 'resources', color], plus(count));
   });
   endTurn(db);
 });

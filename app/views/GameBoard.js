@@ -35,7 +35,7 @@ const GameBoard = {
       deck1: ['game', 'deck1'],
       deck2: ['game', 'deck2'],
       deck3: ['game', 'deck3'],
-      resource: ['game', 'resource'],
+      resources: ['game', 'resources'],
       nobles: ['game', 'nobles'],
     });
 
@@ -92,7 +92,7 @@ const GameBoard = {
         return m('.Resource.' + type, {
           onclick: ctrl.takeResource.bind(ctrl, type),
         }, [
-          m('.Indicator', ctrl.data.resource[type]),
+          m('.Indicator', ctrl.data.resources[type]),
         ]);
       })),
     ]);
