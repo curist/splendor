@@ -2,6 +2,8 @@ import m from 'mithril';
 import B from 'app/broker';
 import _ from 'underscore';
 
+import { BindData } from 'app/db';
+
 import AIs from 'app/AI';
 
 import './newgamesetting.css';
@@ -12,15 +14,18 @@ const NewGameSetting = {
   controller () {
     const ctrl = this;
 
-    ctrl.players = m.prop(2);
-    ctrl.playerActors = m.prop([
-      'human',
-      'human',
-    ]);
+    BindData(ctrl, {
+      playerActors: ['game-settings', 'player-actors'],
+      score: ['game-settings', 'win-game-score'],
+      rounds: ['game-settings', 'tourment-rounds'],
+    });
 
-    ctrl.score = m.prop(15);
+    const playerActors = ctrl.data.playerActors || ['human', 'human'];
 
-    ctrl.tourmentRounds = m.prop(5);
+    ctrl.players = m.prop(playerActors.length);
+    ctrl.playerActors = m.prop(playerActors);
+    ctrl.score = m.prop(ctrl.data.score || 15);
+    ctrl.tourmentRounds = m.prop(ctrl.data.rounds || 5);
 
     ctrl.actors = ['human'].concat(Object.keys(AIs).map(name => {
       return `ai:${name}`;
@@ -29,9 +34,9 @@ const NewGameSetting = {
     ctrl.initGame = (mode) => {
       B.do({
         action: 'game/init',
+        mode: mode,
         players: ctrl.playerActors(),
         winGameScore: ctrl.score(),
-        mode: mode,
         rounds: ctrl.tourmentRounds() || 3,
       });
     };

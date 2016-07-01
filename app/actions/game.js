@@ -44,6 +44,12 @@ B.on('game/init', (action) => {
 
   const playerCount = playerActors.length;
 
+  db.set('game-settings', {
+    'player-actors': playerActors,
+    'win-game-score': winGameScore,
+    'tourment-rounds': rounds
+  });
+
   db.set(['actor-stores'], [{}, {}, {}, {}]);
   initActors(playerActors);
 
