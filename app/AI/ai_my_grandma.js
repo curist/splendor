@@ -11,6 +11,8 @@ const colors = [
   'white', 'blue', 'green', 'red', 'black'
 ];
 
+let winGameScore, playerIndex, playerCount;
+
 function table(data, fields) {
   let a = 1;
   if(1 == a) {
@@ -112,14 +114,27 @@ function cardValue(player, state, cards, card) {
   const { nobles } = state;
   const { provides } = card;
 
+  function sum(arr) {
+    return arr.reduce((total, n) => {
+      return total + n;
+    }, 0);
+  }
+
   function cardBoardPoints(player, card) {
     const { key, provides } = card;
-    const totalValue = cards.reduce((total, card) => {
+    const cardValues = cards.map(card => {
       if(key == card.key) {
-        return total;
+        return 0;
       }
-      return total + provideColorPoints(player, card, provides);
-    }, 0);
+      return provideColorPoints(player, card, provides);
+    }).sort().reverse();
+
+    const takeN = Math.floor((winGameScore - player.score) / 3);
+
+    const totalValue = sum(cardValues.slice(0, takeN));
+    // debug(takeN);
+    // debug(cardValues);
+    // debug(totalValue);
     return totalValue;
   }
 
@@ -130,7 +145,7 @@ function cardValue(player, state, cards, card) {
     const totalNobleValue = nobles.reduce((total, noble) => {
       return total + provideColorPoints(player, noble, provides);
     }, 0);
-    const value = card.points + totalNobleValue + cardBoardPoints(player, card) / 2;
+    const value = card.points + totalNobleValue + cardBoardPoints(player, card);
     // debug(card);
     // debug(card.rank, value, card.total_cost, cost, value/cost);
     return value / cost;
@@ -215,11 +230,11 @@ function colorValue(player, cards, state, color) {
 }
 
 export default class MyGrandMa {
-  constructor (store, playerIndex, playerCount, winGameScore) {
+  constructor (store, myIndex, pplCount, endScore) {
     this.store = store;
-    this.playerIndex = playerIndex;
-    this.playerCount = playerCount;
-    this.winGameScore = winGameScore;
+    playerIndex = myIndex;
+    playerCount = pplCount;
+    winGameScore = endScore;
   }
 
   turn (state) {
