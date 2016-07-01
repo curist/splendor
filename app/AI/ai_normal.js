@@ -218,10 +218,11 @@ export default class Normal {
       };
     }
 
-    // hold the card
+    // hold a card
+    const secondBestCard = getBestCard(player, state, state.cards);
     return {
       action: 'hold',
-      card: bestCard,
+      card: secondBestCard,
     };
   }
 

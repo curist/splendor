@@ -284,10 +284,11 @@ export default class MyGrandMa {
       };
     }
 
+    const secondBestCard = getBestCard(player, state, state.cards);
     // hold the card
     return {
       action: 'hold',
-      card: bestCard,
+      card: secondBestCard,
     };
   }
 

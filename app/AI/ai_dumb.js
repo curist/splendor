@@ -135,13 +135,11 @@ export default class Dumb {
       };
     }
 
-    if(affordableCards.length == 0) {
-      // 3. hold a card
-      return {
-        action: 'hold',
-        card: _.shuffle(state.cards)[0],
-      };
-    }
+    // 3. hold a card
+    return {
+      action: 'hold',
+      card: _.shuffle(state.cards)[0],
+    };
   }
 
   dropResources (state, resources) {
