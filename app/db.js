@@ -21,4 +21,9 @@ export function BindData(controller, bindings) {
   });
 }
 
+// in development mode, expose db
+if(module.hot) {
+  window.db = db;
+}
+
 export default db;
