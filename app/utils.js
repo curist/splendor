@@ -19,7 +19,7 @@ export const syncLocalStorage = (function() {
         localStorage.setItem(key, JSON.stringify(state));
         prevState = state;
       }
-    }, 2000);
+    }, 1000);
   }
 
   return function setupAll() {
