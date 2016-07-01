@@ -24,6 +24,10 @@ h1,h2,h3{
   line-height:1.2;
 }
 
+h4,h5{
+  margin: 0.6em 0;
+}
+
 #app {
   position: relative;
   width: 100%;
