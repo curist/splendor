@@ -32,6 +32,13 @@ const InGameMenu = {
       ctrl.toggleExpand();
     };
 
+    ctrl.pass = () => {
+      B.do({
+        action: 'gameaction/take-resources',
+        resources: {},
+      });
+    };
+
     ctrl.exitGame = () => {
       B.do({
         action: 'game/exit',
@@ -43,9 +50,14 @@ const InGameMenu = {
     return m('div.InGameMenu', [
       (function () {
         if(ctrl.data.game) {
-          return m('button', {
-            onclick: ctrl.exitGame.bind(ctrl),
-          }, 'exit game');
+          return m('.row', [
+            m('button', {
+              onclick: ctrl.pass.bind(ctrl),
+            }, 'pass'),
+            m('button', {
+              onclick: ctrl.exitGame.bind(ctrl),
+            }, 'exit game'),
+          ]);
         }
       })(),
     ]);
