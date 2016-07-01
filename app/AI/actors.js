@@ -5,8 +5,6 @@ const AIs = require('./index.js');
 let actors = [];
 
 export function initActors(actorNames) {
-  db.set(['actor-stores'], [{}, {}, {}, {}]);
-
   const playerCount = actorNames.length;
   const winGameScore = db.get(['game', 'win-game-score']);
 

@@ -44,6 +44,7 @@ B.on('game/init', (action) => {
 
   const playerCount = playerActors.length;
 
+  db.set(['actor-stores'], [{}, {}, {}, {}]);
   initActors(playerActors);
 
   if(mode == 'tourment') {
