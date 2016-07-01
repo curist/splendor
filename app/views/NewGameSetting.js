@@ -20,7 +20,7 @@ const NewGameSetting = {
       rounds: ['game-settings', 'tourment-rounds'],
     });
 
-    const playerActors = ctrl.data.playerActors || ['human', 'human'];
+    const playerActors = (ctrl.data.playerActors || ['human', 'human']).slice(0,4);
 
     ctrl.players = m.prop(playerActors.length);
     ctrl.playerActors = m.prop(playerActors);
