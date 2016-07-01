@@ -109,7 +109,7 @@ function provideColorPoints(player, card, provides) {
     const diff = Math.max(card[color] - player.bonus[color], 0);
     return total + diff;
   }, 0);
-  return card.points / totalShortOf;
+  return card.points / (totalShortOf + player.resources[provides] / 2);
 }
 
 function provideNoblePoints(player, noble, provides) {
@@ -149,7 +149,7 @@ function cardValue(player, state, cards, card) {
       return provideColorPoints(player, card, provides);
     }).sort().reverse();
 
-    const takeN = Math.floor((winGameScore - player.score) / 3);
+    const takeN = Math.floor((winGameScore - player.score) / 3.5);
 
     const totalValue = sum(cardValues.slice(0, takeN));
     // debug(takeN, totalValue);
@@ -178,6 +178,31 @@ function cardValue(player, state, cards, card) {
   // }, 0);
 
   return valueForPlayer(player, card);
+}
+
+function playerBoughtCard(player, card) {
+  if(!canBuyCard(player, card)) {
+    return player;
+  }
+
+  const bonus = Object.assign({}, player.bonus, {
+    [card.provides]: player.bonus[card.provides] + 1
+  });
+
+  let resources = Object.assign({}, player.resources);
+  colors.forEach(color => {
+    const pay = Math.max(card[color] - player.bonus[color], 0);
+    const diff = player.resources[color] - pay;
+    resources[color] -= Math.max(diff, 0);
+    if(diff < 0) {
+      resources.gold -= diff;
+    }
+  });
+
+  return Object.assign({}, player, {
+    bonus,
+    resources,
+  });
 }
 
 function secondPassCardValue(player, cards, cardToValue) {
@@ -220,68 +245,54 @@ function getBestCards(player, state, cards) {
 
   const cardsReValue = cardsWithEstimateValue.map(cardToValue => {
     // given we bought this card, what's most valuable next move?
-    const bonus = Object.assign({}, player.bonus, {
-      [cardToValue.provides]: player.bonus[cardToValue.provides] + 1
-    });
 
-    const futureResources = colors.reduce((res, color) => {
-      const pay = Math.max(cardToValue[color] - player.bonus[color], 0);
-      res[color] = Math.max(player.resources[color] - pay, 0);
-      return res;
-    }, {gold: player.resources.gold});
-
-    const futurePlayer = Object.assign({}, player, {
-      bonus,
-      resources: futureResources
-    });
+    const futurePlayer = playerBoughtCard(player, cardToValue);
 
     const nextTopCards = cards.map(card => {
       let revalue = 0;
       if(card.key != cardToValue.key) {
         revalue = cardValue(futurePlayer, state, cards, card);
       }
-      // debug(cardToValue.key, card.key, revalue);
       return Object.assign({ revalue }, card);
     }).sort((cardA, cardB) => {
       return cardB.revalue - cardA.revalue;
     });
     const nextBestCard = nextTopCards[0];
-    // debug('nextbestcard');
-    // table(cardToValue);
-    // table(nextTopCards, ['key', 'revalue']);
 
-    const futureBonus = Object.assign({}, bonus, {
-      [nextBestCard.provides]: bonus[nextBestCard.provides] + 1
-    });
-    const futureFuturePlayer = Object.assign({}, futurePlayer, futureBonus);
-
-    const affordableNobles = nobles.filter(noble => {
-      return canTakeNoble(futurePlayer, noble);
-    });
-    const futureAffordableNobles = nobles.filter(noble => {
-      return canTakeNoble(futureFuturePlayer, noble);
-    });
-    let noblePoints = 0;
-    if(affordableNobles.length >= 1) {
-      noblePoints += 3;
-    }
-    if(futureAffordableNobles.length >= 2) {
-      noblePoints += 3;
-    }
-
-    let cardPoints = 0;
+    let allPoints = 0;
     if(canBuyCard(player, cardToValue)) {
-      cardPoints += cardToValue.points;
+      allPoints += cardToValue.points;
+
+      const affordableNobles = nobles.filter(noble => {
+        return canTakeNoble(futurePlayer, noble);
+      });
+      if(affordableNobles.length > 0) {
+        allPoints += 3;
+      }
     }
-    if(canBuyCard(futurePlayer, nextBestCard)) {
-      cardPoints += nextBestCard.points;
-    }
-    const allPointsYouCanGet = cardPoints + noblePoints;
-    const callGame = (allPointsYouCanGet > winGameScore) ? 100 : 0;
+    const cardPoints = cards.map(card => {
+      let points = 0;
+      if(canBuyCard(futurePlayer, card)) {
+        points += card.points;
+
+        const futureFuturePlayer = playerBoughtCard(futurePlayer, card);
+        const affordableNobles = nobles.filter(noble => {
+          return canTakeNoble(futureFuturePlayer, noble);
+        });
+        if(affordableNobles.length > 1) {
+          points += 3;
+        }
+      }
+      return points;
+    });
+
+    allPoints += Math.max.apply(null, cardPoints);
+    const callGame = (player.score + allPoints > winGameScore) ? 100 : 0;
     return Object.assign({
       revalue: nextBestCard.revalue,
       nextBestKey: nextBestCard.key,
-      trueValue: cardToValue.value + nextBestCard.revalue * 0.2 + callGame
+      allPoints,
+      trueValue: cardToValue.value + nextBestCard.revalue * 0.2 + callGame,
     }, cardToValue);
   });
 
@@ -301,7 +312,7 @@ function getBestCards(player, state, cards) {
   //   return (cardB.value + cardB.revalue * 0.5) -
   //     (cardA.value + cardA.revalue * 0.5);
   // });
-  let sfields = ['rank', 'key', 'value', 'revalue', 'trueValue', 'nextBestKey', 'provides'].concat(colors);
+  let sfields = ['key', 'nextBestKey', 'points', 'value', 'revalue', 'trueValue', 'allPoints', 'provides'].concat(colors);
   table(sortedCards, sfields);
   return sortedCards;
 }
@@ -320,7 +331,7 @@ function colorValue(player, cards, state, color) {
       diffTotal += diff * (cards.length - i);
     }
   }
-  const scarcity = 1 / (resources[color] + 1);
+  const scarcity = playerCount / (resources[color] + 3);
   return diffTotal + scarcity;
 }
 
