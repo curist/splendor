@@ -13,6 +13,10 @@ $black: black;
     cursor: pointer;
     background: lightsteelblue;
 
+    &.affordable {
+        box-shadow: 0 0 3px 2px rgba(0, 128, 255, 0.5);
+    }
+
     .Rank {
         display: none;
         font-size: 0.8em;

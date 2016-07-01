@@ -37,7 +37,8 @@ const Card = {
     }
     return m('.Card', {
       key: `card${card.key}`,
-      onclick: ctrl.onClick.bind(ctrl, card)
+      onclick: ctrl.onClick.bind(ctrl, card),
+      className: card.affordable ? 'affordable' : '',
     }, [
       (function() {
         if(card.points > 0) {

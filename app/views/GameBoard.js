@@ -5,15 +5,15 @@ import _ from 'underscore';
 import Card from 'app/widgets/Card';
 import Noble from 'app/widgets/Noble';
 
+import { canBuyCard } from 'app/validates';
 import {colors} from 'app/data/game-setting';
-
 import { BindData } from 'app/db';
 
 const debug = require('debug')('app/views/GameBoard');
 
 import './gameboard.css';
 
-function Cards(cards) {
+function Cards(player, cards) {
   return cards.map((card, i) => {
     if(card.status == 'empty') {
       return m(Card, {
@@ -21,7 +21,9 @@ function Cards(cards) {
         status: 'empty'
       });
     }
-    return m(Card, card);
+    return m(Card, Object.assign({
+      affordable: canBuyCard(player, card)
+    }, card));
   });
 }
 
@@ -29,6 +31,8 @@ const GameBoard = {
   controller () {
     const ctrl = this;
     BindData(ctrl, {
+      currentPlayerIndex: ['game', 'current-player'],
+      players: ['game', 'players'],
       cards1: ['game', 'cards1'],
       cards2: ['game', 'cards2'],
       cards3: ['game', 'cards3'],
@@ -61,27 +65,28 @@ const GameBoard = {
     };
   },
   view (ctrl) {
+    const player = ctrl.data.players[ctrl.data.currentPlayerIndex];
     return m('.GameBoard', [
       m('.Nobles', ctrl.data.nobles.map(noble => {
         return m(Noble, noble);
       })),
       m('.col', [
         m('.Rank.row', [
-          Cards(ctrl.data.cards3),
+          Cards(player, ctrl.data.cards3),
           m('.Card.FakeCard', {
             key: 'fakecard3',
             onclick: ctrl.holdRankCard.bind(ctrl, 3),
           }, ctrl.data.deck3.length),
         ]),
         m('.Rank.row', [
-          Cards(ctrl.data.cards2),
+          Cards(player, ctrl.data.cards2),
           m('.Card.FakeCard', {
             key: 'fakecard2',
             onclick: ctrl.holdRankCard.bind(ctrl, 2),
           }, ctrl.data.deck2.length),
         ]),
         m('.Rank.row', [
-          Cards(ctrl.data.cards1),
+          Cards(player, ctrl.data.cards1),
           m('.Card.FakeCard', {
             key: 'fakecard1',
             onclick: ctrl.holdRankCard.bind(ctrl, 1),
