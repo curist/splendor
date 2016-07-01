@@ -195,12 +195,17 @@ function getWinningPlayer(db) {
 }
 
 function nextGame(db) {
+  const players = db.get(['game-settings', 'player-actors']);
+  const winGameScore = db.get(['game-settings', 'win-game-score']);
+  const fast = db.get(['game-settings', 'fast-mode']);
   const tourment = db.get('tourment');
+
   B.do({
     action: 'game/init',
     mode: 'tourment',
-    players: tourment.players,
-    winGameScore: tourment.winGameScore,
+    fast,
+    players,
+    winGameScore,
     rounds: tourment.rounds,
   });
 }
@@ -235,9 +240,13 @@ function nextPlayer(db) {
   }
   db.set(['game', 'current-player'], nextPlayer);
 
-  requestAnimationFrame(() => {
+  if(db.get(['game-settings', 'fast-mode'])) {
     B.do({ action: 'gameevent/turn' });
-  });
+  } else {
+    requestAnimationFrame(() => {
+      B.do({ action: 'gameevent/turn' });
+    });
+  }
 }
 
 // returning `player` after pay for the card

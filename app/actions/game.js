@@ -40,14 +40,15 @@ function changeCardStatus(status) {
 }
 
 B.on('game/init', (action) => {
-  const { players: playerActors, winGameScore, mode, rounds } = action;
+  const { players: playerActors, winGameScore, mode, rounds, fast } = action;
 
   const playerCount = playerActors.length;
 
   db.set('game-settings', {
     'player-actors': playerActors,
     'win-game-score': winGameScore,
-    'tourment-rounds': rounds
+    'tourment-rounds': rounds,
+    'fast-mode': fast,
   });
 
   db.set(['actor-stores'], [{}, {}, {}, {}]);
@@ -56,8 +57,6 @@ B.on('game/init', (action) => {
   if(mode == 'tourment') {
     if(!db.get(['tourment', 'currentRound'])) {
       db.set('tourment', {
-        players: playerActors,
-        winGameScore,
         rounds,
         currentRound: 0,
         wins: playerActors.map(player => {

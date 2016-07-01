@@ -18,6 +18,7 @@ const NewGameSetting = {
       playerActors: ['game-settings', 'player-actors'],
       score: ['game-settings', 'win-game-score'],
       rounds: ['game-settings', 'tourment-rounds'],
+      fast: ['game-settings', 'fast-mode'],
     });
 
     const playerActors = (ctrl.data.playerActors || ['human', 'human']).slice(0,4);
@@ -26,6 +27,7 @@ const NewGameSetting = {
     ctrl.playerActors = m.prop(playerActors);
     ctrl.score = m.prop(ctrl.data.score || 15);
     ctrl.tourmentRounds = m.prop(ctrl.data.rounds || 5);
+    ctrl.fast = m.prop(ctrl.data.fast);
 
     ctrl.actors = ['human'].concat(Object.keys(AIs).map(name => {
       return `ai:${name}`;
@@ -38,6 +40,7 @@ const NewGameSetting = {
         players: ctrl.playerActors(),
         winGameScore: ctrl.score(),
         rounds: ctrl.tourmentRounds() || 3,
+        fast: ctrl.fast(),
       });
     };
 
@@ -55,6 +58,7 @@ const NewGameSetting = {
   },
   view (ctrl) {
     return m('.NewGameSetting', m('.col', [
+      m('h4', 'Genral Settings'),
       m('.row', [
         'players: ',
         m('select', {
@@ -93,6 +97,7 @@ const NewGameSetting = {
           }, n);
         })),
       ]),
+      m('h4', 'Tourment Settings'),
       m('.row', [
         m('span', 'tourment rounds: '),
         m('input.rounds[type=text]', {
@@ -101,7 +106,23 @@ const NewGameSetting = {
           onkeyup: m.withAttr('value', ctrl.tourmentRounds),
         }),
       ]),
-      m('.row', [
+      m('.row', {
+        style: {
+          'align-items': 'center'
+        }
+      }, [
+        m('span', 'fast mode:'),
+        m('input[type=checkbox]', {
+          checked: ctrl.fast(),
+          onchange: m.withAttr('checked', ctrl.fast)
+        }),
+      ]),
+      m('hr'),
+      m('.row', {
+        style: {
+          'justify-content': 'center'
+        }
+      }, [
         m('button', {
           onclick: ctrl.initGame.bind(ctrl, 'normal'),
         }, 'Start Game'),
