@@ -165,8 +165,15 @@ function colorValue(player, cards, state, color) {
 }
 
 export default class Normal {
-  turn (state, playerIndex) {
-    const player = state.players[playerIndex];
+  constructor (store, playerIndex, playerCount, winGameScore) {
+    this.store = store;
+    this.playerIndex = playerIndex;
+    this.playerCount = playerCount;
+    this.winGameScore = winGameScore;
+  }
+
+  turn (state) {
+    const {player} = state;
 
     const allCards = state.cards.concat(player.reservedCards);
     const affordableCards = getAffordableCards(player, allCards);
@@ -217,11 +224,11 @@ export default class Normal {
     };
   }
 
-  dropResources (state, playerIndex, resources) {
+  dropResources (state, resources) {
     return zipResources(_.shuffle(flattenResources(resources)).slice(0, 10));
   }
 
-  pickNoble (state, playerIndex, nobles) {
+  pickNoble (state, nobles) {
     return nobles[0];
   }
 }

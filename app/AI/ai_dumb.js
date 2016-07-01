@@ -29,8 +29,15 @@ function getBestCard(cards) {
 }
 
 export default class Dumb {
+
+  constructor (store, playerIndex, playerCount, winGameScore) {
+    this.store = store;
+    this.playerIndex = playerIndex;
+    this.playerCount = playerCount;
+    this.winGameScore = winGameScore;
+  }
   // state = {
-  //   winGameScore: 15,
+  //   player: player,
   //   cards: [{
   //     black : 0,
   //     blue : 0,
@@ -91,7 +98,7 @@ export default class Dumb {
   //       yellow: 1,
   //     },
   //   }
-  turn (state, playerIndex) {
+  turn (state) {
     // actions
     // 1. buy a card
     // 2. hold a card
@@ -101,7 +108,7 @@ export default class Dumb {
     //   2. buy a card otherwise
     //      a. having points better
     //   3. hold a card otherwise
-    const player = state.players[playerIndex];
+    const {player} = state;
 
     const allCards = state.cards.concat(player.reservedCards);
     const affordableCards = getAffordableCards(player, allCards);
@@ -137,11 +144,11 @@ export default class Dumb {
     }
   }
 
-  dropResources (state, playerIndex, resources) {
+  dropResources (state, resources) {
     return zipResources(_.shuffle(flattenResources(resources)).slice(0, 10));
   }
 
-  pickNoble (state, playerIndex, nobles) {
+  pickNoble (state, nobles) {
     return nobles[0];
   }
 }

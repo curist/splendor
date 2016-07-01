@@ -15,18 +15,19 @@ function composeGameState(db) {
   ).filter(card => {
     return card.status !== 'empty';
   });
+  const playerIndex = db.get(['game', 'current-player']);
+  const players = db.get(['game', 'players']);
+  const player = players[playerIndex];
+  const nobles = db.get(['game', 'nobles']);
+  const resources = db.get(['game', 'resources']);
   const deckRemaingings = [
     db.get(['game', 'deck1']).length,
     db.get(['game', 'deck2']).length,
     db.get(['game', 'deck3']).length,
   ];
   return {
-    winGameScore: db.get(['game', 'win-game-score']),
-    cards: cards,
-    players: db.get(['game', 'players']),
-    nobles: db.get(['game', 'nobles']),
-    resources: db.get(['game', 'resources']),
-    deckRemaingings: deckRemaingings,
+    cards, player, players, nobles,
+    resources, deckRemaingings,
   };
 }
 
@@ -34,13 +35,14 @@ B.on('gameevent/turn', action => {
   const resources = db.get(['game', 'resources']);
   const playerIndex = db.get(['game', 'current-player']);
   const player = db.get(['game', 'players', playerIndex]);
-  if(player.actor == 'human') {
+
+  const actor = getActors()[playerIndex];
+  if(!actor.isAI) {
     return;
   }
-  const actor = getActors()[playerIndex];
   const gameState = composeGameState(db);
 
-  const turnAction = actor.turn(gameState, playerIndex);
+  const turnAction = actor.turn(gameState);
   // turnAction can be [buy, hold, resource]
   debug(turnAction);
   let gameAction;
@@ -82,7 +84,7 @@ B.on('gameevent/drop-resource', action => {
   const actor = getActors()[playerIndex];
   const gameState = composeGameState(db);
 
-  const droppingResources = actor.dropResources(gameState, playerIndex, player.resources);
+  const droppingResources = actor.dropResources(gameState, player.resources);
   let gameAction = {
     action: 'gameaction/drop-resources',
     resources: droppingResources ,
@@ -102,7 +104,7 @@ B.on('gameevent/pick-noble', action => {
   const actor = getActors()[playerIndex];
   const gameState = composeGameState(db);
 
-  const noble = actor.pickNoble(gameState, playerIndex, nobles);
+  const noble = actor.pickNoble(gameState, nobles);
   let gameAction = {
     action: 'gameaction/pick-noble',
     noble: noble,

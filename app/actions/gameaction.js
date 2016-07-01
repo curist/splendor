@@ -262,8 +262,6 @@ function playerAcquireCard(oplayer, card) {
   return [ pay, player ];
 }
 
-// TODO handle player acquire a reserved card
-
 B.on('gameaction/acquire-card', (action) => {
   const { card } = action;
   const playerIndex = db.get(['game', 'current-player']);

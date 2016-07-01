@@ -70,12 +70,19 @@ function getBestCard(player, cards) {
 }
 
 export default class Easy {
-  turn (state, playerIndex) {
+  constructor (store, playerIndex, playerCount, winGameScore) {
+    this.store = store;
+    this.playerIndex = playerIndex;
+    this.playerCount = playerCount;
+    this.winGameScore = winGameScore;
+  }
+
+  turn (state) {
     // actions, either one of:
     // 1. buy a card
     // 2. hold a card
     // 3. take resources
-    const player = state.players[playerIndex];
+    const {player} = state;
 
     const allCards = state.cards.concat(player.reservedCards);
     const affordableCards = getAffordableCards(player, allCards);
@@ -115,11 +122,11 @@ export default class Easy {
     };
   }
 
-  dropResources (state, playerIndex, resources) {
+  dropResources (state, resources) {
     return zipResources(_.shuffle(flattenResources(resources)).slice(0, 10));
   }
 
-  pickNoble (state, playerIndex, nobles) {
+  pickNoble (state, nobles) {
     return nobles[0];
   }
 }

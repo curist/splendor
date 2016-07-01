@@ -2,6 +2,8 @@ import B from 'app/broker';
 
 B.removeAllListeners();
 
+require('app/actions/app');
+
 require('app/actions/game');
 require('app/actions/gameaction');
 require('app/actions/gameevent');

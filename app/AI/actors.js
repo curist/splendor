@@ -1,14 +1,27 @@
+import db from 'app/db';
+
 const AIs = require('./index.js');
 
 let actors = [];
 
 export function initActors(actorNames) {
-  actors = actorNames.map(name => {
+  db.set(['actor-stores'], [{}, {}, {}, {}]);
+
+  const playerCount = actorNames.length;
+  const winGameScore = db.get(['game', 'win-game-score']);
+
+  actors = actorNames.map((name, i) => {
+    const store = db.select('actor-stores', i);
     if(name == 'human') {
       return 'human';
     }
     const aiName = name.split(':')[1];
-    const ai = new AIs[aiName];
+    let AI = AIs[aiName];
+    if(!AI) {
+      return name;
+    }
+    let ai = new AI(store, i, playerCount, winGameScore);
+    ai.isAI = true;
     return ai;
   });
 }
