@@ -234,7 +234,10 @@ function nextPlayer(db) {
     }
   }
   db.set(['game', 'current-player'], nextPlayer);
-  B.do({ action: 'gameevent/turn' });
+
+  requestAnimationFrame(() => {
+    B.do({ action: 'gameevent/turn' });
+  });
 }
 
 // returning `player` after pay for the card
