@@ -1,8 +1,8 @@
 import B from 'app/broker';
 import db from 'app/db';
 
+import { validateAction } from 'app/utils';
 import {getActors} from 'app/AI/actors';
-
 import {colors} from 'app/data/game-setting';
 
 const debug = require('debug')('app/actions/gameevent');
@@ -31,6 +31,7 @@ function composeGameState(db) {
 }
 
 B.on('gameevent/turn', action => {
+  const resources = db.get(['game', 'resources']);
   const playerIndex = db.get(['game', 'current-player']);
   const player = db.get(['game', 'players', playerIndex]);
   if(player.actor == 'human') {
@@ -42,27 +43,37 @@ B.on('gameevent/turn', action => {
   const turnAction = actor.turn(gameState, playerIndex);
   // turnAction can be [buy, hold, resource]
   debug(turnAction);
-  if(turnAction.action == 'buy') {
-    B.do({
+  let gameAction;
+  switch(turnAction.action) {
+  case 'buy':
+    gameAction = {
       action: 'gameaction/acquire-card',
       card: turnAction.card,
-    });
-  } else if(turnAction.action == 'hold') {
-    B.do({
+    };
+    break;
+  case 'hold':
+    gameAction = {
       action: 'gameaction/reserve-card',
       card: turnAction.card,
-    });
-  } else if(turnAction.action == 'resource') {
-    B.do({
+    };
+    break;
+  case 'resource':
+    gameAction = {
       action: 'gameaction/take-resources',
       resources: turnAction.resources,
-    });
-  } else {
+    };
+    break;
+  default:
     debug(`unknown turn action: ${turnAction.action}`);
+    throw new Error(`Unknown turn action by ${player.actor}: ${turnAction.action}`);
   }
+
+  validateAction(player, resources, gameAction);
+  B.do(gameAction);
 });
 
 B.on('gameevent/drop-resource', action => {
+  const resources = db.get(['game', 'resources']);
   const playerIndex = db.get(['game', 'current-player']);
   const player = db.get(['game', 'players', playerIndex]);
   if(player.actor == 'human') {
@@ -71,14 +82,17 @@ B.on('gameevent/drop-resource', action => {
   const actor = getActors()[playerIndex];
   const gameState = composeGameState(db);
 
-  const resources = actor.dropResources(gameState, playerIndex, player.resources);
-  B.do({
+  const droppingResources = actor.dropResources(gameState, playerIndex, player.resources);
+  let gameAction = {
     action: 'gameaction/drop-resources',
-    resources: resources,
-  });
+    resources: droppingResources ,
+  };
+  validateAction(player, resources, gameAction);
+  B.do(gameAction);
 });
 
 B.on('gameevent/pick-noble', action => {
+  const resources = db.get(['game', 'resources']);
   const { nobles } = action;
   const playerIndex = db.get(['game', 'current-player']);
   const player = db.get(['game', 'players', playerIndex]);
@@ -89,9 +103,11 @@ B.on('gameevent/pick-noble', action => {
   const gameState = composeGameState(db);
 
   const noble = actor.pickNoble(gameState, playerIndex, nobles);
-  B.do({
+  let gameAction = {
     action: 'gameaction/pick-noble',
     noble: noble,
-  });
+  };
+  validateAction(player, resources, gameAction);
+  B.do(gameAction);
 
 });

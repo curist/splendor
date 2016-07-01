@@ -2,6 +2,11 @@ import B from 'app/broker';
 import db from 'app/db';
 
 import {colors} from 'app/data/game-setting';
+import {
+  canBuyCard,
+  canTakeNoble,
+  shouldDropResources,
+} from 'app/validates';
 
 const debug = require('debug')('app/actions/gameaction');
 
@@ -106,14 +111,8 @@ function cleanAction(db) {
 function endTurn(db) {
   const playerIndex = db.get(['game', 'current-player']);
   const player = db.get(['game', 'players', playerIndex]);
-  const resourcesCount = Object.keys(player.resources).map(color => {
-    return player.resources[color];
-  }).reduce((sum, count) => {
-    return sum + count;
-  });
 
-  // resource check
-  if (resourcesCount > 10) {
+  if(shouldDropResources(player)) {
     db.set(['game', 'action'], {
       action: 'too-much-resources',
       player
@@ -123,11 +122,7 @@ function endTurn(db) {
   }
   // nobles check
   const affordableNobles = db.get(['game', 'nobles']).filter(noble => {
-    const passedResources = colors.filter(color => {
-      return player.bonus[color] >= noble[color];
-    });
-    // should all pass
-    return passedResources.length == 5;
+    return canTakeNoble(player, noble);
   });
   if(affordableNobles.length > 0) {
     db.set(['game', 'action'], {
@@ -242,19 +237,6 @@ function nextPlayer(db) {
   B.do({ action: 'gameevent/turn' });
 }
 
-function hasEnoughResourceForCard(player, card) {
-  let shortOf = 0;
-  colors.forEach(color => {
-    var short = card[color]
-      - player.resources[color]
-      - player.bonus[color];
-    if(short > 0) {
-      shortOf += short;
-    }
-  });
-  return shortOf <= player.resources.gold;
-}
-
 // returning `player` after pay for the card
 function playerAcquireCard(oplayer, card) {
   let pay = {};
@@ -286,7 +268,7 @@ B.on('gameaction/acquire-card', (action) => {
   const { card } = action;
   const playerIndex = db.get(['game', 'current-player']);
   const player = db.get(['game', 'players', playerIndex]);
-  if(!hasEnoughResourceForCard(player, action.card)) {
+  if(!canBuyCard(player, action.card)) {
     debug('not enough resource for the card');
     return;
   }
