@@ -51,9 +51,6 @@ B.on('game/init', (action) => {
     'fast-mode': fast,
   });
 
-  db.set(['actor-stores'], [{}, {}, {}, {}]);
-  initActors(playerActors);
-
   if(mode == 'tourment') {
     if(!db.get(['tourment', 'currentRound'])) {
       db.set('tourment', {
@@ -126,6 +123,8 @@ B.on('game/init', (action) => {
     players,
   });
 
+  db.set(['actor-stores'], [{}, {}, {}, {}]);
+  initActors(playerActors);
 
   requestAnimationFrame(() => {
     B.do({ action: 'gameevent/turn' });
