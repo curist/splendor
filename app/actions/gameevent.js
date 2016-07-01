@@ -1,7 +1,7 @@
 import B from 'app/broker';
 import db from 'app/db';
 
-import { validateAction } from 'app/utils';
+import { validateAction } from 'app/validates';
 import {getActors} from 'app/AI/actors';
 import {colors} from 'app/data/game-setting';
 

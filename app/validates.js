@@ -73,7 +73,7 @@ export function canTakeNoble(player, noble) {
   return passedResources.length == 5;
 }
 
-export function validateActions(player, resources, action) {
+export function validateAction(player, resources, action) {
   const actor = `${player.key}:${player.actor}`;
   const actionName = action.action;
   if(actionName == 'gameaction/acquire-card') {
