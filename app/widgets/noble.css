@@ -7,8 +7,8 @@ $black: black;
     position: relative;
     width: 57px;
     height: 57px;
-    border: 1px solid #eee;
-    background-color: #763c33;
+    border: 1px solid black;
+    background-color: #0074D9;
     overflow: hidden;
     .Points {
         $size: 20px;
@@ -21,9 +21,10 @@ $black: black;
         font-size: 0.8em;
         border: 1px solid black;
         border-bottom-left-radius: 5px;
-        background-color: #eee;
+        background-color: #aaa;
         justify-content: center;
         align-items: center;
+        color: black;
     }
 
     .Cost {
