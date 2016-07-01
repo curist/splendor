@@ -127,12 +127,12 @@ function cardValue(player, state, cards, card) {
     return value - cost;
   }
 
-  const valueForAllOtherPlayers = state.players.reduce((valueSum, ppl) => {
-    if(ppl.key == player.key) {
-      return valueSum;
-    }
-    return valueSum + valueForPlayer(ppl, card);
-  }, 0);
+  // const valueForAllOtherPlayers = state.players.reduce((valueSum, ppl) => {
+  //   if(ppl.key == player.key) {
+  //     return valueSum;
+  //   }
+  //   return valueSum + valueForPlayer(ppl, card);
+  // }, 0);
 
   return valueForPlayer(player, card);
 }
@@ -180,7 +180,8 @@ export default class Normal {
 
     // try to buy the best card
     const card = getBestCard(player, state, allCards);
-    const bestCard = getBestCard(player, state, state.cards);
+    const bestCards = getBestCards(player, state, allCards);
+    const bestCard = bestCards[0];
     if(hasEnoughResourceForCard(player, bestCard)) {
       return {
         action: 'buy',
@@ -192,7 +193,7 @@ export default class Normal {
 
     const allBonus = calcColorsTotal(allCards);
     const resCount = countResources(player.resources);
-    const topCards = getBestCards(player, state, allCards).slice(0,3);
+    const topCards = bestCards.slice(0,3);
     if(resCount <= 7) {
       const availableColors = colors.filter(color => {
         return state.resources[color] > 0;
