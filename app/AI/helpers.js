@@ -1,4 +1,5 @@
 import _ from 'underscore';
+import { canBuyCard } from 'app/validates';
 
 export const colors = [
   'white', 'blue', 'green', 'red', 'black'
@@ -36,4 +37,31 @@ export function zipResources (resources) {
     obj[res] += 1;
     return obj;
   }, {});
+}
+
+export function playerBoughtCard(player, card) {
+  if(!canBuyCard(player, card)) {
+    return player;
+  }
+
+  const bonus = Object.assign({}, player.bonus, {
+    [card.provides]: player.bonus[card.provides] + 1
+  });
+
+  let resources = Object.assign({}, player.resources);
+  colors.forEach(color => {
+    const pay = Math.max(card[color] - player.bonus[color], 0);
+    const short = player.resources[color] - pay;
+    if(short < 0) {
+      resources[color] = 0;
+      resources.gold += short;
+    } else {
+      resources[color] -= pay;
+    }
+  });
+
+  return Object.assign({}, player, {
+    bonus,
+    resources,
+  });
 }
