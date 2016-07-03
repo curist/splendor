@@ -1,2 +1,0 @@
-* universal action confirmation widgets
-
