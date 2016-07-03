@@ -1,7 +1,6 @@
-# Hello Webapp
+# Splendor
 
-Basic boilerplate for mithril.js app using webpack.
-
+[Splendor on Board Game Geek](https://boardgamegeek.com/boardgame/148228/splendor)
 
 ## Development
 
@@ -9,6 +8,12 @@ Basic boilerplate for mithril.js app using webpack.
 npm i
 npm start
 # open http://localhost:8080
+```
+
+## Test
+
+```sh
+npm t
 ```
 
 ## Build
@@ -19,43 +24,10 @@ npm run build
 # bundled app sits in ./build/
 ```
 
-# App Architecture
+# AI interfaces
 
-1. [mithril.js][1]: view layer, and other goodies
-2. [EventEmitter][2]: event dispatcher
-3. [Baobab][3]: Single data store
+check `app/AI/ai_dumb.js` for a minimal working implementation.
 
-We are using flux-alike architecture, views can emit events, ask to do actions, and only actions can actually alter db states.
-
-Views use utils.BindData to get informed data updates.
-
-    [View] (mithril component) <------------------\
-             |                                    |
-             |                                    |
-        emit action                       inform data update
-             |                                    |
-             V                                    |
-    [Actions] (EventEmitter listening)            |
-             |                                    |
-             |                                    |
-     do actions, alter app state                  |
-             |                                    |
-             \------> [Data Store] (Boabab) ------/
-
-
-# Webpack
-
-Hot module replacement enabled out of the box.
-
-## modules/plugins
-
-* precss
-* autoprefixer
-* postcss
-* HtmlWebpackPlugin
-* ExtractTextPlugin: For production build style.css
-* es6 via babel.js
-* eslint
 
 # License
 
