@@ -216,8 +216,6 @@ function nextPlayer(db) {
   const nextPlayer = (playerIndex + 1) % players.length;
 
   if(nextPlayer == 0) {
-    db.apply(['game', 'turn'], plus(1));
-
     let currentRound = db.get(['tourment', 'currentRound']);
     let totalRounds = db.get(['tourment', 'rounds']);
 
@@ -237,6 +235,8 @@ function nextPlayer(db) {
       }
       return;
     }
+
+    db.apply(['game', 'turn'], plus(1));
   }
   db.set(['game', 'current-player'], nextPlayer);
 
