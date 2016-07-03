@@ -1,12 +1,14 @@
 var webpack = require('webpack');
 var path = require('path');
+
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+
 var precss = require('precss');
 var autoprefixer = require('autoprefixer');
 
 module.exports = {
   entry: './app/index.js',
-  devtool: 'source-map',
   output: {
     path: 'build',
     filename: 'bundle.js'
@@ -16,21 +18,14 @@ module.exports = {
   },
   resolve: {
     alias: {
-      app: path.join(__dirname, 'app')
+      app: path.join(__dirname, '..', 'app')
     }
   },
   module: {
-    preLoaders: [
-      {
-        test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
-        loader: 'eslint',
-      }
-    ],
     loaders: [
       {
         test: /\.css$/,
-        loader: "style-loader!css-loader!postcss-loader"
+        loader: ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader")
       },
       {
         test: /\.js$/,
@@ -51,21 +46,16 @@ module.exports = {
       },
     ]
   },
-  eslint: {
-    configFile: './.eslintrc.js'
-  },
   postcss: function() {
     return [precss, autoprefixer];
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env.DEBUG': '"*"'
-    }),
     new HtmlWebpackPlugin({
       title: 'build by webpack @ ' + new Date(),
       hash: true,
       template: 'index.ejs'
     }),
+    new ExtractTextPlugin('style.css'),
     new webpack.NoErrorsPlugin(),
   ]
 };

@@ -10,7 +10,7 @@ module.exports = {
   // },
   resolve: {
     alias: {
-      app: path.join(__dirname, 'app')
+      app: path.join(__dirname, '..', 'app')
     }
   },
   module: {
