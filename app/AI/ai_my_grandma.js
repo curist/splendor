@@ -77,23 +77,6 @@ function calcColorsTotal(cards) {
   return allColors;
 }
 
-function calcColorFreq(cards) {
-  const allColors = cards.reduce((colorCount, card) => {
-    colors.forEach(color => {
-      colorCount[color] += 1;
-    });
-    return colorCount;
-  }, {
-    white: 0,
-    blue: 0,
-    green: 0,
-    red: 0,
-    black: 0,
-  });
-
-  return allColors;
-}
-
 function provideColorPoints(player, card, provides) {
   // card don't provide card's need
   if(card[provides] == 0) {
@@ -159,7 +142,7 @@ function cardValue(player, state, cards, card) {
 
   function valueForPlayer(player, card) {
     const { provides } = card;
-    const cost = expCardCost(player, card);
+    const cost = cardCost(player, card);
 
     const totalNobleValue = nobles.reduce((total, noble) => {
       return total + provideNoblePoints(player, noble, provides);
@@ -167,7 +150,7 @@ function cardValue(player, state, cards, card) {
     const value = card.points + totalNobleValue + cardBoardPoints(player, card);
     // debug(card);
     // debug(card.rank, value, card.total_cost, cost, value/cost);
-    return value / cost;
+    return value - cost;
   }
 
   // const valueForAllOtherPlayers = state.players.reduce((valueSum, ppl) => {
@@ -178,29 +161,6 @@ function cardValue(player, state, cards, card) {
   // }, 0);
 
   return valueForPlayer(player, card);
-}
-
-function secondPassCardValue(player, cards, cardToValue) {
-  function cardCardValue(player, card, cardToValue) {
-    const { provides } = cardToValue;
-    if(card[provides] == 0) {
-      return 0;
-    }
-    // already satisfied card's need
-    if(player.bonus[provides] >= card[provides]) {
-      return 0;
-    }
-    const totalShortOf = colors.reduce((total, color) => {
-      const diff = Math.max(card[color] - player.bonus[color], 0);
-      return total + diff;
-    }, 0);
-    return card.value / totalShortOf;
-  }
-
-  const totalValue = cards.reduce((total, card) => {
-    return total + cardCardValue(player, card, cardToValue);
-  }, 0);
-  return totalValue;
 }
 
 function getBestCards(player, state, cards) {
