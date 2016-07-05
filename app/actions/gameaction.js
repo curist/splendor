@@ -197,12 +197,14 @@ function getWinningPlayer(db) {
 function nextGame(db) {
   const players = db.get(['game-settings', 'player-actors']);
   const winGameScore = db.get(['game-settings', 'win-game-score']);
+  const seed = db.get(['game-settings', 'random-seed']);
   const fast = db.get(['game-settings', 'fast-mode']);
   const tourment = db.get('tourment');
 
   B.do({
     action: 'game/init',
     mode: 'tourment',
+    seed,
     fast,
     players,
     winGameScore,

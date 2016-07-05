@@ -10,15 +10,9 @@ const InGameMenu = {
   controller () {
     const ctrl = this;
 
-    ctrl.expanded = m.prop(false);
-
     BindData(ctrl , {
       game: ['game']
     });
-
-    ctrl.toggleExpand = () => {
-      ctrl.expanded(!ctrl.expanded());
-    };
 
     ctrl.signin = () => {
       B.do({
@@ -29,7 +23,10 @@ const InGameMenu = {
       B.do({
         action: 'signout'
       });
-      ctrl.toggleExpand();
+    };
+
+    ctrl.undo = () => {
+      B.do({ action: 'game/undo' });
     };
 
     ctrl.pass = () => {
@@ -40,10 +37,7 @@ const InGameMenu = {
     };
 
     ctrl.exitGame = () => {
-      B.do({
-        action: 'game/exit',
-      });
-      ctrl.toggleExpand();
+      B.do({ action: 'game/exit' });
     };
   },
   view (ctrl) {
@@ -51,6 +45,9 @@ const InGameMenu = {
       (function () {
         if(ctrl.data.game) {
           return m('.row', [
+            m('button', {
+              onclick: ctrl.undo.bind(ctrl),
+            }, 'undo'),
             m('button', {
               onclick: ctrl.pass.bind(ctrl),
             }, 'pass'),

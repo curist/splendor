@@ -18,6 +18,7 @@ const NewGameSetting = {
       playerActors: ['game-settings', 'player-actors'],
       score: ['game-settings', 'win-game-score'],
       rounds: ['game-settings', 'tourment-rounds'],
+      seed: ['game-settings', 'random-seed'],
       fast: ['game-settings', 'fast-mode'],
     });
 
@@ -27,6 +28,7 @@ const NewGameSetting = {
     ctrl.playerActors = m.prop(playerActors);
     ctrl.score = m.prop(ctrl.data.score || 15);
     ctrl.tourmentRounds = m.prop(ctrl.data.rounds || 5);
+    ctrl.seed = m.prop(ctrl.data.seed || '');
     ctrl.fast = m.prop(ctrl.data.fast);
 
     ctrl.actors = ['human'].concat(Object.keys(AIs).map(name => {
@@ -41,6 +43,7 @@ const NewGameSetting = {
         winGameScore: ctrl.score(),
         rounds: ctrl.tourmentRounds() || 3,
         fast: ctrl.fast(),
+        seed: ctrl.seed() || undefined
       });
     };
 
@@ -100,19 +103,21 @@ const NewGameSetting = {
       m('h4', 'Tourment Settings'),
       m('.row', [
         m('span', 'tourment rounds: '),
-        m('input.rounds[type=text]', {
+        m('input.rounds[type=number]', {
           value: ctrl.tourmentRounds(),
-          onchange: m.withAttr('value', ctrl.tourmentRounds),
-          onkeyup: m.withAttr('value', ctrl.tourmentRounds),
+          oninput: m.withAttr('value', ctrl.tourmentRounds),
         }),
       ]),
-      m('.row', {
-        style: {
-          'align-items': 'center'
-        }
-      }, [
+      m('.row', [
+        m('span', 'random seed:'),
+        m('input.seed[type=text]', {
+          value: ctrl.seed(),
+          oninput: m.withAttr('value', ctrl.seed),
+        }),
+      ]),
+      m('.row', [
         m('span', 'fast mode:'),
-        m('input[type=checkbox]', {
+        m('input.fast-check[type=checkbox]', {
           checked: ctrl.fast(),
           onchange: m.withAttr('checked', ctrl.fast)
         }),

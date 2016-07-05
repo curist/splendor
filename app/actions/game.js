@@ -2,6 +2,8 @@ import B from 'app/broker';
 import db from 'app/db';
 import _ from 'underscore';
 
+require('seedrandom');
+
 const debug = require('debug')('app/actions/game');
 
 import {initActors} from 'app/AI/actors';
@@ -40,7 +42,9 @@ function changeCardStatus(status) {
 }
 
 B.on('game/init', (action) => {
-  const { players: playerActors, winGameScore, mode, rounds, fast } = action;
+  db.set('game-states', []);
+
+  const { players: playerActors, winGameScore, mode, rounds, seed, fast } = action;
 
   const playerCount = playerActors.length;
 
@@ -48,8 +52,10 @@ B.on('game/init', (action) => {
     'player-actors': playerActors,
     'win-game-score': winGameScore,
     'tourment-rounds': rounds,
+    'random-seed': seed,
     'fast-mode': fast,
   });
+
 
   if(mode == 'tourment') {
     if(!db.get(['tourment', 'currentRound'])) {
@@ -64,6 +70,11 @@ B.on('game/init', (action) => {
     }
     const currentRound = db.get(['tourment', 'currentRound']);
     db.set(['tourment', 'currentRound'], currentRound + 1);
+    // init random seed, only when tourment just begin
+    Math.seedrandom(`${seed}-${currentRound + 1}`);
+
+  } else {
+    Math.seedrandom(seed);
   }
 
   const {
@@ -129,6 +140,15 @@ B.on('game/init', (action) => {
   requestAnimationFrame(() => {
     B.do({ action: 'gameevent/turn' });
   });
+});
+
+B.on('game/undo', () => {
+  db.pop('game-states');
+
+  const states = db.get('game-states');
+  if(states.length > 0) {
+    db.set('game', states[states.length - 1]);
+  }
 });
 
 B.on('game/exit', (action) => {
