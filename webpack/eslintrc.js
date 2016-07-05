@@ -6,6 +6,7 @@ module.exports = {
   },
   "globals": {
     "firebase": true,
+    "FastClick": true,
   },
   "extends": "eslint:recommended",
   "parserOptions": {

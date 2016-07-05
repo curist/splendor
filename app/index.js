@@ -12,6 +12,8 @@ function mountApplication() {
 }
 
 function init() {
+  FastClick.attach(document.body);
+
   require('app/style.css');
   require('app/actions');
 
