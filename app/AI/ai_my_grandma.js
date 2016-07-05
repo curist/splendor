@@ -184,7 +184,7 @@ function getBestCards(player, state, cards) {
     const futurePlayer = playerBoughtCard(player, cardToValue);
 
     const nextTopCards = cards.map(card => {
-      let revalue = 0;
+      let revalue = -10000;
       if(card.key != cardToValue.key) {
         revalue = cardValue(futurePlayer, state, cards, card);
       }
