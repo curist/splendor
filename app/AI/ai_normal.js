@@ -139,9 +139,12 @@ function cardValue(player, state, cards, card) {
 
 function getBestCards(player, state, cards) {
   const { nobles } = state;
-  const sortedCards = cards.sort((cardA, cardB) => {
-    return cardValue(player, state, cards, cardB) -
-      cardValue(player, state, cards, cardA);
+  const sortedCards = cards.map(card => {
+    return Object.assign({
+      value: cardValue(player, state, cards, card)
+    }, card);
+  }).sort((cardA, cardB) => {
+    return cardB.value - cardA.value;
   });
   return sortedCards;
 }
