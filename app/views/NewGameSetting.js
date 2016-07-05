@@ -126,7 +126,7 @@ const NewGameSetting = {
         }),
       ]),
       m('.row', [
-        m('span', 'observer mode:'),
+        m('span', 'pause on each turn:'),
         m('input[type=checkbox]', {
           checked: ctrl.observer(),
           onchange: m.withAttr('checked', ctrl.observer)
