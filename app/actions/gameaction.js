@@ -199,16 +199,16 @@ function nextGame(db) {
   const winGameScore = db.get(['game-settings', 'win-game-score']);
   const seed = db.get(['game-settings', 'random-seed']);
   const fast = db.get(['game-settings', 'fast-mode']);
-  const tourment = db.get('tourment');
+  const tournament = db.get('tournament');
 
   B.do({
     action: 'game/init',
-    mode: 'tourment',
+    mode: 'tournament',
     seed,
     fast,
     players,
     winGameScore,
-    rounds: tourment.rounds,
+    rounds: tournament.rounds,
   });
 }
 
@@ -218,17 +218,17 @@ function nextPlayer(db) {
   const nextPlayer = (playerIndex + 1) % players.length;
 
   if(nextPlayer == 0) {
-    let currentRound = db.get(['tourment', 'currentRound']);
-    let totalRounds = db.get(['tourment', 'rounds']);
+    let currentRound = db.get(['tournament', 'currentRound']);
+    let totalRounds = db.get(['tournament', 'rounds']);
 
     const winningPlayerKey = getWinningPlayer(db);
     if(winningPlayerKey >= 0) {
       const gameMode = db.get(['game', 'mode']);
-      if(gameMode == 'tourment') {
+      if(gameMode == 'tournament') {
         const turn = db.get(['game', 'turn']);
-        db.push(['tourment', 'turns'], turn);
-        db.push(['tourment', 'winners'], winningPlayerKey );
-        db.apply(['tourment', 'wins', winningPlayerKey], plus(1));
+        db.push(['tournament', 'turns'], turn);
+        db.push(['tournament', 'winners'], winningPlayerKey );
+        db.apply(['tournament', 'wins', winningPlayerKey], plus(1));
       }
 
       if(currentRound < totalRounds) {

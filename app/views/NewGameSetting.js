@@ -17,7 +17,7 @@ const NewGameSetting = {
     BindData(ctrl, {
       playerActors: ['game-settings', 'player-actors'],
       score: ['game-settings', 'win-game-score'],
-      rounds: ['game-settings', 'tourment-rounds'],
+      rounds: ['game-settings', 'tournament-rounds'],
       seed: ['game-settings', 'random-seed'],
       fast: ['game-settings', 'fast-mode'],
     });
@@ -27,7 +27,7 @@ const NewGameSetting = {
     ctrl.players = m.prop(playerActors.length);
     ctrl.playerActors = m.prop(playerActors);
     ctrl.score = m.prop(ctrl.data.score || 15);
-    ctrl.tourmentRounds = m.prop(ctrl.data.rounds || 5);
+    ctrl.tournamentRounds = m.prop(ctrl.data.rounds || 5);
     ctrl.seed = m.prop(ctrl.data.seed || '');
     ctrl.fast = m.prop(ctrl.data.fast);
 
@@ -41,7 +41,7 @@ const NewGameSetting = {
         mode: mode,
         players: ctrl.playerActors(),
         winGameScore: ctrl.score(),
-        rounds: ctrl.tourmentRounds() || 3,
+        rounds: ctrl.tournamentRounds() || 3,
         fast: ctrl.fast(),
         seed: ctrl.seed() || undefined
       });
@@ -100,12 +100,12 @@ const NewGameSetting = {
           }, n);
         })),
       ]),
-      m('h4', 'Tourment Settings'),
+      m('h4', 'Tournament Settings'),
       m('.row', [
-        m('span', 'tourment rounds: '),
+        m('span', 'tournament rounds: '),
         m('input.rounds[type=number]', {
-          value: ctrl.tourmentRounds(),
-          oninput: m.withAttr('value', ctrl.tourmentRounds),
+          value: ctrl.tournamentRounds(),
+          oninput: m.withAttr('value', ctrl.tournamentRounds),
         }),
       ]),
       m('.row', [
@@ -132,8 +132,8 @@ const NewGameSetting = {
           onclick: ctrl.initGame.bind(ctrl, 'normal'),
         }, 'Start Game'),
         m('button', {
-          onclick: ctrl.initGame.bind(ctrl, 'tourment'),
-        }, 'Start Tourment'),
+          onclick: ctrl.initGame.bind(ctrl, 'tournament'),
+        }, 'Start Tournament'),
       ]),
     ]));
   },

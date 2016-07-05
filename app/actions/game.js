@@ -51,15 +51,15 @@ B.on('game/init', (action) => {
   db.set('game-settings', {
     'player-actors': playerActors,
     'win-game-score': winGameScore,
-    'tourment-rounds': rounds,
+    'tournament-rounds': rounds,
     'random-seed': seed,
     'fast-mode': fast,
   });
 
 
-  if(mode == 'tourment') {
-    if(!db.get(['tourment', 'currentRound'])) {
-      db.set('tourment', {
+  if(mode == 'tournament') {
+    if(!db.get(['tournament', 'currentRound'])) {
+      db.set('tournament', {
         rounds,
         currentRound: 0,
         wins: playerActors.map(player => {
@@ -69,9 +69,9 @@ B.on('game/init', (action) => {
         winners: [],
       });
     }
-    const currentRound = db.get(['tourment', 'currentRound']);
-    db.set(['tourment', 'currentRound'], currentRound + 1);
-    // init random seed, only when tourment just begin
+    const currentRound = db.get(['tournament', 'currentRound']);
+    db.set(['tournament', 'currentRound'], currentRound + 1);
+    // init random seed, only when tournament just begin
     Math.seedrandom(`${seed}-${currentRound + 1}`);
 
   } else {
@@ -154,6 +154,6 @@ B.on('game/undo', () => {
 
 B.on('game/exit', (action) => {
   db.unset(['game']);
-  db.unset(['tourment']);
+  db.unset(['tournament']);
 });
 

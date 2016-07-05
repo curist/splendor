@@ -10,26 +10,26 @@ import allCards from 'app/data/cards';
 import Card from 'app/widgets/Card';
 import NewGameSetting from 'app/views/NewGameSetting';
 import Summary from 'app/views/Summary';
-import TourmentSummary from 'app/views/TourmentSummary';
+import TournamentSummary from 'app/views/TournamentSummary';
 import GameBoard from 'app/views/GameBoard';
 import SinglePlayerBoard from 'app/views/SinglePlayerBoard';
 import PlayerBoard from 'app/views/PlayerBoard';
 import ActionWindow from 'app/widgets/ActionWindow';
 import ReservedCards from 'app/widgets/ReservedCards';
 
-const TourmentRounds = {
+const TournamentRounds = {
   controller () {
     const ctrl = this;
 
     BindData(ctrl, {
-      currentRound: ['tourment', 'currentRound'],
-      rounds: ['tourment', 'rounds'],
+      currentRound: ['tournament', 'currentRound'],
+      rounds: ['tournament', 'rounds'],
     });
   },
   view (ctrl) {
     const currentRound = ctrl.data.currentRound;
     const rounds = ctrl.data.rounds;
-    return m('.TourmentRound', `${currentRound} / ${rounds}`);
+    return m('.tournament', `${currentRound} / ${rounds}`);
   },
 };
 
@@ -71,8 +71,8 @@ const Home = {
             }
           })(),
           (function () {
-            if(ctrl.data.game.mode == 'tourment') {
-              return m(TourmentRounds);
+            if(ctrl.data.game.mode == 'tournament') {
+              return m(TournamentRounds);
             }
           })(),
           (function () {
@@ -84,8 +84,8 @@ const Home = {
             if(!ctrl.data.showSummary) {
               return;
             }
-            if(ctrl.data.game.mode == 'tourment') {
-              return m(TourmentSummary);
+            if(ctrl.data.game.mode == 'tournament') {
+              return m(TournamentSummary);
             }
             return m(Summary);
           })(),
