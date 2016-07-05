@@ -4,6 +4,10 @@
     right: 10px;
     overflow: hidden;
 
+    &.hide {
+        display: none;
+    }
+
     .CardContainer {
         overflow-y: hidden;
         overflow-x: auto;
