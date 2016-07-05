@@ -7,6 +7,9 @@ class Broker extends EventEmitter {
   }
 }
 
-const b = new Broker();
+const B = new Broker();
+export default B;
 
-module.exports = b;
+if(module.hot) {
+  window.B = B;
+}
