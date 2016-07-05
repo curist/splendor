@@ -11,7 +11,8 @@ const InGameMenu = {
     const ctrl = this;
 
     BindData(ctrl , {
-      game: ['game']
+      game: ['game'],
+      observer: ['game-settings', 'observer-mode'],
     });
 
     ctrl.signin = () => {
@@ -29,11 +30,8 @@ const InGameMenu = {
       B.do({ action: 'game/undo' });
     };
 
-    ctrl.pass = () => {
-      B.do({
-        action: 'gameaction/take-resources',
-        resources: {},
-      });
+    ctrl.nextTurn = () => {
+      B.do({ action: 'gameevent/turn' });
     };
 
     ctrl.exitGame = () => {
@@ -48,9 +46,13 @@ const InGameMenu = {
             m('button', {
               onclick: ctrl.undo.bind(ctrl),
             }, 'undo'),
-            m('button', {
-              onclick: ctrl.pass.bind(ctrl),
-            }, 'pass'),
+            (function() {
+              if(ctrl.data.observer) {
+                return m('button', {
+                  onclick: ctrl.nextTurn.bind(ctrl),
+                }, 'next turn');
+              }
+            })(),
             m('button', {
               onclick: ctrl.exitGame.bind(ctrl),
             }, 'exit game'),

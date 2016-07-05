@@ -200,12 +200,14 @@ function nextGame(db) {
   const seed = db.get(['game-settings', 'random-seed']);
   const fast = db.get(['game-settings', 'fast-mode']);
   const tournament = db.get('tournament');
+  const observer = db.get(['game-settings', 'observer-mode']);
 
   B.do({
     action: 'game/init',
     mode: 'tournament',
     seed,
     fast,
+    observer,
     players,
     winGameScore,
     rounds: tournament.rounds,
@@ -242,6 +244,10 @@ function nextPlayer(db) {
     db.apply(['game', 'turn'], plus(1));
   }
   db.set(['game', 'current-player'], nextPlayer);
+
+  if(db.get(['game-settings', 'observer-mode'])) {
+    return;
+  }
 
   if(db.get(['game-settings', 'fast-mode'])) {
     B.do({ action: 'gameevent/turn' });

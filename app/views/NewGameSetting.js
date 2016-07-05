@@ -20,6 +20,7 @@ const NewGameSetting = {
       rounds: ['game-settings', 'tournament-rounds'],
       seed: ['game-settings', 'random-seed'],
       fast: ['game-settings', 'fast-mode'],
+      observer: ['game-settings', 'observer-mode'],
     });
 
     const playerActors = (ctrl.data.playerActors || ['human', 'human']).slice(0,4);
@@ -30,6 +31,7 @@ const NewGameSetting = {
     ctrl.tournamentRounds = m.prop(ctrl.data.rounds || 5);
     ctrl.seed = m.prop(ctrl.data.seed || '');
     ctrl.fast = m.prop(ctrl.data.fast);
+    ctrl.observer = m.prop(ctrl.data.observer);
 
     ctrl.actors = ['human'].concat(Object.keys(AIs).map(name => {
       return `ai:${name}`;
@@ -43,6 +45,7 @@ const NewGameSetting = {
         winGameScore: ctrl.score(),
         rounds: ctrl.tournamentRounds() || 3,
         fast: ctrl.fast(),
+        observer: ctrl.observer(),
         seed: ctrl.seed() || undefined
       });
     };
@@ -117,9 +120,16 @@ const NewGameSetting = {
       ]),
       m('.row', [
         m('span', 'fast mode:'),
-        m('input.fast-check[type=checkbox]', {
+        m('input[type=checkbox]', {
           checked: ctrl.fast(),
           onchange: m.withAttr('checked', ctrl.fast)
+        }),
+      ]),
+      m('.row', [
+        m('span', 'observer mode:'),
+        m('input[type=checkbox]', {
+          checked: ctrl.observer(),
+          onchange: m.withAttr('checked', ctrl.observer)
         }),
       ]),
       m('hr'),

@@ -20,9 +20,8 @@
         width: 120px;
     }
 
-    .fast-check {
+    input[type=checkbox] {
         width: 20px;
         height: 20px;
-        appereance: none;
     }
 }

@@ -44,7 +44,11 @@ function changeCardStatus(status) {
 B.on('game/init', (action) => {
   db.set('game-states', []);
 
-  const { players: playerActors, winGameScore, mode, rounds, seed, fast } = action;
+  const {
+    players: playerActors,
+    winGameScore, mode, rounds,
+    seed, fast, observer
+  } = action;
 
   const playerCount = playerActors.length;
 
@@ -54,6 +58,7 @@ B.on('game/init', (action) => {
     'tournament-rounds': rounds,
     'random-seed': seed,
     'fast-mode': fast,
+    'observer-mode': observer,
   });
 
 
