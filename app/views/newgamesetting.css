@@ -9,14 +9,10 @@
         input {
             margin-left: 5px;
         }
-
-        input[type=text], input[type=number] {
-            height: 1.5em;
-        }
     }
 
     .rounds {
-        width: 50px;
+        width: 60px;
         text-align: center;
     }
 
