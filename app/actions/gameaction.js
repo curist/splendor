@@ -227,6 +227,7 @@ function nextPlayer(db) {
       if(gameMode == 'tourment') {
         const turn = db.get(['game', 'turn']);
         db.push(['tourment', 'turns'], turn);
+        db.push(['tourment', 'winners'], winningPlayerKey );
         db.apply(['tourment', 'wins', winningPlayerKey], plus(1));
       }
 

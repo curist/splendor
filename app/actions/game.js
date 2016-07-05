@@ -66,6 +66,7 @@ B.on('game/init', (action) => {
           return 0;
         }),
         turns: [],
+        winners: [],
       });
     }
     const currentRound = db.get(['tourment', 'currentRound']);
