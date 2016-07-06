@@ -149,11 +149,10 @@ B.on('game/init', (action) => {
 });
 
 B.on('game/undo', () => {
-  db.pop('game-states');
-
   const states = db.get('game-states');
   if(states.length > 0) {
     db.set('game', states[states.length - 1]);
+    db.pop('game-states');
   }
 });
 
