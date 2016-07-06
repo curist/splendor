@@ -113,7 +113,7 @@ const ActionWindow = {
   },
   pickCardView (ctrl, card) {
     return m('.ActionWindow.row', [
-      m(Card, card),
+      m(Card, Object.assign({}, card, {affordable: false})),
       m('.col', [
         m('button', {
           onclick: ctrl.acquire.bind(ctrl, card),

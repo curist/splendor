@@ -2,7 +2,11 @@ import m from 'mithril';
 
 import Card from 'app/widgets/Card';
 
+import { canBuyCard } from 'app/validates';
+
 import './reservedcards.css';
+
+const debug = require('debug')('app/widgets/ReservedCards');
 
 const ReservedCards = {
   view (ctrl, player) {
@@ -11,7 +15,8 @@ const ReservedCards = {
     return m('.ReservedCards' + hide, [
       m('.Title', 'Hold: ' + cards.length),
       m('.CardContainer', cards.map(card => {
-        return m(Card, card);
+        const affordable = canBuyCard(player, card);
+        return m(Card, Object.assign({}, card, { affordable }));
       })),
     ]);
   }
