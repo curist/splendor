@@ -8,6 +8,8 @@ $gold: gold;
     position: relative;
     padding: 2px 15px;
 
+    color: #eee;
+
     .ScoreRow {
         align-items: center;
         .Score {
@@ -27,7 +29,7 @@ $gold: gold;
         .Resource {
             width: 32px;
             align-items: center;
-            border: 1px solid #555;
+            border: 1px solid #ccc;
             padding: 2px;
             margin-right: 3px;
             border-radius: 10px;
