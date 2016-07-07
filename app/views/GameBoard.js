@@ -48,7 +48,9 @@ const GameBoard = {
     ctrl.takeResource = (type) => {
       B.do({
         action: 'gameaction/take-resource',
-        type: type,
+        resources: {
+          [type]: 1,
+        }
       });
     };
 

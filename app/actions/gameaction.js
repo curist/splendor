@@ -4,6 +4,7 @@ import db from 'app/db';
 import {colors} from 'app/data/game-setting';
 import {
   canBuyCard,
+  canTakeResources,
   canTakeNoble,
   shouldDropResources,
 } from 'app/validates';
@@ -31,19 +32,13 @@ B.on('gameaction/pick-card', (action) => {
 });
 
 B.on('gameaction/take-resource', (action) => {
-  const { type } = action;
-  if(type == 'gold') {
-    return;
-  }
   const resources = db.get(['game', 'resources']);
-  if(resources[type] <= 0) {
+  if(!canTakeResources(resources, action.resources)) {
     return;
   }
   db.set(['game', 'action'], {
     action: 'take-resource',
-    resources: {
-      [type]: 1
-    },
+    resources: action.resources,
   });
 });
 

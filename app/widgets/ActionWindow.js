@@ -19,29 +19,31 @@ const ActionWindow = {
     const ctrl = this;
     BindData(ctrl, {
       action: ['game', 'action'],
+      takenResources: ['game', 'action', 'resources'],
       resources: ['game', 'resources'],
     });
 
     const action = ctrl.data.action;
 
-    ctrl.takenResources = m.prop({});
-    if(action.action == 'take-resource') {
-      ctrl.takenResources(Object.assign({}, action.resources));
-    }
-
     ctrl.takeResource = (color) => {
-      let res = ctrl.takenResources();
+      let res = Object.assign({}, ctrl.data.takenResources);
       res[color] = (res[color] || 0) + 1;
-      ctrl.takenResources(res);
+      B.do({
+        action: 'gameaction/take-resource',
+        resources: res,
+      });
     };
 
     ctrl.giveBackResource = (color) => {
-      let res = ctrl.takenResources();
+      let res = Object.assign({}, ctrl.data.takenResources);
       res[color] -= 1;
       if(res[color] == 0) {
         delete res[color];
       }
-      ctrl.takenResources(res);
+      B.do({
+        action: 'gameaction/take-resource',
+        resources: res,
+      });
     };
 
     ctrl.dropResources = m.prop({});
@@ -133,7 +135,7 @@ const ActionWindow = {
   },
   takeResourceView (ctrl) {
     const resources = ctrl.data.resources;
-    const takenResources = ctrl.takenResources();
+    const takenResources = ctrl.data.takenResources;
     const totalTaken = Object.keys(takenResources).reduce((sum, color) => {
       return sum + takenResources[color];
     }, 0);
