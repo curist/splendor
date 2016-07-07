@@ -28,7 +28,6 @@ const ActionWindow = {
     ctrl.takeResource = (color) => {
       let res = Object.assign({}, ctrl.data.takenResources);
       res[color] = (res[color] || 0) + 1;
-      debug(color, res[color]);
       B.do({
         action: 'gameaction/take-resource',
         resources: res,
