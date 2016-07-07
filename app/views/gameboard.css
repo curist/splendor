@@ -7,7 +7,7 @@ $gold: gold;
 .GameBoard {
     .Nobles {
         display: flex;
-        margin: 10px 0;
+        margin: 3px 0 5px;
         min-height: 60px;
         .Noble {
             margin-left: 5px;
@@ -15,7 +15,7 @@ $gold: gold;
     }
 
     .Rank.row {
-        margin-bottom: 5px;
+        margin-bottom: 3px;
 
         .Card {
             margin-left: 5px;
