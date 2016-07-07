@@ -1,6 +1,6 @@
 /* vim:set ft=sass: */
 
-$wallpaper: 'http://webneel.com/wallpaper/sites/default/files/images/04-2013/15-beach-sea-photography.jpg';
+$wallpaper: '../assets/abstract-bg.jpg';
 
 * {
   box-sizing: border-box;
@@ -16,8 +16,13 @@ html,body{
 
 body{
   line-height: 1.6;
-  font-size: 18px;
+  font-size: 16px;
   color: #444;
+  font-family: Tahoma, Geneva, sans-serif;
+}
+
+h1,h2,h3,h4,h5 {
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 
@@ -39,7 +44,7 @@ h4,h5{
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  filter: blur(8px);
+  filter: blur(5px);
   transform: scale(1.1);
 
   .mask {

@@ -64,7 +64,7 @@ const NewGameSetting = {
   },
   view (ctrl) {
     return m('.NewGameSetting', m('.col', [
-      m('h4', 'Genral Settings'),
+      m('h4', 'General Settings'),
       m('.row', [
         'players: ',
         m('select', {
