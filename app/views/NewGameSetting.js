@@ -132,7 +132,7 @@ const NewGameSetting = {
           onchange: m.withAttr('checked', ctrl.observer)
         }),
       ]),
-      m('hr'),
+      m('br'),
       m('.row', {
         style: {
           'justify-content': 'center'

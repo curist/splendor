@@ -31,7 +31,8 @@ h1,h2,h3{
 }
 
 h4,h5{
-  margin: 0.6em 0;
+  margin: 15px 0 8px;
+  font-weight: medium;
 }
 
 #app-bg {
