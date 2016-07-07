@@ -35,7 +35,7 @@ export function canTakeResources(resources, takingResources) {
     if(takingResources[color] >= 2) {
       took2sameColor = true;
     }
-    sum += takingResources[color];
+    sum += (takingResources[color] || 0);
   }
   if(sum > 3) {
     return false;

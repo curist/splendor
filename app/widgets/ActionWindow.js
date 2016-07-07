@@ -28,6 +28,7 @@ const ActionWindow = {
     ctrl.takeResource = (color) => {
       let res = Object.assign({}, ctrl.data.takenResources);
       res[color] = (res[color] || 0) + 1;
+      debug(color, res[color]);
       B.do({
         action: 'gameaction/take-resource',
         resources: res,
@@ -143,7 +144,7 @@ const ActionWindow = {
       return yn || (takenResources[color] >= 2);
     }, false);
     return m('.ActionWindow.col', [
-      'Resources: ',
+      m('.text', 'Resources: '),
       m('.Resources.row', colors.filter(color => {
         return resources[color];
       }).map(color => {
@@ -167,7 +168,7 @@ const ActionWindow = {
           onclick: ctrl.takeResource.bind(ctrl, color),
         }, count);
       })),
-      'Take',
+      m('.text', 'Take'),
       m('.Resources.row', Object.keys(takenResources).map(color => {
         const count = (takenResources[color] || 0);
         return m('.Resource.' + color, {
@@ -184,7 +185,7 @@ const ActionWindow = {
   },
   blindHoldView (ctrl, rank) {
     return m('.ActionWindow.col', [
-      m('p', `Hold a rank ${rank} card`),
+      m('p.text', `Hold a rank ${rank} card`),
       m('button', {
         onclick: ctrl.blindHold.bind(ctrl, rank),
       }, 'hold'),
