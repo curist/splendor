@@ -9,16 +9,15 @@ $wallpaper: 'http://webneel.com/wallpaper/sites/default/files/images/04-2013/15-
 html,body{
   width: 100%;
   height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
 body{
-  margin: 0;
-  padding: 0;
-  max-width: 42em;
   line-height: 1.6;
   font-size: 18px;
   color: #444;
-  overflow: hidden;
 }
 
 
