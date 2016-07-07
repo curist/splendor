@@ -1,14 +1,11 @@
-$white: white;
-$blue: blue;
-$green: green;
-$red: red;
-$black: black;
+@import '../colors';
+
 .Noble {
     position: relative;
     width: 57px;
     height: 57px;
     border: 1px solid black;
-    background-color: #0074D9;
+    background-color: #aaa;
     overflow: hidden;
     .Points {
         $size: 20px;
@@ -21,7 +18,7 @@ $black: black;
         font-size: 0.8em;
         border: 1px solid black;
         border-bottom-left-radius: 5px;
-        background-color: #aaa;
+        background-color: white;
         justify-content: center;
         align-items: center;
         color: black;

@@ -1,5 +1,7 @@
 /* vim:set ft=sass: */
 
+@import 'colors';
+
 $wallpaper: '../assets/abstract-bg.jpg';
 
 * {

@@ -1,8 +1,5 @@
-$white: white;
-$blue: blue;
-$green: green;
-$red: red;
-$black: black;
+@import '../colors';
+
 .Card {
     position: relative;
     width: 50px;
@@ -14,7 +11,7 @@ $black: black;
     background: lightsteelblue;
 
     &.affordable {
-        box-shadow: 0 0 3px 2px rgba(32, 128, 255, 0.8);
+        box-shadow: 0 0 15px 2px rgba(255, 133, 27, 0.7);
     }
 
     .Rank {

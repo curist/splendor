@@ -1,9 +1,5 @@
-$white: white;
-$blue: blue;
-$green: green;
-$red: red;
-$black: black;
-$gold: gold;
+@import '../colors';
+
 .PlayerBoard {
     position: relative;
     border: 1px solid black;
