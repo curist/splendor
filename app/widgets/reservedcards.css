@@ -3,6 +3,7 @@
     bottom: 50px;
     right: 10px;
     overflow: hidden;
+    color: #bbb;
 
     &.hide {
         display: none;
@@ -15,6 +16,7 @@
         border: 1px solid black;
         height: 95px;
         width: 70px;
+        color: #555;
         background-color: #555;
 
         .Card {

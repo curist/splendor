@@ -1,5 +1,7 @@
 /* vim:set ft=sass: */
 
+$wallpaper: 'http://webneel.com/wallpaper/sites/default/files/images/04-2013/15-beach-sea-photography.jpg';
+
 * {
   box-sizing: border-box;
 }
@@ -16,7 +18,8 @@ body{
   line-height: 1.6;
   font-size: 18px;
   color: #444;
-  background-color: #cdc;
+  overflow: hidden;
+  // background-color: #cdc;
 }
 
 
@@ -26,6 +29,25 @@ h1,h2,h3{
 
 h4,h5{
   margin: 0.6em 0;
+}
+
+#app-bg {
+  position: absolute;
+  top: -10px;
+  bottom: -10px;
+  left: -10px;
+  right: -10px;
+  background: url($wallpaper);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: blur(8px);
+
+  .mask {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(34,34,34,.70);
+  }
 }
 
 #app {
