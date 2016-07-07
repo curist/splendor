@@ -10,6 +10,8 @@ const debug = require('debug')('app/actions/gameevent');
 
 const AIActionDelay = 600 /* ms */;
 
+let timeouts = [];
+
 function composeGameState(db) {
   const cards = db.get(['game', 'cards1']).concat(
     db.get(['game', 'cards2'])
@@ -36,10 +38,10 @@ function composeGameState(db) {
 
 function delay(time, fn) {
   return new Promise(resolve => {
-    setTimeout(() => {
+    timeouts.push(setTimeout(() => {
       const result = fn();
       resolve(result);
-    }, time);
+    }, time));
   });
 }
 
@@ -189,9 +191,9 @@ B.on('gameevent/drop-resource', action => {
   if(db.get(['game-settings', 'fast-mode'])) {
     B.do(gameAction);
   } else {
-    setTimeout(() => {
+    delay(AIActionDelay, () => {
       B.do(gameAction);
-    }, AIActionDelay);
+    });
   }
 });
 
@@ -216,8 +218,13 @@ B.on('gameevent/pick-noble', action => {
   if(db.get(['game-settings', 'fast-mode'])) {
     B.do(gameAction);
   } else {
-    setTimeout(() => {
+    delay(AIActionDelay, () => {
       B.do(gameAction);
-    }, AIActionDelay);
+    });
   }
+});
+
+B.on('game/exit', (action) => {
+  timeouts.forEach(clearTimeout);
+  timeouts = [];
 });
