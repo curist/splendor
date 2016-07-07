@@ -11,15 +11,17 @@ $gold: gold;
     align-items: center;
     background-color: lightblue;
 
+    border-radius: 5px;
+
     &.active {
         border-color: white;
     }
 
     .Score {
-        font-size: 20px;
-        padding: 0 5px;
-        width: 30px;
+        font-size: 18px;
+        width: 100%;
         text-align: center;
+        line-height: 1.2em;
 
         &.win {
             font-weight: bold;
@@ -32,9 +34,9 @@ $gold: gold;
         flex-direction: column;
         .Resource {
             display: flex;
-            height: 24px;
+            font-size: 14px;
             .Indicator {
-                $size: 24px;
+                $size: 20px;
                 display: flex;
                 width: $size;
                 height: $size;
