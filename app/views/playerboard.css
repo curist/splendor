@@ -2,12 +2,11 @@
 
 .PlayerBoard {
     position: relative;
-    border: 1px solid black;
+    border: 2px solid transparent;
     padding: 2px 5px;
     align-items: center;
-    background-color: lightblue;
+    background-color: rgba(255,255,255,0.5);
 
-    border-radius: 5px;
 
     &.active {
         border-color: white;

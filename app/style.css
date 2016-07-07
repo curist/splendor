@@ -47,13 +47,13 @@ h4,h5{
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  filter: blur(5px);
+  filter: blur(3px);
   transform: scale(1.1);
 
   .mask {
     width: 100%;
     height: 100%;
-    background-color: rgba(34,34,34,.70);
+    background-color: rgba(34,34,34,.60);
   }
 }
 
