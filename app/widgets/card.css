@@ -5,8 +5,8 @@ $red: red;
 $black: black;
 .Card {
     position: relative;
-    width: 55px;
-    height: 75px;
+    width: 50px;
+    height: 72px;
     border: 1px solid black;
     border-radius: 3px;
     overflow: hidden;
