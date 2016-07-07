@@ -29,7 +29,7 @@ const TournamentRounds = {
   view (ctrl) {
     const currentRound = ctrl.data.currentRound;
     const rounds = ctrl.data.rounds;
-    return m('.tournament', `${currentRound} / ${rounds}`);
+    return m('.TournamentRound', `${currentRound} / ${rounds}`);
   },
 };
 
