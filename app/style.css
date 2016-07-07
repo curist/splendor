@@ -40,7 +40,7 @@ h4,h5{
   background-repeat: no-repeat;
   background-position: center;
   filter: blur(8px);
-  transform: scale(1.05);
+  transform: scale(1.1);
 
   .mask {
     width: 100%;
