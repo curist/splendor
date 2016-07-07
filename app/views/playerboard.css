@@ -2,14 +2,14 @@
 
 .PlayerBoard {
     position: relative;
-    border: 2px solid transparent;
     padding: 2px 5px;
     align-items: center;
-    background-color: rgba(255,255,255,0.5);
+    background-color: rgba(255,255,255,0.4);
 
 
     &.active {
-        border-color: white;
+        background-color: rgba(255,255,255,0.8);
+        box-shadow: 0 0 18px 0px rgba(255,255,255,0.5);
     }
 
     .Score {
