@@ -1,3 +1,4 @@
+import _ from 'underscore';
 import B from 'app/broker';
 import db from 'app/db';
 
@@ -6,6 +7,8 @@ import {getActors} from 'app/AI/actors';
 import {colors} from 'app/data/game-setting';
 
 const debug = require('debug')('app/actions/gameevent');
+
+const AIActionDelay = 600 /* ms */;
 
 function composeGameState(db) {
   const cards = db.get(['game', 'cards1']).concat(
@@ -29,6 +32,91 @@ function composeGameState(db) {
     cards, player, players, nobles,
     resources, deckRemaingings,
   };
+}
+
+function delay(time, fn) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const result = fn();
+      resolve(result);
+    }, time);
+  });
+}
+
+function delayChain(time, fns) {
+  return fns.reduce((promiseChain, fn) => {
+    if(!promiseChain) {
+      return delay(0, fn);
+    }
+    return promiseChain.then(()=>{
+      return delay(time, fn);
+    });
+  }, undefined);
+}
+
+function flattenResources (resources) {
+  return Object.keys(resources).reduce((flattenResources, key) => {
+    return flattenResources.concat(
+      _.times(resources[key], () => { return key; })
+    );
+  }, []);
+}
+
+function zipResources (resources) {
+  return resources.reduce((obj, res) => {
+    obj[res] = obj[res] || 0;
+    obj[res] += 1;
+    return obj;
+  }, {});
+}
+
+function playAITurnAction(action) {
+  const { action: actionType, card } = action;
+
+  if(actionType == 'gameaction/take-resources') {
+    // an array of array
+    // presenting resources we are taking on each steps
+    const stepRes = flattenResources(action.resources).reduce((stepRes, color) => {
+      const len = stepRes.length;
+      const prevStep = (len > 0) ? stepRes[len - 1] : [];
+      const step = prevStep.concat([color]);
+      return stepRes.concat([step]);
+    }, []);
+    const stepFns = stepRes.map(stepres => {
+      const res = zipResources(stepres);
+      return () => {
+        B.do({
+          action: 'gameaction/take-resource',
+          resources: res,
+        });
+      };
+    });
+
+    delayChain(150, stepFns).then(() => {
+      delay(AIActionDelay, () => {
+        B.do({
+          action: 'gameaction/take-resources',
+          resources: action.resources,
+        });
+      });
+    });
+
+  } else {
+    // 'gameaction/acquire-card',
+    // 'gameaction/reserve-card',
+
+    // delay 0ms, to start promise chain
+    delay(0, () => {
+      B.do({
+        action: 'gameaction/pick-card',
+        card,
+      });
+    }).then(() => {
+      return delay(AIActionDelay, () => {
+        B.do(action);
+      });
+    });
+  }
 }
 
 B.on('gameevent/turn', action => {
@@ -73,7 +161,12 @@ B.on('gameevent/turn', action => {
   }
 
   validateAction(player, resources, gameAction);
-  B.do(gameAction);
+
+  if(db.get(['game-settings', 'fast-mode'])) {
+    B.do(gameAction);
+  } else {
+    playAITurnAction(gameAction);
+  }
 });
 
 B.on('gameevent/drop-resource', action => {
@@ -92,7 +185,14 @@ B.on('gameevent/drop-resource', action => {
     resources: droppingResources ,
   };
   validateAction(player, resources, gameAction);
-  B.do(gameAction);
+
+  if(db.get(['game-settings', 'fast-mode'])) {
+    B.do(gameAction);
+  } else {
+    setTimeout(() => {
+      B.do(gameAction);
+    }, AIActionDelay);
+  }
 });
 
 B.on('gameevent/pick-noble', action => {
@@ -112,6 +212,12 @@ B.on('gameevent/pick-noble', action => {
     noble: noble,
   };
   validateAction(player, resources, gameAction);
-  B.do(gameAction);
 
+  if(db.get(['game-settings', 'fast-mode'])) {
+    B.do(gameAction);
+  } else {
+    setTimeout(() => {
+      B.do(gameAction);
+    }, AIActionDelay);
+  }
 });
