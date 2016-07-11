@@ -13,10 +13,6 @@ function mountApplication() {
 
 function init() {
   FastClick.attach(document.body);
-  const $body = document.getElementsByTagName('body')[0];
-  $body.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-  }, false);
 
   require('app/style.less');
   require('app/actions');
