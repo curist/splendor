@@ -1,4 +1,4 @@
-@import '../colors';
+@import '~app/colors';
 
 .Card {
     position: relative;
@@ -40,19 +40,19 @@
                 border: 1px solid rgba(0, 0, 0, 0.5);
                 border-radius: 3px;
                 &.white {
-                    background-color: $white;
+                    background-color: @white;
                 }
                 &.blue {
-                    background-color: $blue;
+                    background-color: @blue;
                 }
                 &.green {
-                    background-color: $green;
+                    background-color: @green;
                 }
                 &.red {
-                    background-color: $red;
+                    background-color: @red;
                 }
                 &.black {
-                    background-color: $black;
+                    background-color: @black;
                 }
             }
 
@@ -63,13 +63,13 @@
     }
 
     .Points {
-        $size: 20px;
+        @size: 20px;
         display: flex;
         position: absolute;
         top: -1px;
         right: -1px;
-        width: $size;
-        height: $size;
+        width: @size;
+        height: @size;
         font-size: 0.8em;
         border: 1px solid black;
         border-bottom-left-radius: 5px;
@@ -79,9 +79,9 @@
     }
 
     .Provide {
-        $size: 20px;
-        width: $size;
-        height: $size;
+        @size: 20px;
+        width: @size;
+        height: @size;
         position: absolute;
         right: -1px;
         bottom: -1px;
@@ -89,23 +89,23 @@
         border: 1px solid black;
 
         &.white {
-            background-color: $white;
+            background-color: @white;
         }
 
         &.blue {
-            background-color: $blue;
+            background-color: @blue;
         }
         
         &.green {
-            background-color: $green;
+            background-color: @green;
         }
 
         &.red {
-            background-color: $red;
+            background-color: @red;
         }
 
         &.black {
-            background-color: $black;
+            background-color: @black;
         }
     }
 }

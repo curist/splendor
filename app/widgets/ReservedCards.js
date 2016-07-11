@@ -4,7 +4,7 @@ import Card from 'app/widgets/Card';
 
 import { canBuyCard } from 'app/validates';
 
-import './reservedcards.css';
+import './reservedcards.less';
 
 const debug = require('debug')('app/widgets/ReservedCards');
 

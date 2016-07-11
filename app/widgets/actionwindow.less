@@ -1,4 +1,4 @@
-@import '../colors';
+@import '~app/colors';
 
 .ActionWindowBackdrop {
     position: absolute;
@@ -44,37 +44,37 @@
         .Resources {
             padding: 5px;
             .Resource {
-                $size: 32px;
-                width: $size;
-                height: $size;
+                @size: 32px;
+                width: @size;
+                height: @size;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 border: 1px solid #333;
-                border-radius: $size;
+                border-radius: @size;
                 overflow: hidden;
 
                 &.white {
-                    background-color: $white;
+                    background-color: @white;
                 }
                 &.blue {
-                    background-color: $blue;
+                    background-color: @blue;
                     color: white;
                 }
                 &.green {
-                    background-color: $green;
+                    background-color: @green;
                     color: black;
                 }
                 &.red {
-                    background-color: $red;
+                    background-color: @red;
                     color: black;
                 }
                 &.black {
-                    background-color: $black;
+                    background-color: @black;
                     color: #ccc;
                 }
                 &.gold {
-                    background-color: $gold;
+                    background-color: @gold;
                 }
 
                 &.invalid {

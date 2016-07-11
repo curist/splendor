@@ -10,7 +10,7 @@ import Noble from 'app/widgets/Noble';
 import { colors } from 'app/data/game-setting';
 import { BindData } from 'app/db';
 
-import './actionwindow.css';
+import './actionwindow.less';
 
 const debug = require('debug')('app/widgets/ActionWindow');
 

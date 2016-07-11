@@ -18,7 +18,7 @@ function init() {
     e.preventDefault();
   }, false);
 
-  require('app/style.css');
+  require('app/style.less');
   require('app/actions');
 
   syncLocalStorage();

@@ -4,7 +4,7 @@ import _ from 'underscore';
 
 import { BindData } from 'app/db';
 
-import './home.css';
+import './home.less';
 
 import allCards from 'app/data/cards';
 import Card from 'app/widgets/Card';

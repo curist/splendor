@@ -1,8 +1,6 @@
-/* vim:set ft=sass: */
+@import '~app/colors';
 
-@import 'colors';
-
-$wallpaper: '../assets/abstract-bg.jpg';
+@wallpaper: '../assets/abstract-bg.jpg';
 
 * {
   box-sizing: border-box;
@@ -43,7 +41,7 @@ h4,h5{
   bottom: 0;
   left: 0;
   right: 0;
-  background: url($wallpaper);
+  background: url(@wallpaper);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

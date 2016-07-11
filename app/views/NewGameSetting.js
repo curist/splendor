@@ -6,7 +6,7 @@ import { BindData } from 'app/db';
 
 import AIs from 'app/AI';
 
-import './newgamesetting.css';
+import './newgamesetting.less';
 
 const debug = require('debug')('app/views/NewGameSetting');
 

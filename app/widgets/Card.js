@@ -7,7 +7,7 @@ import { colors } from 'app/data/game-setting';
 
 const debug = require('debug')('app/widgets/Card');
 
-import './card.css';
+import './card.less';
 
 // args schema:
 //   { rank: 1,

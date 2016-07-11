@@ -2,7 +2,7 @@ import m from 'mithril';
 
 import { colors } from 'app/data/game-setting';
 
-import './noble.css';
+import './noble.less';
 
 const Noble = {
   view (ctrl, args) {

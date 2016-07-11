@@ -6,7 +6,7 @@ import B from 'app/broker';
 import { BindData } from 'app/db';
 import {colors} from 'app/data/game-setting';
 
-import './singleplayerboard.css';
+import './singleplayerboard.less';
 
 const SinglePlayerBoard = {
   controller () {

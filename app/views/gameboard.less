@@ -1,4 +1,4 @@
-@import '../colors';
+@import '~app/colors';
 
 .GameBoard {
     .Nobles {
@@ -38,32 +38,32 @@
             margin-left: 5px;
             cursor: pointer;
             .Indicator {
-                $size: 36px;
+                @size: 36px;
                 display: flex;
-                width: $size;
-                height: $size;
-                border-radius: $size;
+                width: @size;
+                height: @size;
+                border-radius: @size;
                 justify-content: center;
                 align-items: center;
             }
 
             &.white .Indicator {
-                background-color: $white;
+                background-color: @white;
             }
             &.blue .Indicator {
-                background-color: $blue;
+                background-color: @blue;
                 color: white;
             }
             &.green .Indicator {
-                background-color: $green;
+                background-color: @green;
                 color: black;
             }
             &.red .Indicator {
-                background-color: $red;
+                background-color: @red;
                 color: black;
             }
             &.black .Indicator {
-                background-color: $black;
+                background-color: @black;
                 color: #ccc;
             }
             &.gold {
@@ -71,10 +71,10 @@
                 margin-left: 32px;
             }
             &.gold .Indicator {
-                background-color: $gold;
-                $size: 28px;
-                width: $size;
-                height: $size;
+                background-color: @gold;
+                @size: 28px;
+                width: @size;
+                height: @size;
             }
         }
     }

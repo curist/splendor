@@ -4,7 +4,7 @@ const debug = require('debug')('app/views/InGameMenu');
 
 import { BindData } from 'app/db';
 
-import './inGameMenu.css';
+import './ingamemenu.less';
 
 const InGameMenu = {
   controller () {

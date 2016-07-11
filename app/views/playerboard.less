@@ -1,4 +1,4 @@
-@import '../colors';
+@import '~app/colors';
 
 .PlayerBoard {
     position: relative;
@@ -31,34 +31,34 @@
             display: flex;
             font-size: 14px;
             .Indicator {
-                $size: 20px;
+                @size: 20px;
                 display: flex;
-                width: $size;
-                height: $size;
-                border-radius: $size;
+                width: @size;
+                height: @size;
+                border-radius: @size;
                 justify-content: center;
                 align-items: center;
                 &.white {
-                    background-color: $white;
+                    background-color: @white;
                 }
                 &.blue {
-                    background-color: $blue;
+                    background-color: @blue;
                     color: white;
                 }
                 &.green {
-                    background-color: $green;
+                    background-color: @green;
                     color: black;
                 }
                 &.red {
-                    background-color: $red;
+                    background-color: @red;
                     color: black;
                 }
                 &.black {
-                    background-color: $black;
+                    background-color: @black;
                     color: #ccc;
                 }
                 &.gold {
-                    background-color: $gold;
+                    background-color: @gold;
                 }
             }
 

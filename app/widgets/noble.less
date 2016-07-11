@@ -1,4 +1,4 @@
-@import '../colors';
+@import '~app/colors';
 
 .Noble {
     position: relative;
@@ -9,13 +9,13 @@
     overflow: hidden;
 
     .Points {
-        $size: 20px;
+        @size: 20px;
         display: flex;
         position: absolute;
         top: -1px;
         right: -1px;
-        width: $size;
-        height: $size;
+        width: @size;
+        height: @size;
         font-size: 0.8em;
         border: 1px solid black;
         border-bottom-left-radius: 5px;
@@ -40,21 +40,21 @@
             text-align: center;
 
             &.white {
-                background-color: $white;
+                background-color: @white;
             }
             &.blue {
-                background-color: $blue;
+                background-color: @blue;
                 color: #eee;
             }
             &.green {
-                background-color: $green;
+                background-color: @green;
                 color: #333;
             }
             &.red {
-                background-color: $red;
+                background-color: @red;
             }
             &.black {
-                background-color: $black;
+                background-color: @black;
                 color: #eee;
             }
         }

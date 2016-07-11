@@ -7,7 +7,7 @@ import {colors} from 'app/data/game-setting';
 
 import { BindData } from 'app/db';
 
-import './summary.css';
+import './summary.less';
 
 const Summary = {
   controller () {

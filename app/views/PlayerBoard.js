@@ -7,7 +7,7 @@ import { BindData } from 'app/db';
 
 import {colors} from 'app/data/game-setting';
 
-import './playerboard.css';
+import './playerboard.less';
 
 const PlayerBoard = {
   controller () {

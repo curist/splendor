@@ -11,7 +11,7 @@ import { BindData } from 'app/db';
 
 const debug = require('debug')('app/views/GameBoard');
 
-import './gameboard.css';
+import './gameboard.less';
 
 function Cards(player, cards) {
   return cards.map((card, i) => {
