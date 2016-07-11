@@ -4,7 +4,6 @@ var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-var precss = require('precss');
 var autoprefixer = require('autoprefixer');
 
 module.exports = {
@@ -25,7 +24,11 @@ module.exports = {
     loaders: [
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader")
+        loader: ExtractTextPlugin.extract('css!postcss')
+      },
+      {
+        test: /\.less$/,
+        loader: ExtractTextPlugin.extract('css!postcss!less')
       },
       {
         test: /\.js$/,
@@ -51,7 +54,7 @@ module.exports = {
     ]
   },
   postcss: function() {
-    return [precss, autoprefixer];
+    return [autoprefixer];
   },
   plugins: [
     new HtmlWebpackPlugin({
