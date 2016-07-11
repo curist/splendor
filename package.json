@@ -5,7 +5,7 @@
     "build": "webpack -p --config ./webpack/webpack.build.js",
     "test": "mocha-webpack -w -c --webpack-config ./webpack/webpack.test.js test/test.js",
     "test:ci": "mocha-webpack --webpack-config ./webpack/webpack.test.js test/test.js",
-    "publish": "npm run build && firebase deploy"
+    "deploy": "npm run build && firebase deploy"
   },
   "devDependencies": {
     "assert": "^1.4.1",
