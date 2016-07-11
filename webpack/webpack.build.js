@@ -1,3 +1,4 @@
+var package = require('../package.json');
 var webpack = require('webpack');
 var path = require('path');
 
@@ -58,7 +59,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'build by webpack @ ' + new Date(),
+      title: 'Splenda v' + package.version,
       hash: true,
       template: 'index.ejs'
     }),
