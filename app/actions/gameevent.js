@@ -136,7 +136,7 @@ B.on('gameevent/turn', action => {
 
   const turnAction = actor.turn(gameState);
   // turnAction can be [buy, hold, resource]
-  debug(turnAction);
+  // debug(turnAction);
   let gameAction;
   switch(turnAction.action) {
   case 'buy':

@@ -244,13 +244,7 @@ function nextPlayer(db) {
     return;
   }
 
-  if(db.get(['game-settings', 'fast-mode'])) {
-    B.do({ action: 'gameevent/turn' });
-  } else {
-    requestAnimationFrame(() => {
-      B.do({ action: 'gameevent/turn' });
-    });
-  }
+  B.do({ action: 'gameevent/turn' });
 }
 
 // returning `player` after pay for the card

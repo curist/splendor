@@ -143,9 +143,7 @@ B.on('game/init', (action) => {
   db.set(['actor-stores'], [{}, {}, {}, {}]);
   initActors(playerActors);
 
-  requestAnimationFrame(() => {
-    B.do({ action: 'gameevent/turn' });
-  });
+  B.do({ action: 'gameevent/turn' });
 });
 
 B.on('game/undo', () => {
