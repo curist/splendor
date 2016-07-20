@@ -36,9 +36,11 @@
   },
   "dependencies": {
     "baobab": "^2.3.3",
+    "js-combinatorics": "^0.5.2",
     "mithril": "^0.2.5",
     "normalize.css": "^4.1.1",
     "seedrandom": "^2.4.2",
+    "synaptic": "^1.0.7",
     "underscore": "^1.8.3"
   }
 }

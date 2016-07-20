@@ -2,12 +2,14 @@ import B from 'app/broker';
 import db from 'app/db';
 
 import {colors} from 'app/data/game-setting';
+import {composeGameState} from './helpers';
 import {
   canBuyCard,
   canTakeResources,
   canTakeNoble,
   shouldDropResources,
 } from 'app/validates';
+import { destroyActors } from 'app/AI/actors';
 
 const debug = require('debug')('app/actions/gameaction');
 
@@ -221,13 +223,15 @@ function nextPlayer(db) {
     const winningPlayerKey = getWinningPlayer(db);
     if(winningPlayerKey >= 0) {
       const gameMode = db.get(['game', 'mode']);
+
+      destroyActors(composeGameState(db));
+
       if(gameMode == 'tournament') {
         const turn = db.get(['game', 'turn']);
         db.push(['tournament', 'turns'], turn);
         db.push(['tournament', 'winners'], winningPlayerKey );
         db.apply(['tournament', 'wins', winningPlayerKey], plus(1));
       }
-
       if(currentRound < totalRounds) {
         nextGame(db);
       } else {

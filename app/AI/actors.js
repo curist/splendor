@@ -24,6 +24,17 @@ export function initActors(actorNames) {
   });
 }
 
+export function destroyActors(state) {
+  actors.forEach(actor => {
+    if(!actor.isAI) {
+      return;
+    }
+    if(actor.end) {
+      actor.end(state);
+    }
+  });
+}
+
 export function getActors() {
   return actors;
 }

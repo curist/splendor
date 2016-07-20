@@ -65,3 +65,22 @@ export function playerBoughtCard(player, card) {
     resources,
   });
 }
+
+export function playerTakeResources(player, resources) {
+  let futureResources = Object.assign({}, player.resources);
+  colors.forEach(color => {
+    futureResources[color] += resources[color];
+  });
+  return Object.assign({}, player, {
+    resources: futureResources
+  });
+}
+
+export function playerHoldCard(player, card) {
+  let resources = Object.assign({}, resources);
+  resources.gold += 1;
+  return Object.assign({}, player, {
+    resources,
+    reservedCards: player.reservedCards.concat(card),
+  });
+}

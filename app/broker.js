@@ -10,7 +10,7 @@ class Broker extends EventEmitter {
   }
   do (action) {
     this.count ++;
-    if(this.count > 1000) {
+    if(this.count > 100) {
       debug(`WARNING: events stack over ${this.count}`);
       requestAnimationFrame(() => {
         this.emit('do', action);

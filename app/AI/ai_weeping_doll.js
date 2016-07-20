@@ -4,12 +4,22 @@ import {
   flattenResources,
   zipResources,
 } from './helpers';
+import { canBuyCard } from 'app/validates';
+
+import Combinatorics from 'js-combinatorics';
+
+import model from './nn_model';
 
 const debug = require('debug')('app/AI/ai_weeping_doll');
 
 const colors = [
   'white', 'blue', 'green', 'red', 'black'
 ];
+
+const TRAINING = false;
+const LEARNING_RATE = 0.01;
+const EPSILON = 0.6;
+
 
 function normalize(max, value) {
   return Math.min((value || 0) / max, 1);
@@ -113,17 +123,83 @@ function encodeAction(action) {
 function evalPlayer(player) {
   let score = player.score;
 
+  let colorScore = 0;
   colors.forEach(color => {
-    score += normalize(200, player.bonus[color]);
-    score += normalize(200, player.resources[color]);
+    colorScore += normalize(100, player.bonus[color]);
+    colorScore += normalize(200, player.resources[color]);
   });
-  score += normalize(200, player.resources.gold);
+  colorScore += normalize(150, player.resources.gold);
 
+  let holdScore = 0;
   player.reservedCards.forEach(card => {
-    score += normalize(300, card.points);
+    holdScore += normalize(1000, card.points);
   });
-  return score;
+  // debug(score, colorScore, holdScore);
+  return score + colorScore + holdScore;
 
+}
+
+function playerBoughtCard(player, state, card) {
+  if(!canBuyCard(player, card)) {
+    return player;
+  }
+
+  const bonus = Object.assign({}, player.bonus, {
+    [card.provides]: player.bonus[card.provides] + 1
+  });
+
+  let resources = Object.assign({}, player.resources);
+  colors.forEach(color => {
+    const pay = Math.max(card[color] - player.bonus[color], 0);
+    const short = player.resources[color] - pay;
+    if(short < 0) {
+      resources[color] = 0;
+      resources.gold += short;
+    } else {
+      resources[color] -= pay;
+    }
+  });
+
+  return Object.assign({}, player, {
+    bonus,
+    resources,
+  });
+}
+
+function playerTakeResources(player, state, resources) {
+  let futureResources = Object.assign({}, player.resources);
+  colors.forEach(color => {
+    futureResources[color] += resources[color];
+  });
+  return Object.assign({}, player, {
+    resources: futureResources
+  });
+}
+
+function playerHoldCard(player, state, card) {
+  let resources = Object.assign({}, resources);
+  resources.gold += 1;
+  return Object.assign({}, player, {
+    resources,
+    reservedCards: player.reservedCards.concat(card),
+  });
+}
+
+// TODO those functions should return whole changed state
+function predictState(state, action) {
+  const { player } = state;
+  const { action: actionName } = action;
+  if(actionName == 'buy') {
+    return playerBoughtCard(player, state, action.card);
+  } else if(actionName == 'hold') {
+    return playerHoldCard(player, state, action.card);
+  } else {
+    return playerTakeResources(player, state, action.card);
+  }
+}
+
+function mse(v, expected) {
+  return Math.pow(expected - v, 2) / 2;
 }
 
 export default class WeepingDoll {
@@ -132,59 +208,95 @@ export default class WeepingDoll {
     this.playerIndex = playerIndex;
     this.playerCount = playerCount;
     this.winGameScore = winGameScore;
+
+
+    this.prevFeatures = null;
   }
 
-  chooseAction(state) {
-    // actions, either one of:
-    // 1. buy a card
-    // 2. hold a card
-    // 3. take resources
-    const {player} = state;
-
-    debug(evalPlayer(player));
-    debug(encodeGameState(state));
+  getAllActions(state) {
+    const { player } = state;
+    let actions = [];
 
     const allCards = state.cards.concat(player.reservedCards);
     const affordableCards = getAffordableCards(player, allCards);
 
-    // 2. try to buy a card
-    const card = getBestCard(player, affordableCards);
-    if(card) {
+    actions = actions.concat(affordableCards.map(card => {
       return {
         action: 'buy',
-        card: card,
+        card,
       };
-    }
+    }));
 
-    const allBonus = calcAllBonus(allCards);
-    const resCount = countResources(player.resources);
-    const goalCard = getBestCard(player, allCards) || {};
-    // 1. take resources
-    if(resCount <= 7) {
-      const availableColors = colors.filter(color => {
-        return state.resources[color] > 0;
-      });
-      const pickColors = availableColors.sort((colorA, colorB) => {
-        const value_b = (goalCard[colorB] + 1) * (allBonus[colorB]/10 + 1);
-        const value_a = (goalCard[colorA] + 1) * (allBonus[colorA]/10 + 1);
-        return value_b - value_a;
-      }).slice(0, 3);
-      return {
+    const availableColors = colors.filter(color => {
+      return state.resources[color] > 0;
+    });
+
+    let cmb = Combinatorics.combination(availableColors, 3);
+    for(let res = cmb.next(); res; res = cmb.next()) {
+      actions.push({
         action: 'resource',
-        resources: zipResources(pickColors),
-      };
+        resources: zipResources(res),
+      });
     }
 
-    // 3. hold a card
-    return {
-      action: 'hold',
-      card: _.shuffle(state.cards)[0],
-    };
+    actions = actions.concat(state.cards.map(card => {
+      return {
+        action: 'hold',
+        card,
+      };
+    }));
+
+    return actions;
   }
 
   turn (state) {
-    const action = this.chooseAction(state);
-    debug(encodeAction(action));
+    const { player } = state;
+    // if(TRAINING) {
+    //   const action = this.chooseAction(state);
+
+    //   if(this.prevFeatures) {
+    //     const value = normalize(20, evalPlayer(player));
+    //     const eValue = this.net.activate(this.prevFeatures);
+
+    //     let futurePlayer;
+    //     if(action.action == 'buy') {
+    //       futurePlayer = playerBoughtCard(player, action.card);
+    //     } else if(action.action == 'hold') {
+    //       futurePlayer = playerHoldCard(player, action.card);
+    //     } else {
+    //       futurePlayer = playerTakeResources(player, action.resources);
+    //     }
+    //     const fValue = normalize(20, evalPlayer(futurePlayer));
+
+    //     this.net.propagate(LEARNING_RATE, [value + 0.9 * fValue]);
+    //     debug(mse(value + 0.9 * fValue, eValue));
+    //   }
+    //   this.prevFeatures = encodeGameState(state).concat(encodeAction(action));
+    //   return action;
+    // }
+
+    const actions = this.getAllActions(state);
+    let action;
+    if(Math.random() > EPSILON) { // take best action
+      action = actions.sort((actionA, actionB) => {
+        const gameFeatures = encodeGameState(state);
+        const featureA = gameFeatures.concat(encodeAction(actionA));
+        const featureB = gameFeatures.concat(encodeAction(actionB));
+        const vA = model.net.activate(featureA)[0];
+        const vB = model.net.activate(featureB)[0];
+        return vB - vA;
+      })[0];
+    } else { // take a random move
+      action = actions[Math.floor(Math.random() * actions.length)];
+    }
+    let futurePlayer;
+    if(action.action == 'buy') {
+      futurePlayer = playerBoughtCard(player, action.card);
+    } else if(action.action == 'hold') {
+      futurePlayer = playerHoldCard(player, action.card);
+    } else {
+      futurePlayer = playerTakeResources(player, action.resources);
+    }
     return action;
   }
 
@@ -194,6 +306,12 @@ export default class WeepingDoll {
 
   pickNoble (state, nobles) {
     return nobles[0];
+  }
+
+  end (state) {
+    if(TRAINING) {
+      model.exportModel();
+    }
   }
 }
 
