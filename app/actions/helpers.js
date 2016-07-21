@@ -11,13 +11,13 @@ export function composeGameState(db) {
   const player = players[playerIndex];
   const nobles = db.get(['game', 'nobles']);
   const resources = db.get(['game', 'resources']);
-  const deckRemaingings = [
-    db.get(['game', 'deck1']).length,
-    db.get(['game', 'deck2']).length,
-    db.get(['game', 'deck3']).length,
-  ];
+  const deckRemainings = {
+    1: db.get(['game', 'deck1']).length,
+    2: db.get(['game', 'deck2']).length,
+    3: db.get(['game', 'deck3']).length,
+  };
   return {
     cards, player, players, nobles,
-    resources, deckRemaingings,
+    resources, deckRemainings,
   };
 }
