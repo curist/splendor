@@ -79,7 +79,7 @@ export default class Dumb {
   //     key : 3,
   //   }],
   //   resources: {red: 1, black:1, ..., gold: 1},
-  //   deckRemaings: [36, 26, 16],
+  //   deckRemainings: { 1: 36, 2: 26, 3: 16 },
   // }
   //
   // returns:
