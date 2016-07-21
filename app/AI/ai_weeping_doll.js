@@ -16,13 +16,47 @@ const colors = [
   'white', 'blue', 'green', 'red', 'black'
 ];
 
-const TRAINING = false;
+const TRAINING = true;
 const LEARNING_RATE = 0.01;
 const EPSILON = 0.6;
 
+var avgCards = {
+  1: {
+    white: 0.825,
+    blue: 0.825,
+    green: 0.825,
+    red: 0.825,
+    black: 0.825,
+    points: 0.125,
+    provides: 'random',
+  },
+  2: {
+    white: 1.37,
+    blue: 1.37,
+    green: 1.37,
+    red: 1.37,
+    black: 1.37,
+    points: 1.83,
+    provides: 'random',
+  },
+  3: {
+    white: 2.15,
+    blue: 2.15,
+    green: 2.15,
+    red: 2.15,
+    black: 2.15,
+    points: 4,
+    provides: 'random',
+  }
+};
 
 function normalize(max, value) {
-  return Math.min((value || 0) / max, 1);
+  // let value be in 0 ~ 1
+  return Math.min(Math.max((value || 0) / max, 0), 1);
+}
+
+function clone(obj) {
+  return JSON.parse(JSON.stringify(obj));
 }
 
 function encodePlayer(player) {
@@ -51,26 +85,32 @@ function encodeCard(card) {
   // provides bonus
   colors.forEach(color => {
     var provide = (card.provide == color) ? 1 : 0;
+    if(card.provide == 'random') {
+      provide = 0.2;
+    }
     features.push(provide);
   });
+
+  // TODO add bonus board value as feature
+  // maybe board color sum or multiplier
+
   // score
   features.push(normalize(10, card.points));
   return features;
 }
 
-function encodeNoble(noble) {
+function encodeNoble(player, noble) {
   let features = [];
-  // cost
+  // cost considering player color bonus
   colors.forEach(color => {
-    features.push(normalize(10, noble[color]));
+    features.push(normalize(10, noble[color] - player.bonus[color]));
   });
-  // score
-  features.push(normalize(10, noble.points));
+  features.push(normalize(3, noble.points));
   return features;
 }
 
 function encodeGameState(game) {
-  const { player, players, cards, nobles, resources, deckRemaingings } = game;
+  const { player, players, cards, nobles, resources, deckRemainings } = game;
   let features = [];
 
   features = features.concat(encodePlayer(player));
@@ -84,12 +124,12 @@ function encodeGameState(game) {
 
   // nobles
   for(let i = 0; i < 5; i++) {
-    features = features.concat(encodeNoble(nobles[i] || {}));
+    features = features.concat(encodeNoble(player, nobles[i] || {}));
   }
 
   // cards remaining in each deck
-  for(let i = 0; i < 3; i++) {
-    features.push(normalize(40, deckRemaingings[i]));
+  for(let i = 1; i <= 3; i++) {
+    features.push(normalize(40, deckRemainings[i]));
   }
 
   // resources
@@ -132,7 +172,7 @@ function evalPlayer(player) {
 
   let holdScore = 0;
   player.reservedCards.forEach(card => {
-    holdScore += normalize(1000, card.points);
+    holdScore += normalize(500, card.points);
   });
   // debug(score, colorScore, holdScore);
   return score + colorScore + holdScore;
@@ -141,51 +181,91 @@ function evalPlayer(player) {
 
 function playerBoughtCard(player, state, card) {
   if(!canBuyCard(player, card)) {
-    return player;
+    return state;
   }
+  let futurePlayer = clone(player);
+  let futureState = clone(state);
 
-  const bonus = Object.assign({}, player.bonus, {
-    [card.provides]: player.bonus[card.provides] + 1
-  });
-
-  let resources = Object.assign({}, player.resources);
   colors.forEach(color => {
     const pay = Math.max(card[color] - player.bonus[color], 0);
     const short = player.resources[color] - pay;
     if(short < 0) {
-      resources[color] = 0;
-      resources.gold += short;
+      futurePlayer.resources[color] = 0;
+      futurePlayer.resources.gold += short;
     } else {
-      resources[color] -= pay;
+      futurePlayer.resources[color] -= pay;
     }
   });
 
-  return Object.assign({}, player, {
-    bonus,
-    resources,
+  if(card.status == 'hold') {
+    futurePlayer.reservedCards = futurePlayer.reservedCards.filter(cardo => {
+      return cardo.key !== card.key;
+    });
+  } else {
+    futureState.cards = futureState.cards.filter(cardo => {
+      return cardo.key !== card.key;
+    });
+    if(state.deckRemainings[card.rank] > 0) {
+      state.deckRemainings[card.rank] -= 1;
+      futureState.cards.push(avgCards[card.rank]);
+    }
+  }
+
+  futureState.player = futurePlayer;
+  futureState.players = futureState.players.map(player => {
+    if(player.key == futurePlayer.key) {
+      return futurePlayer;
+    }
+    return player;
   });
+  return futureState;
 }
 
 function playerTakeResources(player, state, resources) {
-  let futureResources = Object.assign({}, player.resources);
-  colors.forEach(color => {
-    futureResources[color] += resources[color];
+  let futurePlayer = clone(player);
+  let futureState = clone(state);
+  Object.keys(resources).forEach(color => {
+    futurePlayer.resources[color] += resources[color];
+    futureState.resources[color] -= resources[color];
   });
-  return Object.assign({}, player, {
-    resources: futureResources
+  futureState.player = futurePlayer;
+  futureState.players = futureState.players.map(player => {
+    if(player.key == futurePlayer.key) {
+      return futurePlayer;
+    }
+    return player;
   });
+  return futureState;
 }
 
 function playerHoldCard(player, state, card) {
-  let resources = Object.assign({}, resources);
-  resources.gold += 1;
-  return Object.assign({}, player, {
-    resources,
-    reservedCards: player.reservedCards.concat(card),
+  let futurePlayer = clone(player);
+  let futureState = clone(state);
+
+  if(state.resources.gold > 0) {
+    futurePlayer.resources.gold += 1;
+    futureState.resources.gold -= 1;
+  }
+
+  futurePlayer.reservedCards = futurePlayer.reservedCards.concat(card);
+
+  futureState.player = futurePlayer;
+  futureState.players = futureState.players.map(player => {
+    if(player.key == futurePlayer.key) {
+      return futurePlayer;
+    }
+    return player;
   });
+  futureState.cards = futureState.cards.filter(cardo => {
+    return cardo.key !== card.key;
+  });
+  if(state.deckRemainings[card.rank] > 0) {
+    state.deckRemainings[card.rank] -= 1;
+    futureState.cards.push(avgCards[card.rank]);
+  }
+  return futureState;
 }
 
-// TODO those functions should return whole changed state
 function predictState(state, action) {
   const { player } = state;
   const { action: actionName } = action;
@@ -194,7 +274,7 @@ function predictState(state, action) {
   } else if(actionName == 'hold') {
     return playerHoldCard(player, state, action.card);
   } else {
-    return playerTakeResources(player, state, action.card);
+    return playerTakeResources(player, state, action.resources);
   }
 }
 
@@ -231,7 +311,8 @@ export default class WeepingDoll {
       return state.resources[color] > 0;
     });
 
-    let cmb = Combinatorics.combination(availableColors, 3);
+    let cmb = Combinatorics.combination(
+      availableColors, Math.min(3, availableColors.length));
     for(let res = cmb.next(); res; res = cmb.next()) {
       actions.push({
         action: 'resource',
@@ -251,35 +332,12 @@ export default class WeepingDoll {
 
   turn (state) {
     const { player } = state;
-    // if(TRAINING) {
-    //   const action = this.chooseAction(state);
-
-    //   if(this.prevFeatures) {
-    //     const value = normalize(20, evalPlayer(player));
-    //     const eValue = this.net.activate(this.prevFeatures);
-
-    //     let futurePlayer;
-    //     if(action.action == 'buy') {
-    //       futurePlayer = playerBoughtCard(player, action.card);
-    //     } else if(action.action == 'hold') {
-    //       futurePlayer = playerHoldCard(player, action.card);
-    //     } else {
-    //       futurePlayer = playerTakeResources(player, action.resources);
-    //     }
-    //     const fValue = normalize(20, evalPlayer(futurePlayer));
-
-    //     this.net.propagate(LEARNING_RATE, [value + 0.9 * fValue]);
-    //     debug(mse(value + 0.9 * fValue, eValue));
-    //   }
-    //   this.prevFeatures = encodeGameState(state).concat(encodeAction(action));
-    //   return action;
-    // }
 
     const actions = this.getAllActions(state);
     let action;
+    const gameFeatures = encodeGameState(state);
     if(Math.random() > EPSILON) { // take best action
       action = actions.sort((actionA, actionB) => {
-        const gameFeatures = encodeGameState(state);
         const featureA = gameFeatures.concat(encodeAction(actionA));
         const featureB = gameFeatures.concat(encodeAction(actionB));
         const vA = model.net.activate(featureA)[0];
@@ -289,14 +347,31 @@ export default class WeepingDoll {
     } else { // take a random move
       action = actions[Math.floor(Math.random() * actions.length)];
     }
-    let futurePlayer;
-    if(action.action == 'buy') {
-      futurePlayer = playerBoughtCard(player, action.card);
-    } else if(action.action == 'hold') {
-      futurePlayer = playerHoldCard(player, action.card);
-    } else {
-      futurePlayer = playerTakeResources(player, action.resources);
+
+    if(TRAINING) {
+      // predict future state
+      // and find best action for future state
+      // and propagate current Q(s, a) -> r + Q(s', a')
+
+      const futureState = predictState(state, action);
+      const futureGameFeatures = encodeGameState(futureState);
+      const futureAction = this.getAllActions(futureState).sort((actionA, actionB) => {
+        const featureA = futureGameFeatures.concat(encodeAction(actionA));
+        const featureB = futureGameFeatures.concat(encodeAction(actionB));
+        const vA = model.net.activate(featureA)[0];
+        const vB = model.net.activate(featureB)[0];
+        return vB - vA;
+      })[0];
+      const futurePlayer = futureState.player;
+      const currentFeatures = gameFeatures.concat(encodeAction(action));
+      const futureFeatures = futureGameFeatures.concat(encodeAction(futureAction));
+      const futureQ = model.net.activate(futureFeatures)[0];
+      const target = evalPlayer(futurePlayer) + futureQ;
+
+      model.net.activate(currentFeatures);
+      model.net.propagate(LEARNING_RATE, target);
     }
+
     return action;
   }
 
