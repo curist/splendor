@@ -3,6 +3,7 @@ import Easy from './ai_easy';
 import Normal from './ai_normal';
 import MyGrandMa from './ai_my_grandma';
 import FiveYearsOld from './ai_fiveyearsold';
+import Apocalypse from './ai_apocalypse.js';
 
 module.exports = {
   dumb: Dumb,
@@ -10,4 +11,5 @@ module.exports = {
   normal: Normal,
   MyGrandMa,
   FiveYearsOld,
+  Apocalypse,
 };
