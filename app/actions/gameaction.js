@@ -8,6 +8,7 @@ import {
   canTakeNoble,
   shouldDropResources,
 } from 'app/validates';
+import {getActors} from 'app/AI/actors';
 
 const debug = require('debug')('app/actions/gameaction');
 
@@ -43,9 +44,7 @@ B.on('gameaction/take-resource', (action) => {
 });
 
 B.on('gameaction/take-resources', (action) => {
-  // db.apply(['game', 'action', 'resources', type], (n) => {
-  //   return (n || 0) + 1;
-  // });
+  pushGameState(db);
   const playerIndex = db.get(['game', 'current-player']);
   const { resources } = action;
   Object.keys(resources).forEach(type => {
@@ -64,6 +63,7 @@ B.on('gameaction/hold-a-rank-card', (action) => {
 });
 
 B.on('gameaction/blind-hold', (action) => {
+  pushGameState(db);
   const { rank } = action;
   const playerIndex = db.get(['game', 'current-player']);
   const player = db.get(['game', 'players', playerIndex]);
@@ -240,10 +240,10 @@ function nextPlayer(db) {
   }
   db.set(['game', 'current-player'], nextPlayer);
 
-  if(db.get(['game-settings', 'observer-mode'])) {
+  const actor = getActors()[nextPlayer];
+  if(actor.isAI && db.get(['game-settings', 'observer-mode'])) {
     return;
   }
-
   B.do({ action: 'gameevent/turn' });
 }
 
@@ -272,7 +272,13 @@ function playerAcquireCard(oplayer, card) {
   return [ pay, player ];
 }
 
+// save game state for undo history
+function pushGameState(db) {
+  db.select('game-states').push(db.get('game'));
+}
+
 B.on('gameaction/acquire-card', (action) => {
+  pushGameState(db);
   const { card } = action;
   const playerIndex = db.get(['game', 'current-player']);
   const player = db.get(['game', 'players', playerIndex]);
@@ -295,6 +301,7 @@ B.on('gameaction/acquire-card', (action) => {
 });
 
 B.on('gameaction/reserve-card', (action) => {
+  pushGameState(db);
   const { card: ocard } = action;
   const playerIndex = db.get(['game', 'current-player']);
   const gold = db.get(['game', 'resources', 'gold']);
@@ -322,6 +329,7 @@ B.on('gameaction/cancel', () => {
 });
 
 B.on('gameaction/drop-resources', (action) => {
+  pushGameState(db);
   const playerIndex = db.get(['game', 'current-player']);
   const { resources: dropResources } = action;
   Object.keys(dropResources).forEach(color => {

@@ -99,8 +99,6 @@ function playAITurnAction(action) {
 }
 
 B.on('gameevent/turn', action => {
-  db.select('game-states').push(db.get('game'));
-
   const resources = db.get(['game', 'resources']);
   const playerIndex = db.get(['game', 'current-player']);
   const player = db.get(['game', 'players', playerIndex]);
