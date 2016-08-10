@@ -139,7 +139,7 @@ B.on('gameevent/turn', action => {
     throw new Error(`Unknown turn action by ${player.actor}: ${turnAction.action}`);
   }
 
-  validateAction(player, resources, gameAction);
+  validateAction(gameState, player, resources, gameAction);
 
   if(db.get(['game-settings', 'fast-mode'])) {
     B.do(gameAction);
@@ -163,7 +163,7 @@ B.on('gameevent/drop-resource', action => {
     action: 'gameaction/drop-resources',
     resources: droppingResources ,
   };
-  validateAction(player, resources, gameAction);
+  validateAction(gameState, player, resources, gameAction);
 
   if(db.get(['game-settings', 'fast-mode'])) {
     B.do(gameAction);
@@ -190,7 +190,7 @@ B.on('gameevent/pick-noble', action => {
     action: 'gameaction/pick-noble',
     noble: noble,
   };
-  validateAction(player, resources, gameAction);
+  validateAction(gameState, player, resources, gameAction);
 
   if(db.get(['game-settings', 'fast-mode'])) {
     B.do(gameAction);

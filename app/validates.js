@@ -1,5 +1,7 @@
 import {colors} from 'app/data/game-setting';
 
+const debug = require('debug')('app/validates');
+
 export function canBuyCard(player, card) {
   let shortOf = 0;
   colors.forEach(color => {
@@ -73,16 +75,55 @@ export function canTakeNoble(player, noble) {
   return passedResources.length == 5;
 }
 
-export function validateAction(player, resources, action) {
+function checkIdentical(origObj, obj) {
+  for(let k in origObj) {
+    if(origObj[k] !== obj[k]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function checkValidCard(state, card) {
+  const { cards } = state;
+  const found = cards.find(cardo => {
+    return cardo.key == card.key;
+  });
+  if(!found || !checkIdentical(found, card)) {
+    throw new Error(`invalid card: ${JSON.stringify(card)}`);
+  }
+}
+
+function checkValidNoble(state, noble) {
+  const { nobles } = state;
+  const found = nobles.find(nobleo => {
+    return nobleo.key == noble.key;
+  });
+  if(!found || !checkIdentical(found, noble)) {
+    throw new Error(`invalid noble: ${JSON.stringify(noble)}`);
+  }
+}
+
+function validateObject(type, state, obj) {
+  const validators = {
+    card: checkValidCard,
+    noble: checkValidNoble,
+  };
+  validators[type](state, obj);
+}
+
+export function validateAction(state, player, resources, action) {
   const actor = `${player.key}:${player.actor}`;
   const actionName = action.action;
   if(actionName == 'gameaction/acquire-card') {
     const { card } = action;
+    validateObject('card', state, card);
     if(!canBuyCard(player, card)) {
       throw new Error(`${actor} can't afford card: ${card.key}`);
     }
   } else if(actionName == 'gameaction/reserve-card') {
     const { card } = action;
+    validateObject('card', state, card);
     if(!canHoldCard(player, card)) {
       throw new Error(`${actor} can't hold target card: ${card.key}`);
     }
@@ -99,6 +140,7 @@ export function validateAction(player, resources, action) {
 
   } else if(actionName == 'gameaction/pick-noble') {
     const { noble } = action;
+    validateObject('noble', state, noble);
     if(!canTakeNoble(player, noble)) {
       throw new Error(`${actor} can't take noble: ${noble.key}`);
     }
