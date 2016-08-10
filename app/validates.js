@@ -86,7 +86,8 @@ function checkIdentical(origObj, obj) {
 
 function checkValidCard(state, card) {
   const { cards } = state;
-  const found = cards.find(cardo => {
+  const allCards = cards.concat(state.player.reservedCards);
+  const found = allCards.find(cardo => {
     return cardo.key == card.key;
   });
   if(!found || !checkIdentical(found, card)) {
