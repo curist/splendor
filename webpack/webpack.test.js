@@ -39,9 +39,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env.DEBUG': '"*"'
-    }),
     new webpack.NoErrorsPlugin(),
   ]
 };
