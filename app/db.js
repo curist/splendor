@@ -1,7 +1,10 @@
 import m from 'mithril';
 import Baobab from 'baobab';
 
-const db = new Baobab({});
+const db = new Baobab({}, {
+  immutable: module.hot ? true : false,
+  persistent: false,
+});
 
 export function BindData(controller, bindings) {
   controller.data = {};
@@ -14,11 +17,26 @@ export function BindData(controller, bindings) {
   });
 
   let watcher = controller._w = db.watch(bindings);
-  watcher.on('update', e => {
+  let callback = (e) => {
+    m.startComputation();
     const data = e.target.get();
     controller.data = data;
-    m.redraw();
-  });
+    m.endComputation();
+  };
+  watcher.on('update', callback);
+
+  // monkey patch onunload callback fn
+  // register onunload after inited component
+  // so we can avoid override existing onunload callback
+  setTimeout(() => {
+    controller.onunload = (function (origOnunload) {
+      origOnunload = (origOnunload || function(){}).bind(controller);
+      return () => {
+        watcher.release();
+        origOnunload();
+      };
+    })(controller.onunload);
+  }, 0);
 }
 
 // in development mode, expose db
