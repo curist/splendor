@@ -2,8 +2,7 @@ import m from 'mithril';
 import Baobab from 'baobab';
 
 const db = new Baobab({}, {
-  immutable: module.hot ? true : false,
-  persistent: false,
+  immutable: module.hot ? false : true,
 });
 
 export function BindData(controller, bindings) {

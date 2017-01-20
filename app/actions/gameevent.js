@@ -9,7 +9,7 @@ import {composeGameState} from './helpers';
 
 const debug = require('debug')('app/actions/gameevent');
 
-const AIActionDelay = 600 /* ms */;
+const AIActionDelay = 1000 /* ms */;
 
 let timeouts = [];
 
@@ -71,7 +71,7 @@ function playAITurnAction(action) {
       };
     });
 
-    delayChain(150, stepFns).then(() => {
+    delayChain(250, stepFns).then(() => {
       delay(AIActionDelay, () => {
         B.do({
           action: 'gameaction/take-resources',
