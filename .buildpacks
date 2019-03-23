@@ -1,2 +1,2 @@
 https://github.com/heroku/heroku-buildpack-nodejs.git#v83
-https://github.com/dokku/buildpack-nginx.git#v10
+https://github.com/florianheinemann/buildpack-nginx.git
