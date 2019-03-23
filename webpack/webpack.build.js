@@ -10,7 +10,7 @@ var autoprefixer = require('autoprefixer');
 module.exports = {
   entry: './app/index.js',
   output: {
-    path: 'build',
+    path: 'www',
     filename: 'bundle.js'
   },
   devServer: {
